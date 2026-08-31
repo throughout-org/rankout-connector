@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\Admin;
+namespace RankOut_Connector\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -14,11 +14,11 @@ class Abilities_Page {
 
 	public function register_menu() {
 		\add_submenu_page(
-			'easy-mcp-ai',
-			__( 'Abilities', 'easy-mcp-ai' ),
-			__( 'Abilities', 'easy-mcp-ai' ),
+			'rankout-connector',
+			__( 'Abilities', 'rankout-connector' ),
+			__( 'Abilities', 'rankout-connector' ),
 			'manage_options',
-			'easy-mcp-ai-abilities',
+			'rankout-connector-abilities',
 			array( $this, 'render_page' )
 		);
 	}
@@ -27,7 +27,7 @@ class Abilities_Page {
 		if ( ! \current_user_can( 'manage_options' ) ) {
 			return;
 		}
-		if ( isset( $_POST['easy_mcp_ai_save_abilities'] ) && \check_admin_referer( 'easy_mcp_ai_save_abilities' ) ) {
+		if ( isset( $_POST['rankout_connector_save_abilities'] ) && \check_admin_referer( 'rankout_connector_save_abilities' ) ) {
 			$abilities_on_page = isset( $_POST['abilities_on_page'] )
 				? array_values( array_filter( array_map( 'sanitize_text_field', wp_unslash( (array) $_POST['abilities_on_page'] ) ) ) )
 				: array();
@@ -41,14 +41,14 @@ class Abilities_Page {
 	}
 
 	private function handle_save_abilities( array $abilities_on_page, array $checked_on_page, int $paged, string $s ) {
-		$enabled_abilities = (array) \get_option( 'easy_mcp_ai_enabled_abilities', array() );
+		$enabled_abilities = (array) \get_option( 'rankout_connector_enabled_abilities', array() );
 		$new_enabled = array_diff( $enabled_abilities, $abilities_on_page );
 		$new_enabled = array_merge( $new_enabled, $checked_on_page );
-		\update_option( 'easy_mcp_ai_enabled_abilities', array_unique( $new_enabled ) );
+		\update_option( 'rankout_connector_enabled_abilities', array_unique( $new_enabled ) );
 
 		$redirect_url = \add_query_arg(
 			array_filter( array(
-				'page'    => 'easy-mcp-ai-abilities',
+				'page'    => 'rankout-connector-abilities',
 				'message' => 'saved',
 				'paged'   => $paged > 1 ? $paged : false,
 				's'       => ! empty( $s ) ? $s : false,
@@ -62,7 +62,7 @@ class Abilities_Page {
 
 	public function render_page() {
 		$has_abilities_api = \function_exists( 'wp_get_abilities' );
-		$enabled_abilities = (array) \get_option( 'easy_mcp_ai_enabled_abilities', array() );
+		$enabled_abilities = (array) \get_option( 'rankout_connector_enabled_abilities', array() );
 		$message           = isset( $_GET['message'] ) ? sanitize_text_field( wp_unslash( $_GET['message'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$search_query      = isset( $_GET['s'] ) ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
@@ -100,7 +100,7 @@ class Abilities_Page {
 			}
 
 			
-			$items_per_page = max( 1, (int) \apply_filters( 'easy_mcp_ai_abilities_per_page', 20 ) );
+			$items_per_page = max( 1, (int) \apply_filters( 'rankout_connector_abilities_per_page', 20 ) );
 			$current_page = max(1, isset($_GET['paged']) ? absint($_GET['paged']) : 1); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$total_items = count($flat_abilities);
 			$total_pages = ceil($total_items / $items_per_page);
@@ -111,14 +111,14 @@ class Abilities_Page {
 				$page_links = \paginate_links( array(
 					'base' => \add_query_arg( 'paged', '%#%' ),
 					'format' => '',
-					'prev_text' => __('&laquo;', 'easy-mcp-ai'),
-					'next_text' => __('&raquo;', 'easy-mcp-ai'),
+					'prev_text' => __('&laquo;', 'rankout-connector'),
+					'next_text' => __('&raquo;', 'rankout-connector'),
 					'total' => $total_pages,
 					'current' => $current_page
 				));
 			}
 		}
 
-		require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/views/abilities.php';
+		require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/views/abilities.php';
 	}
 }

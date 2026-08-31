@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\Tools;
+namespace RankOut_Connector\Tools;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -159,7 +159,7 @@ abstract class Base_Tool {
         if ( null === $title ) {
             return;
         }
-        $max = (int) get_option( 'easy_mcp_ai_max_title_length', 0 );
+        $max = (int) get_option( 'rankout_connector_max_title_length', 0 );
         if ( $max > 0 && mb_strlen( $title ) > $max ) {
             throw new \InvalidArgumentException(
                 sprintf( 'Title exceeds maximum allowed length of %d characters.', $max ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
@@ -173,7 +173,7 @@ abstract class Base_Tool {
 
 
     protected function maybe_force_draft( array &$params ) {
-        if ( get_option( 'easy_mcp_ai_force_draft_on_create', false ) ) {
+        if ( get_option( 'rankout_connector_force_draft_on_create', false ) ) {
             $params['status'] = 'draft';
         }
     }
@@ -403,7 +403,7 @@ abstract class Base_Tool {
 
 
 
-        do_action( 'easy_mcp_ai_post_changed', $post_id, $context );
+        do_action( 'rankout_connector_post_changed', $post_id, $context );
 
         
         

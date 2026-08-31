@@ -1,8 +1,8 @@
 <?php
-namespace Easy_MCP_AI\Tools\History;
+namespace RankOut_Connector\Tools\History;
 
-use Easy_MCP_AI\Tools\Base_Tool;
-use Easy_MCP_AI\History\Change_Log_Repository;
+use RankOut_Connector\Tools\Base_Tool;
+use RankOut_Connector\History\Change_Log_Repository;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -45,13 +45,13 @@ class History_List extends Base_Tool {
         
         
         
-        $can_view_all = \current_user_can( 'easy_mcp_ai_view_all_history' );
+        $can_view_all = \current_user_can( 'rankout_connector_view_all_history' );
         $self_scope   = $can_view_all
             ? array()
             : array( 'wp_user_id' => (int) \get_current_user_id() );
 
         $extra_filters = \apply_filters(
-            'easy_mcp_ai_history_query_scope',
+            'rankout_connector_history_query_scope',
             array(),
             $args,
             (int) \get_current_user_id(),

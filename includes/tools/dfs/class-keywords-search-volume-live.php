@@ -1,8 +1,8 @@
 <?php
-namespace Easy_MCP_AI\Tools\DFS;
+namespace RankOut_Connector\Tools\DFS;
 
-use Easy_MCP_AI\Tools\Base_Tool;
-use Easy_MCP_AI\DFS\DataforSEO_Client;
+use RankOut_Connector\Tools\Base_Tool;
+use RankOut_Connector\DFS\DataforSEO_Client;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

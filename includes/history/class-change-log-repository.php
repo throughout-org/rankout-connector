@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\History;
+namespace RankOut_Connector\History;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -9,7 +9,7 @@ class Change_Log_Repository {
 
     public function table() {
         global $wpdb;
-        return $wpdb->prefix . 'easy_mcp_ai_change_log';
+        return $wpdb->prefix . 'rankout_connector_change_log';
     }
 
     public function insert( array $row ) {

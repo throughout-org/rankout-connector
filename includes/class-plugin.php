@@ -1,14 +1,14 @@
 <?php
-namespace Easy_MCP_AI;
+namespace RankOut_Connector;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/class-activator.php';
-require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/class-deactivator.php';
-require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/class-github-updater.php';
+require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/class-activator.php';
+require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/class-deactivator.php';
+require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/class-github-updater.php';
 
 class Plugin {
 
@@ -41,7 +41,7 @@ class Plugin {
         \add_action( 'init', array( $this, 'handle_well_known' ), 0 );
         \add_action( 'wp_head', array( $this, 'output_post_schema' ) );
 
-        new GitHub_Updater( EASY_MCP_AI_PLUGIN_FILE, EASY_MCP_AI_VERSION );
+        new GitHub_Updater( RANKOUT_CONNECTOR_PLUGIN_FILE, RANKOUT_CONNECTOR_VERSION );
         
         
         
@@ -53,12 +53,12 @@ class Plugin {
         
         
         \add_action( 'init', array( $this, 'handle_oauth_authorize_request' ), PHP_INT_MAX );
-        \add_action( 'easy_mcp_ai_cleanup_audit_log', array( $this, 'cleanup_audit_log' ) );
-        \add_action( 'easy_mcp_ai_cleanup_oauth', array( $this, 'cleanup_oauth_storage' ) );
-        \add_action( 'easy_mcp_ai_cleanup_new_token_meta', array( $this, 'cleanup_new_token_meta' ) );
-        \add_action( 'easy_mcp_ai_cleanup_change_log', array( __CLASS__, 'cleanup_change_log' ) );
+        \add_action( 'rankout_connector_cleanup_audit_log', array( $this, 'cleanup_audit_log' ) );
+        \add_action( 'rankout_connector_cleanup_oauth', array( $this, 'cleanup_oauth_storage' ) );
+        \add_action( 'rankout_connector_cleanup_new_token_meta', array( $this, 'cleanup_new_token_meta' ) );
+        \add_action( 'rankout_connector_cleanup_change_log', array( __CLASS__, 'cleanup_change_log' ) );
         
-        \add_action( 'plugins_loaded', array( 'Easy_MCP_AI\Activator', 'maybe_upgrade' ) );
+        \add_action( 'plugins_loaded', array( 'RankOut_Connector\Activator', 'maybe_upgrade' ) );
         \add_action( 'plugins_loaded', array( $this, 'maybe_upgrade_oauth' ) );
         
         if ( \is_multisite() ) {
@@ -79,31 +79,31 @@ class Plugin {
 
 
     private function load_mcp_includes() {
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/mcp/class-error-codes.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/mcp/class-json-rpc.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/mcp/class-session.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/mcp/class-transport.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/mcp/class-server.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/auth/class-token-manager.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/auth/class-token-auth.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/auth/class-permission-guard.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/class-base-tool.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/class-tool-registry.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/class-dynamic-tool.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/class-dynamic-tool-registrar.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/class-abstract-google-client.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/gsc/class-gsc-client.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/ga/class-ga-client.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/dfs/class-dataforseo-client.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/semrush/class-semrush-client.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/semrush/class-semrush-validators.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/resources/class-base-resource.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/resources/class-resource-registry.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/history/class-change-log-schema.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/history/class-change-redactor.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/history/class-change-context.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/history/class-change-log-repository.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/history/class-change-recorder.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/mcp/class-error-codes.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/mcp/class-json-rpc.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/mcp/class-session.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/mcp/class-transport.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/mcp/class-server.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/auth/class-token-manager.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/auth/class-token-auth.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/auth/class-permission-guard.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/class-base-tool.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/class-tool-registry.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/class-dynamic-tool.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/class-dynamic-tool-registrar.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/class-abstract-google-client.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/gsc/class-gsc-client.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/ga/class-ga-client.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/dfs/class-dataforseo-client.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/semrush/class-semrush-client.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/semrush/class-semrush-validators.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/resources/class-base-resource.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/resources/class-resource-registry.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/history/class-change-log-schema.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/history/class-change-redactor.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/history/class-change-context.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/history/class-change-log-repository.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/history/class-change-recorder.php';
     }
 
     
@@ -122,21 +122,21 @@ class Plugin {
 
         
         static $external_data_actions = array(
-            'easy_mcp_ai_gsc_test',
-            'easy_mcp_ai_ga_test',
-            'easy_mcp_ai_dfs_test',
-            'easy_mcp_ai_dfs_refresh_balance',
-            'easy_mcp_ai_semrush_test',
-            'easy_mcp_ai_semrush_refresh_balance',
+            'rankout_connector_gsc_test',
+            'rankout_connector_ga_test',
+            'rankout_connector_dfs_test',
+            'rankout_connector_dfs_refresh_balance',
+            'rankout_connector_semrush_test',
+            'rankout_connector_semrush_refresh_balance',
         );
         if ( in_array( $action, $external_data_actions, true ) ) {
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/class-abstract-google-client.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/gsc/class-gsc-client.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/ga/class-ga-client.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/dfs/class-dataforseo-client.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/semrush/class-semrush-client.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/semrush/class-semrush-validators.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/class-external-data-admin.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/class-abstract-google-client.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/gsc/class-gsc-client.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/ga/class-ga-client.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/dfs/class-dataforseo-client.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/semrush/class-semrush-client.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/semrush/class-semrush-validators.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/class-external-data-admin.php';
             new Admin\External_Data_Admin();
             return;
         }
@@ -148,44 +148,44 @@ class Plugin {
         
         
         
-        if ( 'easy_mcp_ai_get_changes_for_audit' === $action ) {
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/auth/class-token-manager.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/class-base-tool.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/class-tool-registry.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/class-plugin-integration-registry.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/class-plugin-integrations-page.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
+        if ( 'rankout_connector_get_changes_for_audit' === $action ) {
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/auth/class-token-manager.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/class-base-tool.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/class-tool-registry.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/class-plugin-integration-registry.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/class-plugin-integrations-page.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
             new Admin\Admin_Page( new Auth\Token_Manager(), new Tools\Tool_Registry() );
             return;
         }
     }
 
     public function init_admin() {
-        $admin_lang = \get_option( 'easy_mcp_ai_admin_language', '' );
+        $admin_lang = \get_option( 'rankout_connector_admin_language', '' );
         if ( ! empty( $admin_lang ) ) {
             
             
             $safe_lang = preg_replace( '/[^a-zA-Z_]/', '', $admin_lang );
-            $mo_file = EASY_MCP_AI_PLUGIN_DIR . 'languages/easy-mcp-ai-' . $safe_lang . '.mo';
+            $mo_file = RANKOUT_CONNECTOR_PLUGIN_DIR . 'languages/rankout-connector-' . $safe_lang . '.mo';
             if ( file_exists( $mo_file ) ) {
-                \unload_textdomain( 'easy-mcp-ai' );
-                \load_textdomain( 'easy-mcp-ai', $mo_file );
+                \unload_textdomain( 'rankout-connector' );
+                \load_textdomain( 'rankout-connector', $mo_file );
             }
         }
         $this->load_mcp_includes();
         $this->token_manager = new Auth\Token_Manager();
         $this->tool_registry = new Tools\Tool_Registry();
         $this->register_tools();
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/class-abilities-page.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/class-external-data-admin.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/class-plugin-integration-registry.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/class-plugin-integrations-page.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/class-abilities-page.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/class-external-data-admin.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/class-plugin-integration-registry.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/class-plugin-integrations-page.php';
         new Admin\Admin_Page( $this->token_manager, $this->tool_registry );
         new Admin\Abilities_Page();
         new Admin\External_Data_Admin();
-        if ( \apply_filters( 'easy_mcp_ai_oauth_enabled', true ) ) {
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/class-oauth-admin.php';
+        if ( \apply_filters( 'rankout_connector_oauth_enabled', true ) ) {
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/class-oauth-admin.php';
             new Admin\OAuth_Admin();
         }
     }
@@ -214,7 +214,7 @@ class Plugin {
             return;
         }
 
-        if ( ! \apply_filters( 'easy_mcp_ai_oauth_enabled', true ) ) {
+        if ( ! \apply_filters( 'rankout_connector_oauth_enabled', true ) ) {
             return;
         }
 
@@ -237,12 +237,12 @@ class Plugin {
         
         
         
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/class-dynamic-tool-registrar.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/class-dynamic-tool-registrar.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
         
         
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-token-endpoint.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-discovery.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-token-endpoint.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-discovery.php';
         $discovery = new OAuth\Discovery();
         $rest_req  = new \WP_REST_Request( 'GET' );
         $response  = $is_protected_resource
@@ -288,11 +288,11 @@ class Plugin {
 
     public function handle_oauth_authorize_request() {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public routing check; authorize handler enforces its own nonce downstream.
-        $oauth_param = isset( $_GET['easy_mcp_ai_oauth'] ) ? sanitize_text_field( wp_unslash( $_GET['easy_mcp_ai_oauth'] ) ) : '';
+        $oauth_param = isset( $_GET['rankout_connector_oauth'] ) ? sanitize_text_field( wp_unslash( $_GET['rankout_connector_oauth'] ) ) : '';
         if ( 'authorize' !== $oauth_param ) {
             return;
         }
-        if ( ! \apply_filters( 'easy_mcp_ai_oauth_enabled', true ) ) {
+        if ( ! \apply_filters( 'rankout_connector_oauth_enabled', true ) ) {
             return;
         }
         $this->handle_oauth_authorize();
@@ -307,15 +307,15 @@ class Plugin {
 
 
     private function handle_oauth_authorize() {
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-consent-screen.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-client-registry.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-consent-screen.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-client-registry.php';
         
         
         
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-token-endpoint.php';
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-authorization-endpoint.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-token-endpoint.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-authorization-endpoint.php';
 
         $method  = isset( $_SERVER['REQUEST_METHOD'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) : 'GET';
         $request = new \WP_REST_Request( $method );
@@ -404,7 +404,7 @@ class Plugin {
 
         
         
-        \Easy_MCP_AI\History\Change_Log_Schema::maybe_upgrade();
+        \RankOut_Connector\History\Change_Log_Schema::maybe_upgrade();
 
         $this->token_manager     = new Auth\Token_Manager();
         $this->tool_registry     = new Tools\Tool_Registry();
@@ -417,9 +417,9 @@ class Plugin {
         
         
         
-        if ( \get_option( 'easy_mcp_ai_change_log_enabled', true ) ) {
-            ( new \Easy_MCP_AI\History\Change_Recorder(
-                new \Easy_MCP_AI\History\Change_Log_Repository()
+        if ( \get_option( 'rankout_connector_change_log_enabled', true ) ) {
+            ( new \RankOut_Connector\History\Change_Recorder(
+                new \RankOut_Connector\History\Change_Log_Repository()
             ) )->register();
         }
 
@@ -427,17 +427,17 @@ class Plugin {
         $transport->register_routes();
 
         
-        if ( \apply_filters( 'easy_mcp_ai_oauth_enabled', true ) ) {
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-discovery.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-client-registry.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-token-manager.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-token-validator.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-authorization-endpoint.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-token-endpoint.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-consent-screen.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-routes.php';
+        if ( \apply_filters( 'rankout_connector_oauth_enabled', true ) ) {
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-discovery.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-client-registry.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-token-manager.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-token-validator.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-authorization-endpoint.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-token-endpoint.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-consent-screen.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-routes.php';
             $oauth_routes = new OAuth\OAuth_Routes();
             $oauth_routes->register_routes();
         }
@@ -452,29 +452,22 @@ class Plugin {
             'site-health',
         );
 
-        
-        if ( ! empty( \get_option( \Easy_MCP_AI\GSC\GSC_Client::OPTION_JSON, '' ) ) ) {
-            $tool_dirs[] = 'gsc';
-        }
-        
-        if ( ! empty( \get_option( \Easy_MCP_AI\GA\GA_Client::OPTION_JSON, '' ) ) ) {
-            $tool_dirs[] = 'ga';
-        }
-        
-        $dfs_login    = \get_option( \Easy_MCP_AI\DFS\DataforSEO_Client::OPTION_LOGIN, '' );
-        $dfs_api_pwd  = \get_option( \Easy_MCP_AI\DFS\DataforSEO_Client::OPTION_API_PASSWORD, '' );
-        if ( ! empty( $dfs_login ) && ! empty( $dfs_api_pwd ) ) {
-            $tool_dirs[] = 'dfs';
-        }
-        
-        if ( ! empty( \get_option( \Easy_MCP_AI\Semrush\Semrush_Client::OPTION_API_KEY, '' ) ) ) {
-            $tool_dirs[] = 'semrush';
-        }
-        
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/users/trait-user-meta-auth-guard.php';
+        // GA4/GSC/Semrush/DataForSEO tool categories are deliberately never
+        // loaded here — RankOut's own dashboard already has first-party
+        // Google OAuth integrations for GA/GSC and its own paid Semrush/
+        // DataForSEO API relationships; a client's WordPress admin pasting
+        // its own copies of those credentials would be a strictly worse,
+        // redundant credential surface for data RankOut already pulls
+        // itself. The External Data admin settings page and these client
+        // classes are left in place (dead but harmless) rather than
+        // deleted outright, since class-external-data-admin.php still
+        // references them — removing that page is a follow-up cleanup,
+        // not required for these tool categories to be genuinely inert.
+
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/users/trait-user-meta-auth-guard.php';
 
         foreach ( $tool_dirs as $dir ) {
-            $tool_path = EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/' . $dir . '/';
+            $tool_path = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/' . $dir . '/';
             if ( is_dir( $tool_path ) ) {
                 $files = glob( $tool_path . 'class-*.php' );
                 if ( $files ) {
@@ -486,7 +479,7 @@ class Plugin {
         }
 
         
-        $enabled_plugin_groups = (array) \get_option( 'easy_mcp_ai_enabled_plugin_groups', array() );
+        $enabled_plugin_groups = (array) \get_option( 'rankout_connector_enabled_plugin_groups', array() );
         if ( ! empty( $enabled_plugin_groups ) ) {
             $group_dir_map = array(
                 'woocommerce'         => 'woocommerce',
@@ -504,7 +497,7 @@ class Plugin {
                 }
             }
             foreach ( array_keys( $dirs_to_load ) as $plugin_dir ) {
-                $plugin_tool_path = EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/' . $plugin_dir . '/';
+                $plugin_tool_path = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/' . $plugin_dir . '/';
                 if ( is_dir( $plugin_tool_path ) ) {
                     $plugin_files = glob( $plugin_tool_path . 'class-*.php' );
                     if ( $plugin_files ) {
@@ -546,7 +539,7 @@ class Plugin {
     }
 
     private function register_resources() {
-        $files = glob( EASY_MCP_AI_PLUGIN_DIR . 'includes/resources/class-*-resource.php' );
+        $files = glob( RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/resources/class-*-resource.php' );
         if ( $files ) {
             foreach ( $files as $file ) {
                 require_once $file;
@@ -573,8 +566,8 @@ class Plugin {
             return;
         }
         global $wpdb;
-        $codes_table  = $wpdb->prefix . 'easy_mcp_ai_oauth_codes';
-        $tokens_table = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $codes_table  = $wpdb->prefix . 'rankout_connector_oauth_codes';
+        $tokens_table = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
 
         $i = 0;
         do {
@@ -606,7 +599,7 @@ class Plugin {
             // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- direct DB required for batched usermeta cleanup.
             $rows = $wpdb->get_results( $wpdb->prepare(
                 "SELECT umeta_id, meta_value FROM {$wpdb->usermeta} WHERE meta_key LIKE %s LIMIT 500",
-                $wpdb->esc_like( '_easy_mcp_ai_new_token_' ) . '%'
+                $wpdb->esc_like( '_rankout_connector_new_token_' ) . '%'
             ), ARRAY_A );
             $deleted = 0;
             if ( $rows ) {
@@ -637,20 +630,20 @@ class Plugin {
         if ( ! \wp_doing_cron() ) {
             return;
         }
-        $retention = (int) \get_option( 'easy_mcp_ai_change_log_retention', 30 );
+        $retention = (int) \get_option( 'rankout_connector_change_log_retention', 30 );
         if ( $retention <= 0 ) {
             return;
         }
         $cutoff = \gmdate( 'Y-m-d H:i:s', time() - ( $retention * DAY_IN_SECONDS ) );
 
-        if ( ! class_exists( '\\Easy_MCP_AI\\History\\Change_Log_Repository' ) ) {
-            $f = EASY_MCP_AI_PLUGIN_DIR . 'includes/history/class-change-log-repository.php';
+        if ( ! class_exists( '\\RankOut_Connector\\History\\Change_Log_Repository' ) ) {
+            $f = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/history/class-change-log-repository.php';
             if ( ! file_exists( $f ) ) {
                 return;
             }
             require_once $f;
         }
-        $repo = new \Easy_MCP_AI\History\Change_Log_Repository();
+        $repo = new \RankOut_Connector\History\Change_Log_Repository();
         for ( $i = 0; $i < self::CLEANUP_MAX_ITERATIONS; $i++ ) {
             $n = $repo->delete_older_than( $cutoff, 500 );
             if ( $n < 500 ) {
@@ -664,11 +657,11 @@ class Plugin {
             return;
         }
         global $wpdb;
-        $retention = max( 1, (int) \get_option( 'easy_mcp_ai_audit_log_retention', 30 ) );
+        $retention = max( 1, (int) \get_option( 'rankout_connector_audit_log_retention', 30 ) );
         
         $i = 0;
         do {
-            $table   = \esc_sql( $wpdb->prefix . 'easy_mcp_ai_audit_log' );
+            $table   = \esc_sql( $wpdb->prefix . 'rankout_connector_audit_log' );
             // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- table name is not user input, direct DB required for batch cleanup.
             $deleted = $wpdb->query( $wpdb->prepare(
                 "DELETE FROM `{$table}` WHERE created_at < DATE_SUB(UTC_TIMESTAMP(), INTERVAL %d DAY) LIMIT 500",
@@ -683,8 +676,8 @@ class Plugin {
         try {
             Activator::activate();
             
-            if ( \apply_filters( 'easy_mcp_ai_oauth_enabled', true ) ) {
-                require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
+            if ( \apply_filters( 'rankout_connector_oauth_enabled', true ) ) {
+                require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
                 OAuth\OAuth_Schema::create_tables();
             }
         } finally {
@@ -701,10 +694,10 @@ class Plugin {
         if ( ! \is_admin() && ! ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
             return;
         }
-        if ( ! \apply_filters( 'easy_mcp_ai_oauth_enabled', true ) ) {
+        if ( ! \apply_filters( 'rankout_connector_oauth_enabled', true ) ) {
             return;
         }
-        $oauth_schema_file = EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
+        $oauth_schema_file = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
         if ( file_exists( $oauth_schema_file ) ) {
             require_once $oauth_schema_file;
             OAuth\OAuth_Schema::maybe_upgrade();

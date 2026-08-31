@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\OAuth;
+namespace RankOut_Connector\OAuth;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -20,7 +20,7 @@ class Discovery {
 
 
 
-    const NAMESPACE_V1 = 'easy-mcp-ai/v1';
+    const NAMESPACE_V1 = 'rankout-connector/v1';
 
     
 
@@ -72,7 +72,7 @@ class Discovery {
 
         $metadata = array(
             'issuer'                                => home_url(),
-            'authorization_endpoint'                => home_url( '?easy_mcp_ai_oauth=authorize' ),
+            'authorization_endpoint'                => home_url( '?rankout_connector_oauth=authorize' ),
             'token_endpoint'                        => $rest_base . '/oauth/token',
             'registration_endpoint'                 => $rest_base . '/oauth/register',
             'revocation_endpoint'                   => $rest_base . '/oauth/revoke',
@@ -108,7 +108,7 @@ class Discovery {
         }
         return new \WP_Error(
             'oauth_requires_https',
-            __( 'OAuth metadata endpoints require HTTPS.', 'easy-mcp-ai' ),
+            __( 'OAuth metadata endpoints require HTTPS.', 'rankout-connector' ),
             array( 'status' => 403 )
         );
     }

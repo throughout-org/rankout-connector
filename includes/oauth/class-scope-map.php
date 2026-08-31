@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\OAuth;
+namespace RankOut_Connector\OAuth;
 
-use Easy_MCP_AI\Tools\Dynamic_Tool_Registrar;
+use RankOut_Connector\Tools\Dynamic_Tool_Registrar;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -152,17 +152,17 @@ class Scope_Map {
 
     public static function is_plugin_category_active( string $slug ): bool {
         if ( 'gsc' === $slug ) {
-            return ! empty( \get_option( 'easy_mcp_ai_gsc_service_account_json', '' ) );
+            return ! empty( \get_option( 'rankout_connector_gsc_service_account_json', '' ) );
         }
         if ( 'ga' === $slug ) {
-            return ! empty( \get_option( 'easy_mcp_ai_ga_service_account_json', '' ) );
+            return ! empty( \get_option( 'rankout_connector_ga_service_account_json', '' ) );
         }
         if ( 'dfs' === $slug ) {
-            return ! empty( \get_option( 'easy_mcp_ai_dfs_login', '' ) )
-                && ! empty( \get_option( 'easy_mcp_ai_dfs_api_password', '' ) );
+            return ! empty( \get_option( 'rankout_connector_dfs_login', '' ) )
+                && ! empty( \get_option( 'rankout_connector_dfs_api_password', '' ) );
         }
         if ( 'semrush' === $slug ) {
-            return ! empty( \get_option( 'easy_mcp_ai_semrush_api_key', '' ) );
+            return ! empty( \get_option( 'rankout_connector_semrush_api_key', '' ) );
         }
         if ( ! isset( self::PLUGIN_DETECTION_CLASSES[ $slug ] ) ) {
             return false;
@@ -297,8 +297,8 @@ class Scope_Map {
             return array();
         }
 
-        if ( ! class_exists( '\\Easy_MCP_AI\\Tools\\Dynamic_Tool_Registrar' ) ) {
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/class-dynamic-tool-registrar.php';
+        if ( ! class_exists( '\\RankOut_Connector\\Tools\\Dynamic_Tool_Registrar' ) ) {
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/class-dynamic-tool-registrar.php';
         }
 
         $prefixes = array();
@@ -510,34 +510,34 @@ class Scope_Map {
             $seen[ $slug ] = true;
 
             $labels = array(
-                'posts'       => __( 'Posts & Pages', 'easy-mcp-ai' ),
-                'media'       => __( 'Media', 'easy-mcp-ai' ),
-                'taxonomies'  => __( 'Taxonomies', 'easy-mcp-ai' ),
-                'comments'    => __( 'Comments', 'easy-mcp-ai' ),
-                'users'       => __( 'Users', 'easy-mcp-ai' ),
-                'menus'       => __( 'Menus', 'easy-mcp-ai' ),
-                'blocks'      => __( 'Blocks & Themes', 'easy-mcp-ai' ),
-                'plugins'     => __( 'Plugins', 'easy-mcp-ai' ),
-                'settings'    => __( 'Settings', 'easy-mcp-ai' ),
+                'posts'       => __( 'Posts & Pages', 'rankout-connector' ),
+                'media'       => __( 'Media', 'rankout-connector' ),
+                'taxonomies'  => __( 'Taxonomies', 'rankout-connector' ),
+                'comments'    => __( 'Comments', 'rankout-connector' ),
+                'users'       => __( 'Users', 'rankout-connector' ),
+                'menus'       => __( 'Menus', 'rankout-connector' ),
+                'blocks'      => __( 'Blocks & Themes', 'rankout-connector' ),
+                'plugins'     => __( 'Plugins', 'rankout-connector' ),
+                'settings'    => __( 'Settings', 'rankout-connector' ),
                 'woocommerce' => 'WooCommerce',
-                'acf'         => __( 'Advanced Custom Fields', 'easy-mcp-ai' ),
+                'acf'         => __( 'Advanced Custom Fields', 'rankout-connector' ),
                 'buddypress'  => 'BuddyPress',
-                'events'      => __( 'The Events Calendar', 'easy-mcp-ai' ),
-                'yoast'       => __( 'Yoast SEO', 'easy-mcp-ai' ),
-                'aioseo'      => __( 'All in One SEO', 'easy-mcp-ai' ),
-                'rankmath'    => __( 'Rank Math SEO', 'easy-mcp-ai' ),
-                'gsc'         => __( 'Google Search Console', 'easy-mcp-ai' ),
-                'ga'          => __( 'Google Analytics', 'easy-mcp-ai' ),
-                'dfs'         => __( 'DataforSEO', 'easy-mcp-ai' ),
-                'semrush'     => __( 'Semrush', 'easy-mcp-ai' ),
-                'term_meta'   => __( 'Term Meta', 'easy-mcp-ai' ),
-                'user_meta'   => __( 'User Meta', 'easy-mcp-ai' ),
-                'appearance'  => __( 'Site Appearance (templates & global styles)', 'easy-mcp-ai' ),
+                'events'      => __( 'The Events Calendar', 'rankout-connector' ),
+                'yoast'       => __( 'Yoast SEO', 'rankout-connector' ),
+                'aioseo'      => __( 'All in One SEO', 'rankout-connector' ),
+                'rankmath'    => __( 'Rank Math SEO', 'rankout-connector' ),
+                'gsc'         => __( 'Google Search Console', 'rankout-connector' ),
+                'ga'          => __( 'Google Analytics', 'rankout-connector' ),
+                'dfs'         => __( 'DataforSEO', 'rankout-connector' ),
+                'semrush'     => __( 'Semrush', 'rankout-connector' ),
+                'term_meta'   => __( 'Term Meta', 'rankout-connector' ),
+                'user_meta'   => __( 'User Meta', 'rankout-connector' ),
+                'appearance'  => __( 'Site Appearance (templates & global styles)', 'rankout-connector' ),
                 'wc_webhooks' => 'WooCommerce Webhooks',
-                'user_create' => __( 'Users — Create', 'easy-mcp-ai' ),
-                'user_update' => __( 'Users — Update', 'easy-mcp-ai' ),
-                'user_delete' => __( 'Users — Delete', 'easy-mcp-ai' ),
-                'history'     => __( 'Change History (audit log of MCP edits)', 'easy-mcp-ai' ),
+                'user_create' => __( 'Users — Create', 'rankout-connector' ),
+                'user_update' => __( 'Users — Update', 'rankout-connector' ),
+                'user_delete' => __( 'Users — Delete', 'rankout-connector' ),
+                'history'     => __( 'Change History (audit log of MCP edits)', 'rankout-connector' ),
             );
 
             $is_core        = in_array( $slug, self::CORE_CATEGORIES, true );
@@ -593,7 +593,7 @@ class Scope_Map {
                     $display_label = ucfirst( $parts[0] );
                 } else {
                     $norm_prefix   = 'core';
-                    $display_label = __( 'Core', 'easy-mcp-ai' );
+                    $display_label = __( 'Core', 'rankout-connector' );
                 }
                 if ( '' === $norm_prefix || isset( $seen_prefixes[ $norm_prefix ] ) ) {
                     continue;
@@ -605,7 +605,7 @@ class Scope_Map {
                 $categories[] = array(
                     'slug'            => "abilities_{$norm_prefix}",
                     /* translators: %s: ability prefix (e.g. "Core", "Wpforms") */
-                    'label'           => sprintf( __( 'Abilities — %s', 'easy-mcp-ai' ), $display_label ),
+                    'label'           => sprintf( __( 'Abilities — %s', 'rankout-connector' ), $display_label ),
                     'read_scope'      => "mcp:abilities:{$norm_prefix}",
                     'write_scope'     => '',     
                     'default_read'    => false,  

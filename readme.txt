@@ -1,4 +1,4 @@
-=== Easy MCP AI – Claude, ChatGPT & SEO Data Connector ===
+=== RankOut Connector – Claude, ChatGPT & SEO Data Connector ===
 Contributors: easymcpai
 Tags: mcp, ai, ai-seo, claude, mcp-server
 Requires at least: 6.0
@@ -12,7 +12,7 @@ Connect Claude, ChatGPT & any AI to WordPress. Manage your entire site by chat �
 
 == Description ==
 
-[**Easy MCP AI**](https://easymcpai.com/) is the most complete **free WordPress MCP server** — a remote MCP server built so AI assistants and autonomous AI agents can run your entire site workflow, from content and publishing to SEO research, traffic monitoring, and daily admin, through the [Model Context Protocol](https://modelcontextprotocol.io). It works as an MCP adapter for any MCP-compatible AI client, making your site agent-ready out of the box. Ask your AI about Google Analytics, Google Search Console, and SEO data without leaving your chat. You bring the direction. Your AI handles the execution.
+[**RankOut Connector**](https://easymcpai.com/) is the most complete **free WordPress MCP server** — a remote MCP server built so AI assistants and autonomous AI agents can run your entire site workflow, from content and publishing to SEO research, traffic monitoring, and daily admin, through the [Model Context Protocol](https://modelcontextprotocol.io). It works as an MCP adapter for any MCP-compatible AI client, making your site agent-ready out of the box. Ask your AI about Google Analytics, Google Search Console, and SEO data without leaving your chat. You bring the direction. Your AI handles the execution.
 
 No Node.js. No external proxy. No complicated setup. Just install, generate a token, and start building.
 
@@ -135,7 +135,7 @@ Once connected, your **AI agent** can handle everything you'd normally do in the
 **wp_history_get** — fetch a single change record with full before/after JSON snapshots
 **wp_history_diff** — compute a structured diff between any recorded snapshot and either another snapshot or the current live state of the object
 
-Non-admin tokens see only their own changes. Administrators (with the new `easy_mcp_ai_view_all_history` capability — granted to the Administrator role on activation) see every user's changes. Sensitive keys are redacted before storage, sensitive post meta keys (matching patterns like `*_token`, `*_secret`, `*password*`, `*api_key*`) are redacted at write time, and snapshot size is capped. The `wp_history_diff` tool also enforces these gates when reading the *current* live state: meta requires `edit_post`, options require `manage_options`, and protected meta keys are excluded entirely. Site owners can narrow query scope further via the `easy_mcp_ai_history_query_scope` filter (the self-pin for non-admins cannot be weakened by the filter).
+Non-admin tokens see only their own changes. Administrators (with the new `rankout_connector_view_all_history` capability — granted to the Administrator role on activation) see every user's changes. Sensitive keys are redacted before storage, sensitive post meta keys (matching patterns like `*_token`, `*_secret`, `*password*`, `*api_key*`) are redacted at write time, and snapshot size is capped. The `wp_history_diff` tool also enforces these gates when reading the *current* live state: meta requires `edit_post`, options require `manage_options`, and protected meta keys are excluded entirely. Site owners can narrow query scope further via the `rankout_connector_history_query_scope` filter (the self-pin for non-admins cannot be weakened by the filter).
 
 = 11 Google Analytics 4 Tools =
 
@@ -194,7 +194,7 @@ Non-admin tokens see only their own changes. Administrators (with the new `easy_
 
 = Connect Any Plugin with Abilities API =
 
-WordPress 6.9+ introduces **Abilities API** — a standard way for plugins to declare what they can do. Easy MCP AI acts as an **MCP adapter** for any plugin that registers Abilities — automatically discovering and exposing them as MCP tools with no custom code needed. If a plugin supports the Abilities API, your AI can use it out of the box.
+WordPress 6.9+ introduces **Abilities API** — a standard way for plugins to declare what they can do. RankOut Connector acts as an **MCP adapter** for any plugin that registers Abilities — automatically discovering and exposing them as MCP tools with no custom code needed. If a plugin supports the Abilities API, your AI can use it out of the box.
 
 = One-Click Connect with OAuth 2.0/2.1 =
 
@@ -224,7 +224,7 @@ Giving an AI access to your site is serious — so security is built into every 
 = Automatic Installation =
 
 1. In your WordPress admin, go to **Plugins → Add New Plugin**.
-2. Search for "Easy MCP AI".
+2. Search for "RankOut Connector".
 3. Click **Install Now** and then **Activate**.
 
 = Manual Installation =
@@ -239,16 +239,16 @@ Giving an AI access to your site is serious — so security is built into every 
 
 = Path A — One-Click Connect (OAuth) =
 
-1. Go to **Easy MCP AI → Dashboard** and copy your MCP server URL.
+1. Go to **RankOut Connector → Dashboard** and copy your MCP server URL.
 2. In your AI client (e.g. Claude Desktop → Settings → Connectors → Add custom connector), paste the server URL. No token needed.
 3. Your browser opens a WordPress login + consent screen. Sign in as the user the AI should act as.
 4. Tick the permission categories (Read / Write per content type, GA4, Search Console, etc.) you want to grant, then **Approve**.
 5. The client is connected. Start talking to your site.
-6. Manage or revoke connected clients anytime under **Easy MCP AI → API Token & OAuth → OAuth** tab.
+6. Manage or revoke connected clients anytime under **RankOut Connector → API Token & OAuth → OAuth** tab.
 
 = Path B — Manual Token (Bearer) =
 
-1. Go to **Easy MCP AI → API Tokens** in your WordPress admin sidebar.
+1. Go to **RankOut Connector → API Tokens** in your WordPress admin sidebar.
 2. Click **Create New Token**.
 3. Give the token a name, choose the WordPress user the AI will act as, and select which tools to allow.
 4. Click **Create Token** and copy the token — it is only shown once.
@@ -258,7 +258,7 @@ Giving an AI access to your site is serious — so security is built into every 
 
 == External services ==
 
-This plugin connects to the following third-party services **only when a site administrator explicitly configures their own external account credentials** in **Easy MCP AI → External Data**. Nothing is contacted on a default install.
+This plugin connects to the following third-party services **only when a site administrator explicitly configures their own external account credentials** in **RankOut Connector → External Data**. Nothing is contacted on a default install.
 
 **Semrush API** — `api.semrush.com`, `www.semrush.com`
 
@@ -290,49 +290,49 @@ This plugin connects to the following third-party services **only when a site ad
 
 == Frequently Asked Questions ==
 
-= What is Easy MCP AI? =
+= What is RankOut Connector? =
 
-Easy MCP AI is a free **WordPress AI connector** that turns your site into a remote **MCP (Model Context Protocol) server**. Once activated, any MCP-compatible AI assistant or AI agent — Claude (Anthropic), ChatGPT (OpenAI), Cursor, Gemini AI, n8n, and more — can read and write content, manage media, users, and settings, and pull SEO and analytics data through 204 ready-to-use tools. No Node.js, no proxy, no extra hosting.
+RankOut Connector is a free **WordPress AI connector** that turns your site into a remote **MCP (Model Context Protocol) server**. Once activated, any MCP-compatible AI assistant or AI agent — Claude (Anthropic), ChatGPT (OpenAI), Cursor, Gemini AI, n8n, and more — can read and write content, manage media, users, and settings, and pull SEO and analytics data through 204 ready-to-use tools. No Node.js, no proxy, no extra hosting.
 
 = Is this a WordPress MCP server? =
 
-Yes. Easy MCP AI acts as a **WordPress MCP adapter** — a full MCP server implementing the Model Context Protocol spec (v2025-11-25, with backwards compatibility for v2025-06-18 and v2025-03-26) directly inside WordPress. Your site exposes a single MCP endpoint at `/wp-json/easy-mcp-ai/v1/mcp` that any MCP client can connect to over HTTPS.
+Yes. RankOut Connector acts as a **WordPress MCP adapter** — a full MCP server implementing the Model Context Protocol spec (v2025-11-25, with backwards compatibility for v2025-06-18 and v2025-03-26) directly inside WordPress. Your site exposes a single MCP endpoint at `/wp-json/rankout-connector/v1/mcp` that any MCP client can connect to over HTTPS.
 
 = What is the Model Context Protocol (MCP)? =
 
 MCP is an open standard created by Anthropic that lets AI assistants and AI agents securely connect to external tools and data sources. It's quickly becoming the universal protocol for AI-to-app communication, supported by Anthropic, OpenAI, Google, and dozens of other platforms. Learn more at [modelcontextprotocol.io](https://modelcontextprotocol.io).
 
-= How is Easy MCP AI different from other WordPress AI plugins? =
+= How is RankOut Connector different from other WordPress AI plugins? =
 
-Most WordPress AI plugins embed a single AI provider (OpenAI, Claude, etc.) inside the wp-admin and bill you for usage. Easy MCP AI does the opposite — it makes your WordPress site an agent-ready backend that **any** AI assistant can connect to over MCP. You bring your own AI client, you bring your own model, and the plugin focuses on giving that AI safe, scoped access to your site: 214 tools, OAuth 2.0/2.1 one-click connect, per-token permissions, and a full audit trail.
+Most WordPress AI plugins embed a single AI provider (OpenAI, Claude, etc.) inside the wp-admin and bill you for usage. RankOut Connector does the opposite — it makes your WordPress site an agent-ready backend that **any** AI assistant can connect to over MCP. You bring your own AI client, you bring your own model, and the plugin focuses on giving that AI safe, scoped access to your site: 214 tools, OAuth 2.0/2.1 one-click connect, per-token permissions, and a full audit trail.
 
-= Is Easy MCP AI free? =
+= Is RankOut Connector free? =
 
-Yes. This **WordPress MCP** plugin is free and open source on the WordPress.org plugin directory. There are no paid tiers, no usage limits, and no telemetry. Optional external integrations (Semrush, DataForSEO, Google Analytics, Search Console) use **your own** third-party accounts — Easy MCP AI never bills you for API usage.
+Yes. This **WordPress MCP** plugin is free and open source on the WordPress.org plugin directory. There are no paid tiers, no usage limits, and no telemetry. Optional external integrations (Semrush, DataForSEO, Google Analytics, Search Console) use **your own** third-party accounts — RankOut Connector never bills you for API usage.
 
 = How do I connect Claude, ChatGPT, Cursor, Gemini, or n8n to my WordPress site? =
 
-After activation, go to **Easy MCP AI → Dashboard** and copy your MCP server URL. Then:
+After activation, go to **RankOut Connector → Dashboard** and copy your MCP server URL. Then:
 
 * **Claude Desktop / Claude.ai / Claude Code** (by Anthropic) — Settings → Connectors → Add custom connector, paste the URL, approve the OAuth consent screen. One click, no token.
 * **ChatGPT (OpenAI)** — add as an MCP server using the same URL.
 * **Cursor / Windsurf / Cline / Roo Code** — add MCP server in the client's settings using the URL.
 * **Gemini AI** (Gemini CLI / Google Antigravity) — register the MCP endpoint in the client config.
-* **n8n** — use the MCP node and point it at the URL plus a Bearer token created under **Easy MCP AI → API Tokens**.
+* **n8n** — use the MCP node and point it at the URL plus a Bearer token created under **RankOut Connector → API Tokens**.
 
 See the [integrations page](https://easymcpai.com/integrations) for step-by-step guides per client.
 
 = Does it work with WooCommerce, Yoast, Rank Math, ACF, BuddyPress, and The Events Calendar? =
 
-Yes. Easy MCP AI ships with first-party WooCommerce AI tool sets: **WooCommerce** (46 tools — products, orders, customers, coupons, reports, shipping, webhooks), **Advanced Custom Fields (ACF)** (6 tools to get and update ACF fields and ACF field groups on posts, users, and terms), **The Events Calendar** (10 tools), **BuddyPress** (10 tools), **Yoast SEO**, **Rank Math**, and **All in One SEO (AIOSEO)**. Each integration only loads if the underlying plugin is active, and each tool group can be toggled individually under **Easy MCP AI → Plugin Integrations**.
+Yes. RankOut Connector ships with first-party WooCommerce AI tool sets: **WooCommerce** (46 tools — products, orders, customers, coupons, reports, shipping, webhooks), **Advanced Custom Fields (ACF)** (6 tools to get and update ACF fields and ACF field groups on posts, users, and terms), **The Events Calendar** (10 tools), **BuddyPress** (10 tools), **Yoast SEO**, **Rank Math**, and **All in One SEO (AIOSEO)**. Each integration only loads if the underlying plugin is active, and each tool group can be toggled individually under **RankOut Connector → Plugin Integrations**.
 
-= Can I use Easy MCP AI as an AI writing assistant for WordPress? =
+= Can I use RankOut Connector as an AI writing assistant for WordPress? =
 
 Yes. Once connected, your AI acts as a writing assistant for WordPress — drafting posts, editing existing content, updating meta descriptions for SEO, and publishing — all from a single conversation. It works with Claude, ChatGPT, Gemini AI, or any other AI tool that supports MCP.
 
 = How do I connect Semrush, DataForSEO, Google Analytics, and Google Search Console? =
 
-Go to **Easy MCP AI → External Data**. Each service has its own section:
+Go to **RankOut Connector → External Data**. Each service has its own section:
 
 * **Semrush** — paste your API key, click Test, then toggle the 13 keyword research and SEO tools you want enabled.
 * **DataForSEO** — enter your account login + API password, click Test, then enable the 8 DFS tools including on-page SEO audits and SERP tools.
@@ -343,14 +343,14 @@ All credentials are stored AES-256-GCM encrypted with per-provider HKDF-derived 
 
 = Does this plugin send my content to OpenAI, Anthropic, or Google? =
 
-**No.** Easy MCP AI does not call any AI provider. The flow is the opposite: your AI assistant (Claude by Anthropic, ChatGPT by OpenAI, etc.) calls **your** WordPress site, and the plugin executes whatever tool the AI requested. Your content only leaves your server in the response that goes back to the AI client you connected — never to a third party you didn't choose. Outbound connections to Semrush / DataForSEO / Google APIs only happen if you explicitly configure those credentials, and they only receive the per-call parameters (keywords, target URLs, date ranges) — not your post content.
+**No.** RankOut Connector does not call any AI provider. The flow is the opposite: your AI assistant (Claude by Anthropic, ChatGPT by OpenAI, etc.) calls **your** WordPress site, and the plugin executes whatever tool the AI requested. Your content only leaves your server in the response that goes back to the AI client you connected — never to a third party you didn't choose. Outbound connections to Semrush / DataForSEO / Google APIs only happen if you explicitly configure those credentials, and they only receive the per-call parameters (keywords, target URLs, date ranges) — not your post content.
 
 = How does authentication work? =
 
 Two options, both production-grade:
 
 1. **OAuth 2.0/2.1 one-click connect** (recommended) — open your AI client, paste your MCP URL, sign in to WordPress, approve the consent screen. Done.
-2. **Manual Bearer token** — create a token under **Easy MCP AI → API Tokens**, paste it into your AI client.
+2. **Manual Bearer token** — create a token under **RankOut Connector → API Tokens**, paste it into your AI client.
 
 Under the hood, every token (OAuth or Bearer) is SHA-256 hashed before being saved — the raw value is never stored and cannot be recovered after creation.
 
@@ -362,7 +362,7 @@ Under the hood the plugin implements the full OAuth 2.1 spec: PKCE (S256), RFC 7
 
 = Do I need to enable OAuth? =
 
-No configuration required — OAuth 2.0/2.1 endpoints are live as soon as the plugin is activated. You can manage registered clients and revoke per-user grants under **Easy MCP AI → API Token & OAuth → OAuth** tab. Bearer tokens continue to work alongside OAuth for power users and automation.
+No configuration required — OAuth 2.0/2.1 endpoints are live as soon as the plugin is activated. You can manage registered clients and revoke per-user grants under **RankOut Connector → API Token & OAuth → OAuth** tab. Bearer tokens continue to work alongside OAuth for power users and automation.
 
 = Can I control what the AI is allowed to do? =
 
@@ -370,31 +370,31 @@ Yes, fully. Each token has its own permission set — you choose exactly which o
 
 = Can I limit which posts or pages the AI can edit? =
 
-Permissions are enforced at the **WordPress capability level**, not per-post. Easy MCP AI runs every tool call as the WordPress user the token is bound to, so the AI inherits exactly that user's `edit_posts` / `edit_others_posts` / `publish_posts` caps. If you want an AI restricted to, say, drafts only, create a dedicated low-privilege WordPress user (Contributor or Author) and bind the token to that user. Additionally, the **Force Draft** setting under Settings forces every create operation to draft status regardless of the AI's request.
+Permissions are enforced at the **WordPress capability level**, not per-post. RankOut Connector runs every tool call as the WordPress user the token is bound to, so the AI inherits exactly that user's `edit_posts` / `edit_others_posts` / `publish_posts` caps. If you want an AI restricted to, say, drafts only, create a dedicated low-privilege WordPress user (Contributor or Author) and bind the token to that user. Additionally, the **Force Draft** setting under Settings forces every create operation to draft status regardless of the AI's request.
 
 = How do I revoke access for an AI client? =
 
-For OAuth-connected clients, go to **Easy MCP AI → API Token & OAuth → OAuth** and click Revoke next to the grant — the client immediately loses access and any active refresh tokens are invalidated. For Bearer tokens, go to **Easy MCP AI → API Tokens** and delete the token. Either action is instant and irreversible.
+For OAuth-connected clients, go to **RankOut Connector → API Token & OAuth → OAuth** and click Revoke next to the grant — the client immediately loses access and any active refresh tokens are invalidated. For Bearer tokens, go to **RankOut Connector → API Tokens** and delete the token. Either action is instant and irreversible.
 
 = Where can I see a history of every AI action? =
 
-Go to **Easy MCP AI → Audit Log**. Every tool call is recorded in the user activity log with the token used, the tool name, the arguments, the result, the client IP, and a timestamp. The audit trail is paginated and searchable, and retention is configurable under Settings (default 30 days, after which old rows are auto-purged).
+Go to **RankOut Connector → Audit Log**. Every tool call is recorded in the user activity log with the token used, the tool name, the arguments, the result, the client IP, and a timestamp. The audit trail is paginated and searchable, and retention is configurable under Settings (default 30 days, after which old rows are auto-purged).
 
 = Will the AI publish posts automatically? =
 
-Only if you let it. By default, the AI can create posts in whatever status it asks for (draft, publish, etc.) — but you can flip the **Force Draft on Create** setting under **Easy MCP AI → Settings** and every newly created post or page will be forced to `draft` regardless of what the AI requested. Combine that with a Contributor-level WordPress user for the AI to require human review before anything goes live.
+Only if you let it. By default, the AI can create posts in whatever status it asks for (draft, publish, etc.) — but you can flip the **Force Draft on Create** setting under **RankOut Connector → Settings** and every newly created post or page will be forced to `draft` regardless of what the AI requested. Combine that with a Contributor-level WordPress user for the AI to require human review before anything goes live.
 
 = Is it safe to run on a live site? =
 
-Yes — Easy MCP AI is built for production. Every request is authenticated (OAuth 2.0/2.1 or Bearer), capability-checked against WordPress core permissions, rate-limited (default 60 req/min per token, configurable), and recorded in the audit trail. You can additionally restrict the endpoint to specific IP addresses, force all created content to draft, disable specific tools globally, and bind tokens to low-privilege WordPress users. The plugin only requires HTTPS for OAuth flows — bearer-token access is allowed over HTTP for local development but should never be exposed that way on a live site.
+Yes — RankOut Connector is built for production. Every request is authenticated (OAuth 2.0/2.1 or Bearer), capability-checked against WordPress core permissions, rate-limited (default 60 req/min per token, configurable), and recorded in the audit trail. You can additionally restrict the endpoint to specific IP addresses, force all created content to draft, disable specific tools globally, and bind tokens to low-privilege WordPress users. The plugin only requires HTTPS for OAuth flows — bearer-token access is allowed over HTTP for local development but should never be exposed that way on a live site.
 
 = Does it work with WordPress multisite? =
 
-Yes. Easy MCP AI runs per-site on a multisite network — each subsite has its own MCP endpoint, its own tokens, and its own audit log. Network-scoped operations (network options, sitewide plugin/theme activation) are additionally gated on Super Admin + `manage_network_options` / `manage_network_plugins` capabilities, so a per-site admin token cannot reach network-level state.
+Yes. RankOut Connector runs per-site on a multisite network — each subsite has its own MCP endpoint, its own tokens, and its own audit log. Network-scoped operations (network options, sitewide plugin/theme activation) are additionally gated on Super Admin + `manage_network_options` / `manage_network_plugins` capabilities, so a per-site admin token cannot reach network-level state.
 
 = Can I use this on localhost or a staging site? =
 
-Yes. On loopback addresses (`127.0.0.1`, `::1`) the OAuth HTTPS requirement is automatically relaxed so you can test against `http://localhost`. For non-loopback dev setups behind a reverse proxy that terminates TLS elsewhere, add `define('EASY_MCP_AI_OAUTH_ALLOW_HTTP', true);` to `wp-config.php`. **Never set that flag on a production site.** Bearer-token access works over HTTP without any flag, but again, only for dev.
+Yes. On loopback addresses (`127.0.0.1`, `::1`) the OAuth HTTPS requirement is automatically relaxed so you can test against `http://localhost`. For non-loopback dev setups behind a reverse proxy that terminates TLS elsewhere, add `define('RANKOUT_CONNECTOR_OAUTH_ALLOW_HTTP', true);` to `wp-config.php`. **Never set that flag on a production site.** Bearer-token access works over HTTP without any flag, but again, only for dev.
 
 = Does it work with custom post types and Gutenberg blocks? =
 
@@ -410,16 +410,16 @@ WordPress 6.0+ and PHP 7.4+. PHP 8.0 or higher is recommended. WordPress 6.9+ un
 
 = Does this require Node.js or a special server? =
 
-No long-running processes, no Node.js, no Docker. The plugin runs entirely inside WordPress as a normal PHP plugin. The plugin contacts external services (Semrush, DataForSEO, Google Analytics 4, Google Search Console) only if you explicitly add those third-party account credentials under **Easy MCP AI → External Data** — see the External services section above. Out of the box, nothing leaves your server.
+No long-running processes, no Node.js, no Docker. The plugin runs entirely inside WordPress as a normal PHP plugin. The plugin contacts external services (Semrush, DataForSEO, Google Analytics 4, Google Search Console) only if you explicitly add those third-party account credentials under **RankOut Connector → External Data** — see the External services section above. Out of the box, nothing leaves your server.
 
 = Why does the endpoint return 404 or 401 Unauthorized? =
 
 * **404 Not Found** — go to **Settings → Permalinks** in WordPress admin and click **Save Changes** to flush rewrite rules. Pretty permalinks must be enabled.
-* **401 Unauthorized** — double-check the Bearer token in your AI client matches one shown under **Easy MCP AI → API Tokens** (tokens are only shown once at creation — if you lost it, delete and recreate). For OAuth clients, try disconnecting and re-approving the connector. Also confirm your `Authorization: Bearer <token>` header is being sent (some reverse proxies strip it).
+* **401 Unauthorized** — double-check the Bearer token in your AI client matches one shown under **RankOut Connector → API Tokens** (tokens are only shown once at creation — if you lost it, delete and recreate). For OAuth clients, try disconnecting and re-approving the connector. Also confirm your `Authorization: Bearer <token>` header is being sent (some reverse proxies strip it).
 
 = Where do I report security bugs found in this plugin? =
 
-Please report security bugs found in the source code of the Easy MCP AI for WordPress plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/8e5e1a2e-1cd4-42d7-8a5d-9ff3d1a7f397). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+Please report security bugs found in the source code of the RankOut Connector for WordPress plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/8e5e1a2e-1cd4-42d7-8a5d-9ff3d1a7f397). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
 
 == Screenshots ==
 
@@ -478,13 +478,13 @@ Please report security bugs found in the source code of the Easy MCP AI for Word
 
 = 1.6.5 =
 * Added 13 Semrush Analytics API tools (`wp_semrush_*`): domain overview, organic keywords, organic competitors, keyword overview, related keywords, keyword difficulty, phrase questions, backlinks overview/list/referring-domains/anchors, URL organic keywords, and a free API-units balance check
-* Extended **Easy MCP AI → External Data** with a fourth Semrush section — paste an API key, test the connection, and toggle individual tools
+* Extended **RankOut Connector → External Data** with a fourth Semrush section — paste an API key, test the connection, and toggle individual tools
 * Added new OAuth scope `mcp:semrush:read` covering all 13 Semrush tools, with consent-screen entry gated on a saved API key
 * Subdomain and Subfolder reports are deferred to a future release pending docs verification
 
 = 1.6.1 =
 * Improved translation quality across 50 languages for a more natural, accurate admin experience
-* Fixed tool definitions that were causing errors when using Easy MCP AI with ChatGPT
+* Fixed tool definitions that were causing errors when using RankOut Connector with ChatGPT
 
 = 1.6.0 =
 * Ask your AI about SEO data from DataforSEO — live SERP results, keyword search volumes, backlinks, on-page issues, and ranked keywords for any domain
@@ -495,7 +495,7 @@ Please report security bugs found in the source code of the Easy MCP AI for Word
 = 1.5.0 =
 * Ask your AI about your Google Search Console data — top queries, clicks, impressions, sitemaps, and URL indexing status
 * Ask your AI about your Google Analytics 4 data — traffic, top pages, conversions, realtime active users, and more
-* New **External Data** page under Easy MCP AI to connect your Google service account once and enable/disable individual tools
+* New **External Data** page under RankOut Connector to connect your Google service account once and enable/disable individual tools
 * Your Google credentials stay encrypted on your server and never leave WordPress
 * New OAuth scopes for fine-grained access: `mcp:ga:read` (Google Analytics tools) and `mcp:gsc:read` (Search Console tools)
 
@@ -538,7 +538,7 @@ Please report security bugs found in the source code of the Easy MCP AI for Word
 * Tool count increased from 48 to 74
 * Fixed plugin activation/deactivation failing due to URL-encoded plugin slugs
 * Fixed tool whitelist bug that blocked all tools when no wildcard patterns were set
-* Renamed REST endpoint from `wp-mcp/v1` to `easy-mcp-ai/v1`
+* Renamed REST endpoint from `wp-mcp/v1` to `rankout-connector/v1`
 * Various security and code quality improvements
 
 = 1.0.0 =
@@ -566,16 +566,16 @@ Bug-fix release. AI connections now recover automatically when a login token exp
 Bug-fix release. Plugin-provided abilities now save and activate correctly on the Abilities page. No breaking changes.
 
 = 1.7.0 =
-No breaking changes. A `change_log` table is added; Change History recording is OFF by default. Enable it under Easy MCP AI → Settings (90-day retention). Only MCP tool writes are recorded — admin-UI and cron edits are not.
+No breaking changes. A `change_log` table is added; Change History recording is OFF by default. Enable it under RankOut Connector → Settings (90-day retention). Only MCP tool writes are recorded — admin-UI and cron edits are not.
 
 = 1.6.0 =
-No breaking changes. DataforSEO tools are inactive until you add your API credentials under Easy MCP AI → External Data.
+No breaking changes. DataforSEO tools are inactive until you add your API credentials under RankOut Connector → External Data.
 
 = 1.3.0 =
-No breaking changes. WooCommerce, ACF, The Events Calendar, BuddyPress, and SEO plugin tools are opt-in — enable them from Easy MCP AI → Plugin Integrations.
+No breaking changes. WooCommerce, ACF, The Events Calendar, BuddyPress, and SEO plugin tools are opt-in — enable them from RankOut Connector → Plugin Integrations.
 
 = 1.1.1 =
-The MCP endpoint has moved from `wp-mcp/v1` to `easy-mcp-ai/v1`. Update your AI client connection URLs after upgrading.
+The MCP endpoint has moved from `wp-mcp/v1` to `rankout-connector/v1`. Update your AI client connection URLs after upgrading.
 
 = 1.0.0 =
 Initial release. No upgrade steps required.

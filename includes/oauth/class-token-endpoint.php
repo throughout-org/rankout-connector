@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\OAuth;
+namespace RankOut_Connector\OAuth;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -20,7 +20,7 @@ class Token_Endpoint {
 
 
 
-    const NAMESPACE_V1 = 'easy-mcp-ai/v1';
+    const NAMESPACE_V1 = 'rankout-connector/v1';
 
     
 
@@ -61,7 +61,7 @@ class Token_Endpoint {
                 return new \WP_REST_Response(
                     array(
                         'error'             => 'unsupported_grant_type',
-                        'error_description' => __( 'Only authorization_code and refresh_token grant types are supported.', 'easy-mcp-ai' ),
+                        'error_description' => __( 'Only authorization_code and refresh_token grant types are supported.', 'rankout-connector' ),
                     ),
                     400
                 );
@@ -94,17 +94,17 @@ class Token_Endpoint {
 
         
         if ( '' === $code || '' === $code_verifier || '' === $client_id || '' === $redirect_uri ) {
-            return $this->token_error( 'invalid_request', __( 'Missing required parameter.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_request', __( 'Missing required parameter.', 'rankout-connector' ) );
         }
 
         
         if ( ! preg_match( '/^[A-Za-z0-9\-._~]{43,128}$/', $code_verifier ) ) {
-            return $this->token_error( 'invalid_request', __( 'Invalid code_verifier format.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_request', __( 'Invalid code_verifier format.', 'rankout-connector' ) );
         }
 
         
         $code_hash   = hash( 'sha256', $code );
-        $codes_table = $wpdb->prefix . 'easy_mcp_ai_oauth_codes';
+        $codes_table = $wpdb->prefix . 'rankout_connector_oauth_codes';
 
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table prefixed by $wpdb->prefix; auth code lookup must be fresh.
         $code_row = $wpdb->get_row(
@@ -116,24 +116,24 @@ class Token_Endpoint {
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         if ( ! $code_row ) {
-            return $this->token_error( 'invalid_grant', __( 'Authorization code not found.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_grant', __( 'Authorization code not found.', 'rankout-connector' ) );
         }
 
         
         if ( null !== $code_row->used_at ) {
             $this->revoke_tokens_for_code( $code_row );
-            return $this->token_error( 'invalid_grant', __( 'Authorization code has already been used. All associated tokens have been revoked.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_grant', __( 'Authorization code has already been used. All associated tokens have been revoked.', 'rankout-connector' ) );
         }
 
         
         $now_utc = gmdate( 'Y-m-d H:i:s' );
         if ( $code_row->expires_at < $now_utc ) {
-            return $this->token_error( 'invalid_grant', __( 'Authorization code has expired.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_grant', __( 'Authorization code has expired.', 'rankout-connector' ) );
         }
 
         
         if ( $code_row->client_id !== $client_id ) {
-            return $this->token_error( 'invalid_grant', __( 'Client ID mismatch.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_grant', __( 'Client ID mismatch.', 'rankout-connector' ) );
         }
 
         
@@ -141,11 +141,11 @@ class Token_Endpoint {
         $registry = new Client_Registry();
         $client   = $registry->get_client( $client_id );
         if ( null === $client ) {
-            return $this->token_error( 'invalid_client', __( 'Client not found or inactive.', 'easy-mcp-ai' ), 401 );
+            return $this->token_error( 'invalid_client', __( 'Client not found or inactive.', 'rankout-connector' ), 401 );
         }
 
         if ( $code_row->redirect_uri !== $redirect_uri ) {
-            return $this->token_error( 'invalid_grant', __( 'Redirect URI mismatch.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_grant', __( 'Redirect URI mismatch.', 'rankout-connector' ) );
         }
 
         
@@ -158,13 +158,13 @@ class Token_Endpoint {
             $resource = rest_url( self::NAMESPACE_V1 . '/mcp' );
         }
         if ( ! empty( $code_row->resource ) && ! self::resource_matches( $resource, $code_row->resource ) ) {
-            return $this->token_error( 'invalid_target', __( 'Resource parameter does not match the authorized resource.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_target', __( 'Resource parameter does not match the authorized resource.', 'rankout-connector' ) );
         }
 
         
         $computed_challenge = self::base64url_encode( hash( 'sha256', $code_verifier, true ) );
         if ( ! hash_equals( $code_row->code_challenge, $computed_challenge ) ) {
-            return $this->token_error( 'invalid_grant', __( 'PKCE verification failed.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_grant', __( 'PKCE verification failed.', 'rankout-connector' ) );
         }
 
         
@@ -186,7 +186,7 @@ class Token_Endpoint {
             
             
             $this->revoke_tokens_for_code( $code_row );
-            return $this->token_error( 'invalid_grant', __( 'Authorization code already redeemed or expired. Tokens revoked.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_grant', __( 'Authorization code already redeemed or expired. Tokens revoked.', 'rankout-connector' ) );
         }
 
         
@@ -199,7 +199,7 @@ class Token_Endpoint {
         );
 
         if ( null === $tokens ) {
-            return $this->token_error( 'server_error', __( 'Failed to issue access token.', 'easy-mcp-ai' ), 500 );
+            return $this->token_error( 'server_error', __( 'Failed to issue access token.', 'rankout-connector' ), 500 );
         }
 
         
@@ -245,14 +245,14 @@ class Token_Endpoint {
         $resource      = is_string( $request->get_param( 'resource' ) ) ? $request->get_param( 'resource' ) : '';
 
         if ( '' === $refresh_token || '' === $client_id ) {
-            return $this->token_error( 'invalid_request', __( 'Missing required parameter.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_request', __( 'Missing required parameter.', 'rankout-connector' ) );
         }
 
         
         
         $client = ( new Client_Registry() )->get_client( $client_id );
         if ( ! $client ) {
-            return $this->token_error( 'invalid_client', __( 'Client not found or inactive.', 'easy-mcp-ai' ), 401 );
+            return $this->token_error( 'invalid_client', __( 'Client not found or inactive.', 'rankout-connector' ), 401 );
         }
 
         if ( empty( $resource ) ) {
@@ -267,14 +267,14 @@ class Token_Endpoint {
         
         $expected_resource = rest_url( self::NAMESPACE_V1 . '/mcp' );
         if ( ! self::resource_matches( $resource, $expected_resource ) ) {
-            return $this->token_error( 'invalid_grant', __( 'Resource mismatch.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_grant', __( 'Resource mismatch.', 'rankout-connector' ) );
         }
 
         $token_manager = new OAuth_Token_Manager();
         $result = $token_manager->refresh( $refresh_token, $client_id, $resource );
 
         if ( false === $result ) {
-            return $this->token_error( 'invalid_grant', __( 'Refresh token is invalid, expired, or revoked.', 'easy-mcp-ai' ) );
+            return $this->token_error( 'invalid_grant', __( 'Refresh token is invalid, expired, or revoked.', 'rankout-connector' ) );
         }
 
         $response = new \WP_REST_Response(
@@ -307,8 +307,8 @@ class Token_Endpoint {
 
     private function revoke_tokens_for_code( $code_row ) {
         global $wpdb;
-        $tokens_table = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
-        $codes_table  = $wpdb->prefix . 'easy_mcp_ai_oauth_codes';
+        $tokens_table = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
+        $codes_table  = $wpdb->prefix . 'rankout_connector_oauth_codes';
 
         if ( empty( $code_row->minted_token_id ) && ! empty( $code_row->code_hash ) ) {
             // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table prefixed by $wpdb->prefix.
@@ -482,7 +482,7 @@ class Token_Endpoint {
         return new \WP_REST_Response(
             array(
                 'error'             => 'insecure_transport',
-                'error_description' => __( 'HTTPS is required.', 'easy-mcp-ai' ),
+                'error_description' => __( 'HTTPS is required.', 'rankout-connector' ),
             ),
             403
         );
@@ -502,7 +502,7 @@ class Token_Endpoint {
 
 
     private static function is_local_dev_request(): bool {
-        if ( defined( 'EASY_MCP_AI_OAUTH_ALLOW_HTTP' ) && EASY_MCP_AI_OAUTH_ALLOW_HTTP ) {
+        if ( defined( 'RANKOUT_CONNECTOR_OAUTH_ALLOW_HTTP' ) && RANKOUT_CONNECTOR_OAUTH_ALLOW_HTTP ) {
             return true;
         }
 
@@ -527,17 +527,17 @@ class Token_Endpoint {
             ? trim( sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ), '[]' )
             : 'unknown';
 
-        $per_ip_key   = 'easy_mcp_ai_token_rl_' . md5( $ip );
-        $global_key   = 'easy_mcp_ai_token_rl_global';
+        $per_ip_key   = 'rankout_connector_token_rl_' . md5( $ip );
+        $global_key   = 'rankout_connector_token_rl_global';
         $per_ip_limit = 120;
         $global_limit = 1200;
 
         if ( \wp_using_ext_object_cache() ) {
-            \wp_cache_add( $per_ip_key, 0, 'easy_mcp_ai', HOUR_IN_SECONDS );
-            $ip_count = \wp_cache_incr( $per_ip_key, 1, 'easy_mcp_ai' );
+            \wp_cache_add( $per_ip_key, 0, 'rankout_connector', HOUR_IN_SECONDS );
+            $ip_count = \wp_cache_incr( $per_ip_key, 1, 'rankout_connector' );
 
-            \wp_cache_add( $global_key, 0, 'easy_mcp_ai', HOUR_IN_SECONDS );
-            $global_count = \wp_cache_incr( $global_key, 1, 'easy_mcp_ai' );
+            \wp_cache_add( $global_key, 0, 'rankout_connector', HOUR_IN_SECONDS );
+            $global_count = \wp_cache_incr( $global_key, 1, 'rankout_connector' );
         } else {
             
             

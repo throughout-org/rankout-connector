@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\DFS;
+namespace RankOut_Connector\DFS;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -15,8 +15,8 @@ class DataforSEO_Client {
 
 	
 
-	const OPTION_LOGIN        = 'easy_mcp_ai_dfs_login';
-	const OPTION_API_PASSWORD = 'easy_mcp_ai_dfs_api_password';
+	const OPTION_LOGIN        = 'rankout_connector_dfs_login';
+	const OPTION_API_PASSWORD = 'rankout_connector_dfs_api_password';
 
 	
 
@@ -26,7 +26,7 @@ class DataforSEO_Client {
 
 
 
-	const TRANSIENT_BALANCE_PREFIX = 'easy_mcp_ai_dfs_balance_';
+	const TRANSIENT_BALANCE_PREFIX = 'rankout_connector_dfs_balance_';
 
 	
 
@@ -61,7 +61,7 @@ class DataforSEO_Client {
 
 	const CIPHER_VERSION    = "v2\x00";
 	const CIPHER_PREFIX_LEN = 3;
-	const HKDF_INFO         = 'easy_mcp_ai_dfs_v2';
+	const HKDF_INFO         = 'rankout_connector_dfs_v2';
 
 	
 
@@ -73,13 +73,13 @@ class DataforSEO_Client {
 	private static function derive_key(): string {
 		if ( ! defined( 'SECURE_AUTH_KEY' ) || ! defined( 'SECURE_AUTH_SALT' ) ) {
 			throw new \RuntimeException(
-				'DataforSEO credentials are unavailable: SECURE_AUTH_KEY and SECURE_AUTH_SALT must be defined in wp-config.php. Generate fresh values at https://api.wordpress.org/secret-key/1.1/salt/, update wp-config.php, then re-save your DataforSEO credentials in Easy MCP AI → External Data.'
+				'DataforSEO credentials are unavailable: SECURE_AUTH_KEY and SECURE_AUTH_SALT must be defined in wp-config.php. Generate fresh values at https://api.wordpress.org/secret-key/1.1/salt/, update wp-config.php, then re-save your DataforSEO credentials in RankOut Connector → External Data.'
 			);
 		}
 		$material = SECURE_AUTH_KEY . SECURE_AUTH_SALT;
 		if ( strlen( $material ) < 64 || false !== strpos( $material, 'put your unique phrase here' ) ) {
 			throw new \RuntimeException(
-				'DataforSEO credentials are unavailable: WordPress security salts are still set to placeholder values. Generate fresh values at https://api.wordpress.org/secret-key/1.1/salt/ (or run: wp config shuffle-salts), update wp-config.php, then re-save your DataforSEO credentials in Easy MCP AI → External Data.'
+				'DataforSEO credentials are unavailable: WordPress security salts are still set to placeholder values. Generate fresh values at https://api.wordpress.org/secret-key/1.1/salt/ (or run: wp config shuffle-salts), update wp-config.php, then re-save your DataforSEO credentials in RankOut Connector → External Data.'
 			);
 		}
 		return hash_hkdf( 'sha256', $material, 32, self::HKDF_INFO );
@@ -137,21 +137,21 @@ class DataforSEO_Client {
 
 		if ( empty( $login ) || empty( $password ) ) {
 			throw new \RuntimeException(
-				'DataforSEO credentials not configured. Go to Easy MCP AI → External Data.'
+				'DataforSEO credentials not configured. Go to RankOut Connector → External Data.'
 			);
 		}
 
 		$decrypted_login = self::decrypt( $login );
 		if ( false === $decrypted_login ) {
 			throw new \RuntimeException(
-				'Failed to decrypt DataforSEO login. The stored value could not be decrypted with the current WordPress security salts (SECURE_AUTH_KEY/SECURE_AUTH_SALT). This usually means the salts changed after the credentials were saved. Re-save your credentials in Easy MCP AI → External Data.'
+				'Failed to decrypt DataforSEO login. The stored value could not be decrypted with the current WordPress security salts (SECURE_AUTH_KEY/SECURE_AUTH_SALT). This usually means the salts changed after the credentials were saved. Re-save your credentials in RankOut Connector → External Data.'
 			);
 		}
 
 		$decrypted_password = self::decrypt( $password );
 		if ( false === $decrypted_password ) {
 			throw new \RuntimeException(
-				'Failed to decrypt DataforSEO API password. The stored value could not be decrypted with the current WordPress security salts (SECURE_AUTH_KEY/SECURE_AUTH_SALT). This usually means the salts changed after the credentials were saved. Re-save your credentials in Easy MCP AI → External Data.'
+				'Failed to decrypt DataforSEO API password. The stored value could not be decrypted with the current WordPress security salts (SECURE_AUTH_KEY/SECURE_AUTH_SALT). This usually means the salts changed after the credentials were saved. Re-save your credentials in RankOut Connector → External Data.'
 			);
 		}
 
@@ -331,7 +331,7 @@ class DataforSEO_Client {
 			case 20000:
 				return '';
 			case 40100:
-				return 'DataforSEO authentication failed. Verify your login and API password at Easy MCP AI → External Data. The API password is generated at app.dataforseo.com/api-access and is different from your account password.';
+				return 'DataforSEO authentication failed. Verify your login and API password at RankOut Connector → External Data. The API password is generated at app.dataforseo.com/api-access and is different from your account password.';
 			case 40200:
 				return 'DataforSEO requires payment to access this endpoint. Activate or upgrade your plan at app.dataforseo.com.';
 			case 40202:

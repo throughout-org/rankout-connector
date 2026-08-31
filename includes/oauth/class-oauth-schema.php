@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\OAuth;
+namespace RankOut_Connector\OAuth;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -23,7 +23,7 @@ class OAuth_Schema {
 
 
     const DB_VERSION = '1.0.5';
-    const VERSION_OPTION = 'easy_mcp_ai_oauth_db_version';
+    const VERSION_OPTION = 'rankout_connector_oauth_db_version';
 
     
 
@@ -34,7 +34,7 @@ class OAuth_Schema {
         global $wpdb;
 
         $charset_collate = $wpdb->get_charset_collate();
-        $prefix          = $wpdb->prefix . 'easy_mcp_ai_oauth_';
+        $prefix          = $wpdb->prefix . 'rankout_connector_oauth_';
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 

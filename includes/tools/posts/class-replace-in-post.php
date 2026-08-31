@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\Tools\Posts;
+namespace RankOut_Connector\Tools\Posts;
 
-use Easy_MCP_AI\Tools\Base_Tool;
+use RankOut_Connector\Tools\Base_Tool;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -32,7 +32,7 @@ class Replace_In_Post extends Base_Tool {
     }
 
     public function get_description() {
-        return 'Performs search-and-replace inside ONE field of a post without re-uploading the full content. Required: `id`, `field` (post_content|post_excerpt|post_title), `search`, `replace`. Optional: `regex` (default false), `max_replacements` (-1 = unlimited). Limits: subject 200KB, pattern 500 chars. Regex mode bounded by pcre.backtrack_limit + nested-quantifier heuristic (heuristic is advisory only — the backtrack limit is the real ReDoS defence). Site owners can disable regex entirely via the `easy_mcp_ai_replace_in_post_allow_regex` filter. Returns { id, field, replacements_count, content_length_before, content_length_after }. Major token-saver for small edits to large posts.';
+        return 'Performs search-and-replace inside ONE field of a post without re-uploading the full content. Required: `id`, `field` (post_content|post_excerpt|post_title), `search`, `replace`. Optional: `regex` (default false), `max_replacements` (-1 = unlimited). Limits: subject 200KB, pattern 500 chars. Regex mode bounded by pcre.backtrack_limit + nested-quantifier heuristic (heuristic is advisory only — the backtrack limit is the real ReDoS defence). Site owners can disable regex entirely via the `rankout_connector_replace_in_post_allow_regex` filter. Returns { id, field, replacements_count, content_length_before, content_length_after }. Major token-saver for small edits to large posts.';
     }
 
     public function get_category() {
@@ -138,9 +138,9 @@ class Replace_In_Post extends Base_Tool {
         }
 
         if ( $regex ) {
-            $allow_regex = (bool) apply_filters( 'easy_mcp_ai_replace_in_post_allow_regex', true );
+            $allow_regex = (bool) apply_filters( 'rankout_connector_replace_in_post_allow_regex', true );
             if ( ! $allow_regex ) {
-                throw new \InvalidArgumentException( 'Regex replacement is disabled on this site (filter: easy_mcp_ai_replace_in_post_allow_regex).' );
+                throw new \InvalidArgumentException( 'Regex replacement is disabled on this site (filter: rankout_connector_replace_in_post_allow_regex).' );
             }
 
             

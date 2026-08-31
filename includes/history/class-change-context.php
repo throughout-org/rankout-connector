@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\History;
+namespace RankOut_Connector\History;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

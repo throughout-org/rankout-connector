@@ -3,40 +3,40 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-function easy_mcp_ai_view_audit_log( $total, $entries, $page, $total_pages, $message, $change_counts = array(), $changes_nonce = '' ) {
+function rankout_connector_view_audit_log( $total, $entries, $page, $total_pages, $message, $change_counts = array(), $changes_nonce = '' ) {
 ?>
 <div class="wrap wp-mcp-admin">
-    <h1><?php esc_html_e( 'Easy MCP AI - Audit Log', 'easy-mcp-ai' ); ?></h1>
+    <h1><?php esc_html_e( 'RankOut Connector - Audit Log', 'rankout-connector' ); ?></h1>
 
     <?php include __DIR__ . '/partials/page-nav.php'; ?>
 
     <?php if ( 'cleaned' === $message ) : ?>
         <div class="notice notice-success is-dismissible">
-            <p><?php esc_html_e( 'Audit log entries have been cleaned up.', 'easy-mcp-ai' ); ?></p>
+            <p><?php esc_html_e( 'Audit log entries have been cleaned up.', 'rankout-connector' ); ?></p>
         </div>
     <?php elseif ( 'cleaned_more' === $message ) : ?>
         <div class="notice notice-warning is-dismissible">
-            <p><?php esc_html_e( 'Cleaned up 10,000 audit log entries. More likely remain — click the button again to drain the rest.', 'easy-mcp-ai' ); ?></p>
+            <p><?php esc_html_e( 'Cleaned up 10,000 audit log entries. More likely remain — click the button again to drain the rest.', 'rankout-connector' ); ?></p>
         </div>
     <?php endif; ?>
 
-    <?php $retention = (int) get_option( 'easy_mcp_ai_audit_log_retention', 30 ); ?>
-    <form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=easy-mcp-ai-audit' ) ); ?>" class="wp-mcp-cleanup-form">
-        <?php wp_nonce_field( 'easy_mcp_ai_cleanup_audit' ); ?>
-        <input type="hidden" name="easy_mcp_ai_cleanup_audit" value="1">
+    <?php $retention = (int) get_option( 'rankout_connector_audit_log_retention', 30 ); ?>
+    <form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=rankout-connector-audit' ) ); ?>" class="wp-mcp-cleanup-form">
+        <?php wp_nonce_field( 'rankout_connector_cleanup_audit' ); ?>
+        <input type="hidden" name="rankout_connector_cleanup_audit" value="1">
         <p>
             <?php
             printf(
                 /* translators: %d: number of log entries */
-                esc_html__( 'Showing %d total log entries.', 'easy-mcp-ai' ),
+                esc_html__( 'Showing %d total log entries.', 'rankout-connector' ),
                 absint( $total )
             );
             ?>
-            <button type="submit" class="button button-secondary wp-mcp-confirm-submit" data-confirm="<?php echo esc_attr( sprintf( /* translators: %d: retention days */ __( 'Delete all audit log entries older than %d days?', 'easy-mcp-ai' ), absint( $retention ) ) ); ?>">
+            <button type="submit" class="button button-secondary wp-mcp-confirm-submit" data-confirm="<?php echo esc_attr( sprintf( /* translators: %d: retention days */ __( 'Delete all audit log entries older than %d days?', 'rankout-connector' ), absint( $retention ) ) ); ?>">
                 <?php
                 printf(
                     /* translators: %d: retention days */
-                    esc_html__( 'Clean Up Entries Older Than %d Days', 'easy-mcp-ai' ),
+                    esc_html__( 'Clean Up Entries Older Than %d Days', 'rankout-connector' ),
                     absint( $retention )
                 );
                 ?>
@@ -46,13 +46,13 @@ function easy_mcp_ai_view_audit_log( $total, $entries, $page, $total_pages, $mes
             <?php
             printf(
                 /* translators: %s: link to settings page */
-                wp_kses( __( 'Retention period is %s.', 'easy-mcp-ai' ), array( 'a' => array( 'href' => array() ) ) ),
+                wp_kses( __( 'Retention period is %s.', 'rankout-connector' ), array( 'a' => array( 'href' => array() ) ) ),
                 sprintf(
                     '<a href="%s">%s</a>',
-                    esc_url( admin_url( 'admin.php?page=easy-mcp-ai-settings' ) ),
+                    esc_url( admin_url( 'admin.php?page=rankout-connector-settings' ) ),
                     sprintf(
                         /* translators: %d: number of days */
-                        esc_html__( 'set to %d days — change in Settings', 'easy-mcp-ai' ),
+                        esc_html__( 'set to %d days — change in Settings', 'rankout-connector' ),
                         absint( $retention )
                     )
                 )
@@ -64,19 +64,19 @@ function easy_mcp_ai_view_audit_log( $total, $entries, $page, $total_pages, $mes
     <table class="wp-list-table widefat fixed striped table-view-list">
         <thead>
             <tr>
-                <th scope="col" class="manage-column column-date"><?php esc_html_e( 'Date', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-token"><?php esc_html_e( 'Token', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-tool"><?php esc_html_e( 'Tool', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-changes"><?php esc_html_e( 'Changes', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-arguments"><?php esc_html_e( 'Arguments', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-status"><?php esc_html_e( 'Status', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-ip"><?php esc_html_e( 'IP Address', 'easy-mcp-ai' ); ?></th>
+                <th scope="col" class="manage-column column-date"><?php esc_html_e( 'Date', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-token"><?php esc_html_e( 'Token', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-tool"><?php esc_html_e( 'Tool', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-changes"><?php esc_html_e( 'Changes', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-arguments"><?php esc_html_e( 'Arguments', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-status"><?php esc_html_e( 'Status', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-ip"><?php esc_html_e( 'IP Address', 'rankout-connector' ); ?></th>
             </tr>
         </thead>
         <tbody>
             <?php if ( empty( $entries ) ) : ?>
                 <tr>
-                    <td colspan="7"><?php esc_html_e( 'No audit log entries found.', 'easy-mcp-ai' ); ?></td>
+                    <td colspan="7"><?php esc_html_e( 'No audit log entries found.', 'rankout-connector' ); ?></td>
                 </tr>
             <?php else : ?>
                 <?php foreach ( $entries as $entry ) : ?>
@@ -125,7 +125,7 @@ function easy_mcp_ai_view_audit_log( $total, $entries, $page, $total_pages, $mes
                                    aria-expanded="false">
                                     <?php
                                     /* translators: %d: change row count */
-                                    echo esc_html( sprintf( _n( '%d change', '%d changes', $c, 'easy-mcp-ai' ), $c ) );
+                                    echo esc_html( sprintf( _n( '%d change', '%d changes', $c, 'rankout-connector' ), $c ) );
                                     ?>
                                     <span class="emai-changes-caret" aria-hidden="true">▾</span>
                                 </a>
@@ -137,14 +137,14 @@ function easy_mcp_ai_view_audit_log( $total, $entries, $page, $total_pages, $mes
                             <?php if ( ! empty( $args_display ) ) : ?>
                                 <span title="<?php echo esc_attr( $entry['arguments'] ); ?>"><?php echo esc_html( $args_display ); ?></span>
                             <?php else : ?>
-                                <span class="description"><?php esc_html_e( 'None', 'easy-mcp-ai' ); ?></span>
+                                <span class="description"><?php esc_html_e( 'None', 'rankout-connector' ); ?></span>
                             <?php endif; ?>
                         </td>
                         <td class="column-status">
                             <?php if ( $is_error ) : ?>
-                                <span class="wp-mcp-badge wp-mcp-badge-error"><?php esc_html_e( 'Error', 'easy-mcp-ai' ); ?></span>
+                                <span class="wp-mcp-badge wp-mcp-badge-error"><?php esc_html_e( 'Error', 'rankout-connector' ); ?></span>
                             <?php else : ?>
-                                <span class="wp-mcp-badge wp-mcp-badge-ok"><?php esc_html_e( 'OK', 'easy-mcp-ai' ); ?></span>
+                                <span class="wp-mcp-badge wp-mcp-badge-ok"><?php esc_html_e( 'OK', 'rankout-connector' ); ?></span>
                             <?php endif; ?>
                         </td>
                         <td class="column-ip">
@@ -154,7 +154,7 @@ function easy_mcp_ai_view_audit_log( $total, $entries, $page, $total_pages, $mes
                     <tr class="emai-changes-detail" data-audit-id="<?php echo absint( $entry['id'] ); ?>" hidden>
                         <td colspan="7" style="background:#f6f7f7;">
                             <div class="emai-changes-detail-body">
-                                <em><?php esc_html_e( 'Loading…', 'easy-mcp-ai' ); ?></em>
+                                <em><?php esc_html_e( 'Loading…', 'rankout-connector' ); ?></em>
                             </div>
                         </td>
                     </tr>
@@ -163,13 +163,13 @@ function easy_mcp_ai_view_audit_log( $total, $entries, $page, $total_pages, $mes
         </tbody>
         <tfoot>
             <tr>
-                <th scope="col" class="manage-column column-date"><?php esc_html_e( 'Date', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-token"><?php esc_html_e( 'Token', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-tool"><?php esc_html_e( 'Tool', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-changes"><?php esc_html_e( 'Changes', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-arguments"><?php esc_html_e( 'Arguments', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-status"><?php esc_html_e( 'Status', 'easy-mcp-ai' ); ?></th>
-                <th scope="col" class="manage-column column-ip"><?php esc_html_e( 'IP Address', 'easy-mcp-ai' ); ?></th>
+                <th scope="col" class="manage-column column-date"><?php esc_html_e( 'Date', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-token"><?php esc_html_e( 'Token', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-tool"><?php esc_html_e( 'Tool', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-changes"><?php esc_html_e( 'Changes', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-arguments"><?php esc_html_e( 'Arguments', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-status"><?php esc_html_e( 'Status', 'rankout-connector' ); ?></th>
+                <th scope="col" class="manage-column column-ip"><?php esc_html_e( 'IP Address', 'rankout-connector' ); ?></th>
             </tr>
         </tfoot>
     </table>
@@ -183,8 +183,8 @@ function easy_mcp_ai_view_audit_log( $total, $entries, $page, $total_pages, $mes
                 echo wp_kses_post( paginate_links( array(
                     'base'      => add_query_arg( 'paged', '%#%' ),
                     'format'    => '',
-                    'prev_text' => __( '&laquo; Previous', 'easy-mcp-ai' ),
-                    'next_text' => __( 'Next &raquo;', 'easy-mcp-ai' ),
+                    'prev_text' => __( '&laquo; Previous', 'rankout-connector' ),
+                    'next_text' => __( 'Next &raquo;', 'rankout-connector' ),
                     'total'     => $total_pages,
                     'current'   => $page,
                 ) ) );
@@ -195,4 +195,4 @@ function easy_mcp_ai_view_audit_log( $total, $entries, $page, $total_pages, $mes
 </div>
 <?php
 }
-easy_mcp_ai_view_audit_log( $total, $entries, $page, $total_pages, $message, isset( $change_counts ) ? $change_counts : array(), isset( $changes_nonce ) ? $changes_nonce : '' );
+rankout_connector_view_audit_log( $total, $entries, $page, $total_pages, $message, isset( $change_counts ) ? $change_counts : array(), isset( $changes_nonce ) ? $changes_nonce : '' );

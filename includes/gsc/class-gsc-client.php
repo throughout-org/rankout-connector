@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\GSC;
+namespace RankOut_Connector\GSC;
 
-use Easy_MCP_AI\Abstract_Google_Client;
+use RankOut_Connector\Abstract_Google_Client;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -9,11 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class GSC_Client extends Abstract_Google_Client {
 
-    const OPTION_JSON     = 'easy_mcp_ai_gsc_service_account_json';
-    const OPTION_SITE_URL = 'easy_mcp_ai_gsc_default_site_url';
-    const TRANSIENT_TOKEN = 'easy_mcp_ai_gsc_token';
+    const OPTION_JSON     = 'rankout_connector_gsc_service_account_json';
+    const OPTION_SITE_URL = 'rankout_connector_gsc_default_site_url';
+    const TRANSIENT_TOKEN = 'rankout_connector_gsc_token';
     const SCOPE           = 'https://www.googleapis.com/auth/webmasters';
-    const HKDF_INFO       = 'easy_mcp_ai_gsc_creds_v1';
+    const HKDF_INFO       = 'rankout_connector_gsc_creds_v1';
 
     protected static function product_name(): string {
         return 'Google Search Console';
@@ -97,7 +97,7 @@ class GSC_Client extends Abstract_Google_Client {
                 );
             }
             throw new \RuntimeException(
-                'Access denied by Google Search Console. The configured service account does not have access to this property. A site administrator can grant access in Easy MCP AI → External Data → Test Connection.'
+                'Access denied by Google Search Console. The configured service account does not have access to this property. A site administrator can grant access in RankOut Connector → External Data → Test Connection.'
             );
         }
         if ( 404 === $code ) {
@@ -130,7 +130,7 @@ class GSC_Client extends Abstract_Google_Client {
         $url = \get_option( self::OPTION_SITE_URL, '' );
         if ( empty( $url ) ) {
             throw new \RuntimeException(
-                'No site_url provided and no default property configured. Set one in Easy MCP AI → External Data.'
+                'No site_url provided and no default property configured. Set one in RankOut Connector → External Data.'
             );
         }
         return self::validate_site_url( $url );

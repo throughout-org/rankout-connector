@@ -1,20 +1,20 @@
-# Easy MCP AI – Claude, ChatGPT & SEO Data Connector
+# RankOut Connector – Claude, ChatGPT & SEO Data Connector
 
 > **Connect Claude, ChatGPT & any AI to WordPress. Manage your entire site by chat — content, media, GA4, Search Console, SEO, GEO, AEO, E-E-A-T & more. 233 tools. Free.**
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue)](https://github.com/throughout-org/easy-mcp-ai/releases)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue)](https://github.com/throughout-org/rankout-connector/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-8892bf)](https://php.net)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![Tools](https://img.shields.io/badge/tools-233-orange)](https://easymcpai.com/tools)
 
-**Links:** [Website](https://easymcpai.com) · [WordPress.org Plugin](https://wordpress.org/plugins/easy-mcp-ai/) · [Integration Guides](https://easymcpai.com/integrations) · [Developer Docs](DEVELOPER.md) · [Changelog](CHANGELOG.md)
+**Links:** [Website](https://easymcpai.com) · [WordPress.org Plugin](https://wordpress.org/plugins/rankout-connector/) · [Integration Guides](https://easymcpai.com/integrations) · [Developer Docs](DEVELOPER.md) · [Changelog](CHANGELOG.md)
 
 ---
 
-## What is Easy MCP AI?
+## What is RankOut Connector?
 
-[**Easy MCP AI**](https://easymcpai.com/) is the most complete **free WordPress MCP server** — a remote MCP server built so AI assistants and autonomous AI agents can run your entire site workflow, from content and publishing to SEO research, traffic monitoring, and daily admin, through the [Model Context Protocol](https://modelcontextprotocol.io). It works as an MCP adapter for any MCP-compatible AI client, making your site agent-ready out of the box.
+[**RankOut Connector**](https://easymcpai.com/) is the most complete **free WordPress MCP server** — a remote MCP server built so AI assistants and autonomous AI agents can run your entire site workflow, from content and publishing to SEO research, traffic monitoring, and daily admin, through the [Model Context Protocol](https://modelcontextprotocol.io). It works as an MCP adapter for any MCP-compatible AI client, making your site agent-ready out of the box.
 
 No Node.js. No external proxy. No complicated setup. Just install, generate a token, and start building.
 
@@ -207,7 +207,7 @@ Once connected, your AI agent can handle everything you'd normally do in the Wor
 
 #### Connect Any Plugin with Abilities API
 
-WordPress 6.9+ introduces the **Abilities API** — a standard way for plugins to declare what they can do. Easy MCP AI acts as an **MCP adapter** for any plugin that registers Abilities — automatically discovering and exposing them as MCP tools with no custom code needed.
+WordPress 6.9+ introduces the **Abilities API** — a standard way for plugins to declare what they can do. RankOut Connector acts as an **MCP adapter** for any plugin that registers Abilities — automatically discovering and exposing them as MCP tools with no custom code needed.
 
 ---
 
@@ -245,7 +245,7 @@ Giving an AI access to your site is serious — so security is built into every 
 ### Automatic (recommended)
 
 1. In your WordPress admin, go to **Plugins → Add New Plugin**
-2. Search for **"Easy MCP AI"**
+2. Search for **"RankOut Connector"**
 3. Click **Install Now** and then **Activate**
 
 ### Manual
@@ -260,16 +260,16 @@ Giving an AI access to your site is serious — so security is built into every 
 
 ### Path A — One-Click OAuth (recommended)
 
-1. Go to **Easy MCP AI → Dashboard** and copy your MCP server URL
+1. Go to **RankOut Connector → Dashboard** and copy your MCP server URL
 2. In your AI client (e.g. Claude Desktop → Settings → Connectors → Add custom connector), paste the URL — no token needed
 3. Your browser opens a WordPress login + consent screen. Sign in as the user the AI should act as
 4. Tick the permission categories you want to grant, then **Approve**
 5. Done. Start talking to your site
-6. Manage or revoke connected clients anytime under **Easy MCP AI → API Token & OAuth → OAuth** tab
+6. Manage or revoke connected clients anytime under **RankOut Connector → API Token & OAuth → OAuth** tab
 
 ### Path B — Manual Bearer Token
 
-1. Go to **Easy MCP AI → API Tokens** and click **Create New Token**
+1. Go to **RankOut Connector → API Tokens** and click **Create New Token**
 2. Give the token a name, choose the WordPress user the AI will act as, and select which tools to allow
 3. Click **Create Token** and copy the token — it is only shown once
 4. In your AI assistant, paste in the endpoint URL and token from the Dashboard page
@@ -284,7 +284,7 @@ Add to your `~/.claude/settings.json`:
   "mcpServers": {
     "my-wordpress": {
       "type": "http",
-      "url": "https://yourdomain.com/wp-json/easy-mcp-ai/v1/mcp",
+      "url": "https://yourdomain.com/wp-json/rankout-connector/v1/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_TOKEN_HERE"
       }
@@ -297,7 +297,7 @@ Add to your `~/.claude/settings.json`:
 
 ## External Services
 
-This plugin connects to the following third-party services **only when a site administrator explicitly configures their own external account credentials** in **Easy MCP AI → External Data**. Nothing is contacted on a default install.
+This plugin connects to the following third-party services **only when a site administrator explicitly configures their own external account credentials** in **RankOut Connector → External Data**. Nothing is contacted on a default install.
 
 | Service | Endpoint | When Used |
 |---|---|---|
@@ -312,25 +312,25 @@ All credentials are stored AES-256-GCM encrypted with per-provider HKDF-derived 
 
 ## Frequently Asked Questions
 
-**What is Easy MCP AI?**  
-Easy MCP AI is a free WordPress AI connector that turns your site into a remote MCP server. Once activated, any MCP-compatible AI assistant — Claude, ChatGPT, Cursor, Gemini AI, n8n — can read and write content, manage media, users, and settings, and pull SEO and analytics data through 233 ready-to-use tools. No Node.js, no proxy, no extra hosting.
+**What is RankOut Connector?**  
+RankOut Connector is a free WordPress AI connector that turns your site into a remote MCP server. Once activated, any MCP-compatible AI assistant — Claude, ChatGPT, Cursor, Gemini AI, n8n — can read and write content, manage media, users, and settings, and pull SEO and analytics data through 233 ready-to-use tools. No Node.js, no proxy, no extra hosting.
 
 **Is this a WordPress MCP server?**  
-Yes. Easy MCP AI implements the Model Context Protocol spec (v2025-11-25, with backwards compatibility for v2025-06-18 and v2025-03-26) directly inside WordPress. Your site exposes a single MCP endpoint at `/wp-json/easy-mcp-ai/v1/mcp`.
+Yes. RankOut Connector implements the Model Context Protocol spec (v2025-11-25, with backwards compatibility for v2025-06-18 and v2025-03-26) directly inside WordPress. Your site exposes a single MCP endpoint at `/wp-json/rankout-connector/v1/mcp`.
 
 **What is the Model Context Protocol (MCP)?**  
 MCP is an open standard created by Anthropic that lets AI assistants securely connect to external tools and data sources. It's the universal protocol for AI-to-app communication, supported by Anthropic, OpenAI, Google, and dozens of other platforms. Learn more at [modelcontextprotocol.io](https://modelcontextprotocol.io).
 
 **Does this plugin send my content to OpenAI, Anthropic, or Google?**  
-No. Easy MCP AI does not call any AI provider. The flow is the opposite: your AI assistant calls your WordPress site, and the plugin executes whatever tool the AI requested. Your content only leaves your server in the response that goes back to the AI client you connected.
+No. RankOut Connector does not call any AI provider. The flow is the opposite: your AI assistant calls your WordPress site, and the plugin executes whatever tool the AI requested. Your content only leaves your server in the response that goes back to the AI client you connected.
 
-**Is Easy MCP AI free?**  
+**Is RankOut Connector free?**  
 Yes. This WordPress MCP plugin is free and open source on the WordPress.org plugin directory. There are no paid tiers, no usage limits, and no telemetry. Optional external integrations (Semrush, DataForSEO, Google Analytics, Search Console) use your own third-party accounts.
 
 **How does authentication work?**  
 Two options:
 1. **OAuth 2.0/2.1 one-click connect** (recommended) — open your AI client, paste your MCP URL, sign in to WordPress, approve the consent screen
-2. **Manual Bearer token** — create a token under Easy MCP AI → API Tokens, paste it into your AI client
+2. **Manual Bearer token** — create a token under RankOut Connector → API Tokens, paste it into your AI client
 
 Every token (OAuth or Bearer) is SHA-256 hashed before being saved — the raw value is never stored.
 
@@ -338,10 +338,10 @@ Every token (OAuth or Bearer) is SHA-256 hashed before being saved — the raw v
 Yes, fully. Each token has its own permission set — you choose exactly which tools it can call. Permissions are also enforced at the WordPress capability level, so the AI inherits exactly the capabilities of the WordPress user the token is bound to.
 
 **Will the AI publish posts automatically?**  
-Only if you let it. Enable **Force Draft on Create** under Easy MCP AI → Settings and every newly created post or page will be forced to `draft` regardless of what the AI requested.
+Only if you let it. Enable **Force Draft on Create** under RankOut Connector → Settings and every newly created post or page will be forced to `draft` regardless of what the AI requested.
 
 **Does it work with WordPress multisite?**  
-Yes. Easy MCP AI runs per-site on a multisite network — each subsite has its own MCP endpoint, its own tokens, and its own audit log.
+Yes. RankOut Connector runs per-site on a multisite network — each subsite has its own MCP endpoint, its own tokens, and its own audit log.
 
 **Does it work on localhost?**  
 Yes. On loopback addresses (`127.0.0.1`, `::1`) the OAuth HTTPS requirement is automatically relaxed so you can test against `http://localhost`.
@@ -423,4 +423,4 @@ GPL-2.0-or-later — see [LICENSE](https://www.gnu.org/licenses/gpl-2.0.html)
 
 ---
 
-Developed by [EasyMCPAI](https://easymcpai.com) · [WordPress.org](https://wordpress.org/plugins/easy-mcp-ai/) · [GitHub](https://github.com/throughout-org/easy-mcp-ai)
+Developed by [EasyMCPAI](https://easymcpai.com) · [WordPress.org](https://wordpress.org/plugins/rankout-connector/) · [GitHub](https://github.com/throughout-org/rankout-connector)

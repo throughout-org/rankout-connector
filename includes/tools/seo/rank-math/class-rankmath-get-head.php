@@ -3,13 +3,13 @@
 
 
 
-namespace Easy_MCP_AI\Tools\SEO;
+namespace RankOut_Connector\Tools\SEO;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Easy_MCP_AI\Tools\Base_Tool;
+use RankOut_Connector\Tools\Base_Tool;
 
 class Rankmath_Get_Head extends Base_Tool {
 

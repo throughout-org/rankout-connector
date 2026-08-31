@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\Semrush;
+namespace RankOut_Connector\Semrush;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Semrush_Client {
 
-	const OPTION_API_KEY = 'easy_mcp_ai_semrush_api_key';
+	const OPTION_API_KEY = 'rankout_connector_semrush_api_key';
 
 	const BASE_URL_SEO       = 'https://api.semrush.com/';
 	const BASE_URL_BACKLINKS = 'https://api.semrush.com/analytics/v1/';
@@ -68,7 +68,7 @@ class Semrush_Client {
 	
 	const CIPHER_VERSION    = "v2\x00";
 	const CIPHER_PREFIX_LEN = 3;
-	const HKDF_INFO         = 'easy_mcp_ai_semrush_v2';
+	const HKDF_INFO         = 'rankout_connector_semrush_v2';
 
 	private static function derive_key(): string {
 		if ( ! defined( 'SECURE_AUTH_KEY' ) || ! defined( 'SECURE_AUTH_SALT' ) ) {
@@ -121,11 +121,11 @@ class Semrush_Client {
 	public function get_api_key(): string {
 		$enc = \get_option( self::OPTION_API_KEY, '' );
 		if ( empty( $enc ) ) {
-			throw new \RuntimeException( 'Semrush API key not configured. Go to Easy MCP AI → External Data.' );
+			throw new \RuntimeException( 'Semrush API key not configured. Go to RankOut Connector → External Data.' );
 		}
 		$plain = self::decrypt( $enc );
 		if ( false === $plain || '' === $plain ) {
-			throw new \RuntimeException( 'Failed to decrypt Semrush API key. Re-save credentials in Easy MCP AI → External Data.' );
+			throw new \RuntimeException( 'Failed to decrypt Semrush API key. Re-save credentials in RankOut Connector → External Data.' );
 		}
 		return $plain;
 	}

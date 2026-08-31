@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\Resources;
+namespace RankOut_Connector\Resources;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -28,21 +28,21 @@ class Resource_Registry {
     public function auto_discover() {
         $resource_classes = array(
             
-            'Easy_MCP_AI\\Resources\\Site_Info_Resource',
-            'Easy_MCP_AI\\Resources\\Recent_Posts_Resource',
-            'Easy_MCP_AI\\Resources\\Site_Stats_Resource',
+            'RankOut_Connector\\Resources\\Site_Info_Resource',
+            'RankOut_Connector\\Resources\\Recent_Posts_Resource',
+            'RankOut_Connector\\Resources\\Site_Stats_Resource',
             
-            'Easy_MCP_AI\\Resources\\Reading_Settings_Resource',
-            'Easy_MCP_AI\\Resources\\Discussion_Settings_Resource',
-            'Easy_MCP_AI\\Resources\\Active_Plugins_Resource',
-            'Easy_MCP_AI\\Resources\\Post_Types_Resource',
-            'Easy_MCP_AI\\Resources\\Taxonomies_Resource',
-            'Easy_MCP_AI\\Resources\\Authors_Resource',
-            'Easy_MCP_AI\\Resources\\Theme_Templates_Resource',
-            'Easy_MCP_AI\\Resources\\Menus_Resource',
-            'Easy_MCP_AI\\Resources\\Draft_Posts_Resource',
-            'Easy_MCP_AI\\Resources\\Scheduled_Posts_Resource',
-            'Easy_MCP_AI\\Resources\\Recent_Media_Resource',
+            'RankOut_Connector\\Resources\\Reading_Settings_Resource',
+            'RankOut_Connector\\Resources\\Discussion_Settings_Resource',
+            'RankOut_Connector\\Resources\\Active_Plugins_Resource',
+            'RankOut_Connector\\Resources\\Post_Types_Resource',
+            'RankOut_Connector\\Resources\\Taxonomies_Resource',
+            'RankOut_Connector\\Resources\\Authors_Resource',
+            'RankOut_Connector\\Resources\\Theme_Templates_Resource',
+            'RankOut_Connector\\Resources\\Menus_Resource',
+            'RankOut_Connector\\Resources\\Draft_Posts_Resource',
+            'RankOut_Connector\\Resources\\Scheduled_Posts_Resource',
+            'RankOut_Connector\\Resources\\Recent_Media_Resource',
         );
         foreach ( $resource_classes as $class ) {
             if ( class_exists( $class ) ) {

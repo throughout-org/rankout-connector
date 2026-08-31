@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\History;
+namespace RankOut_Connector\History;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Change_Log_Schema {
     const DB_VERSION  = '1.0.0';
-    const OPTION_NAME = 'easy_mcp_ai_change_log_db_version';
+    const OPTION_NAME = 'rankout_connector_change_log_db_version';
 
     public static function maybe_upgrade() {
         if ( \version_compare( (string) \get_option( self::OPTION_NAME, '0' ), self::DB_VERSION, '>=' ) ) {
@@ -18,7 +18,7 @@ class Change_Log_Schema {
 
     public static function create_tables() {
         global $wpdb;
-        $table           = $wpdb->prefix . 'easy_mcp_ai_change_log';
+        $table           = $wpdb->prefix . 'rankout_connector_change_log';
         $charset_collate = method_exists( $wpdb, 'get_charset_collate' ) ? $wpdb->get_charset_collate() : '';
         $sql = "CREATE TABLE {$table} (
             id              bigint(20)   unsigned NOT NULL AUTO_INCREMENT,

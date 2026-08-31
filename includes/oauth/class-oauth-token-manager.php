@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\OAuth;
+namespace RankOut_Connector\OAuth;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -41,10 +41,10 @@ class OAuth_Token_Manager {
     public function mint_access_token( string $client_id, int $wp_user_id, string $resource, string $scope, int $parent_id = 0 ): ?array {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $table = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
 
-        $access_ttl  = (int) get_option( 'easy_mcp_ai_oauth_access_token_ttl', self::DEFAULT_ACCESS_TTL );
-        $refresh_ttl = (int) get_option( 'easy_mcp_ai_oauth_refresh_token_ttl', self::DEFAULT_REFRESH_TTL );
+        $access_ttl  = (int) get_option( 'rankout_connector_oauth_access_token_ttl', self::DEFAULT_ACCESS_TTL );
+        $refresh_ttl = (int) get_option( 'rankout_connector_oauth_refresh_token_ttl', self::DEFAULT_REFRESH_TTL );
 
         
         $raw_access    = self::TOKEN_PREFIX . bin2hex( random_bytes( 32 ) );
@@ -100,7 +100,7 @@ class OAuth_Token_Manager {
     public function validate_access_token( string $raw_token ) {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $table = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
 
         
         if ( 0 !== strpos( $raw_token, self::TOKEN_PREFIX ) ) {
@@ -135,7 +135,7 @@ class OAuth_Token_Manager {
 
         
         
-        $throttle_key = 'easy_mcp_ai_oat_lu_' . (int) $row['id'];
+        $throttle_key = 'rankout_connector_oat_lu_' . (int) $row['id'];
         if ( ! \get_transient( $throttle_key ) ) {
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Plugin-owned table write; throttled via transient.
             $wpdb->update(
@@ -164,7 +164,7 @@ class OAuth_Token_Manager {
     public function refresh( string $raw_refresh_token, string $client_id, string $resource ) {
         global $wpdb;
 
-        $table        = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $table        = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
         $refresh_hash = hash( 'sha256', $raw_refresh_token );
 
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table prefixed by $wpdb->prefix; refresh lookup must be fresh.
@@ -183,7 +183,7 @@ class OAuth_Token_Manager {
 
         
         
-        $row['scope'] = implode( ' ', \Easy_MCP_AI\OAuth\Scope_Map::apply_legacy_scope_upgrades(
+        $row['scope'] = implode( ' ', \RankOut_Connector\OAuth\Scope_Map::apply_legacy_scope_upgrades(
             array_filter( explode( ' ', $row['scope'] ) )
         ) );
 
@@ -288,7 +288,7 @@ class OAuth_Token_Manager {
     public function revoke_token( string $token_hash, string $client_id = '' ): bool {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $table = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
 
         
         if ( '' !== $client_id ) {
@@ -330,7 +330,7 @@ class OAuth_Token_Manager {
     public function revoke_by_refresh_hash( string $refresh_hash, string $client_id = '' ): bool {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $table = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table prefixed by $wpdb->prefix.
         $row   = $wpdb->get_row(
             $wpdb->prepare(
@@ -370,7 +370,7 @@ class OAuth_Token_Manager {
             return false;
         }
 
-        $table  = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $table  = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
         $cutoff = gmdate( 'Y-m-d H:i:s', time() - self::REFRESH_GRACE_SECONDS );
 
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table prefixed by $wpdb->prefix; freshness required.
@@ -397,13 +397,13 @@ class OAuth_Token_Manager {
 
 
     private function log_refresh_event( string $event, int $chain_id, string $client_id ): void {
-        if ( ! \get_option( 'easy_mcp_ai_audit_log_enabled', true ) ) {
+        if ( ! \get_option( 'rankout_connector_audit_log_enabled', true ) ) {
             return;
         }
         global $wpdb;
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Plugin-owned audit table.
         $wpdb->insert(
-            $wpdb->prefix . 'easy_mcp_ai_audit_log',
+            $wpdb->prefix . 'rankout_connector_audit_log',
             array(
                 'token_id'      => 0,
                 'tool_name'     => '_oauth_refresh',
@@ -427,7 +427,7 @@ class OAuth_Token_Manager {
 
         global $wpdb;
 
-        $table  = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $table  = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table prefixed by $wpdb->prefix.
         $result = $wpdb->query(
             $wpdb->prepare(

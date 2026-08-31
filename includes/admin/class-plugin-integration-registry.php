@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\Admin;
+namespace RankOut_Connector\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

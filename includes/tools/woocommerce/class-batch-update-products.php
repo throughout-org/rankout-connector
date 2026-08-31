@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\Tools\WooCommerce;
+namespace RankOut_Connector\Tools\WooCommerce;
 
-use Easy_MCP_AI\Tools\Base_Tool;
+use RankOut_Connector\Tools\Base_Tool;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -14,7 +14,7 @@ class Batch_Update_Products extends Base_Tool {
     }
 
     public function get_description() {
-        return 'Create, update, and/or delete up to 100 WooCommerce products in a single REST batch call. Provide any combination of `create` (array of product objects), `update` (array of product objects with `id`), `delete` (array of integer IDs). Default soft cap is 25 items per branch (raise via `easy_mcp_ai_wc_batch_soft_cap` filter). WooCommerce caps total at 100 items per branch via `woocommerce_rest_batch_items_limit` filter. Returns pass-through WC response: { create: [...], update: [...], delete: [...] }. WC REST permission_callback enforces per-item edit_product cap — partial failures are possible (failed items appear with error key).';
+        return 'Create, update, and/or delete up to 100 WooCommerce products in a single REST batch call. Provide any combination of `create` (array of product objects), `update` (array of product objects with `id`), `delete` (array of integer IDs). Default soft cap is 25 items per branch (raise via `rankout_connector_wc_batch_soft_cap` filter). WooCommerce caps total at 100 items per branch via `woocommerce_rest_batch_items_limit` filter. Returns pass-through WC response: { create: [...], update: [...], delete: [...] }. WC REST permission_callback enforces per-item edit_product cap — partial failures are possible (failed items appear with error key).';
     }
 
     public function get_category() {
@@ -68,12 +68,12 @@ class Batch_Update_Products extends Base_Tool {
             throw new \RuntimeException( 'WooCommerce is not active.' );
         }
 
-        $soft_cap = (int) apply_filters( 'easy_mcp_ai_wc_batch_soft_cap', 25 );
+        $soft_cap = (int) apply_filters( 'rankout_connector_wc_batch_soft_cap', 25 );
 
         $body = array();
         if ( ! empty( $arguments['create'] ) ) {
             if ( count( $arguments['create'] ) > $soft_cap ) {
-                throw new \InvalidArgumentException( sprintf( 'create exceeds the %d-item soft cap. Use the easy_mcp_ai_wc_batch_soft_cap filter to raise the limit.', $soft_cap ) ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                throw new \InvalidArgumentException( sprintf( 'create exceeds the %d-item soft cap. Use the rankout_connector_wc_batch_soft_cap filter to raise the limit.', $soft_cap ) ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             }
             $create_items = array();
             foreach ( $arguments['create'] as $item ) {
@@ -84,13 +84,13 @@ class Batch_Update_Products extends Base_Tool {
         }
         if ( ! empty( $arguments['update'] ) ) {
             if ( count( $arguments['update'] ) > $soft_cap ) {
-                throw new \InvalidArgumentException( sprintf( 'update exceeds the %d-item soft cap. Use the easy_mcp_ai_wc_batch_soft_cap filter to raise the limit.', $soft_cap ) ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                throw new \InvalidArgumentException( sprintf( 'update exceeds the %d-item soft cap. Use the rankout_connector_wc_batch_soft_cap filter to raise the limit.', $soft_cap ) ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             }
             $body['update'] = $arguments['update'];
         }
         if ( ! empty( $arguments['delete'] ) ) {
             if ( count( $arguments['delete'] ) > $soft_cap ) {
-                throw new \InvalidArgumentException( sprintf( 'delete exceeds the %d-item soft cap. Use the easy_mcp_ai_wc_batch_soft_cap filter to raise the limit.', $soft_cap ) ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                throw new \InvalidArgumentException( sprintf( 'delete exceeds the %d-item soft cap. Use the rankout_connector_wc_batch_soft_cap filter to raise the limit.', $soft_cap ) ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             }
             $body['delete'] = array_map( 'absint', $arguments['delete'] );
         }

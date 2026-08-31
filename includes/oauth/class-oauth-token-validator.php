@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\OAuth;
+namespace RankOut_Connector\OAuth;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -39,7 +39,7 @@ class OAuth_Token_Validator {
         if ( empty( $auth_header ) ) {
             return new \WP_Error(
                 'missing_token',
-                __( 'Missing Authorization header.', 'easy-mcp-ai' ),
+                __( 'Missing Authorization header.', 'rankout-connector' ),
                 array( 'status' => 401 )
             );
         }
@@ -48,7 +48,7 @@ class OAuth_Token_Validator {
         if ( 0 !== strpos( $auth_header, 'Bearer ' ) ) {
             return new \WP_Error(
                 'invalid_token_format',
-                __( 'Authorization header must use Bearer scheme.', 'easy-mcp-ai' ),
+                __( 'Authorization header must use Bearer scheme.', 'rankout-connector' ),
                 array( 'status' => 401 )
             );
         }
@@ -59,7 +59,7 @@ class OAuth_Token_Validator {
         if ( 0 !== strpos( $raw_token, OAuth_Token_Manager::TOKEN_PREFIX ) ) {
             return new \WP_Error(
                 'invalid_token_prefix',
-                __( 'Invalid token prefix.', 'easy-mcp-ai' ),
+                __( 'Invalid token prefix.', 'rankout-connector' ),
                 array( 'status' => 401 )
             );
         }
@@ -70,7 +70,7 @@ class OAuth_Token_Validator {
         if ( false === $token_data ) {
             return new \WP_Error(
                 'invalid_token',
-                __( 'Token is invalid, expired, or revoked.', 'easy-mcp-ai' ),
+                __( 'Token is invalid, expired, or revoked.', 'rankout-connector' ),
                 array( 'status' => 401 )
             );
         }
@@ -90,7 +90,7 @@ class OAuth_Token_Validator {
         if ( ! Token_Endpoint::resource_matches( $token_resource, $canonical_uri ) ) {
             return new \WP_Error(
                 'invalid_audience',
-                __( 'Token audience does not match this MCP server.', 'easy-mcp-ai' ),
+                __( 'Token audience does not match this MCP server.', 'rankout-connector' ),
                 array( 'status' => 403 )
             );
         }
@@ -113,6 +113,6 @@ class OAuth_Token_Validator {
 
 
     private function get_canonical_resource_uri(): string {
-        return rest_url( 'easy-mcp-ai/v1/mcp' );
+        return rest_url( 'rankout-connector/v1/mcp' );
     }
 }

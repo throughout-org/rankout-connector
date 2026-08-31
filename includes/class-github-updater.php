@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI;
+namespace RankOut_Connector;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -15,17 +15,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  *     WordPress's update_plugins transient so the standard "Update Available"
  *     notice and one-click update both work normally.
  *  3. After WordPress unzips the GitHub archive, renames the extracted folder
- *     (GitHub names it "{repo}-{version}") back to "easy-mcp-ai" so the plugin
+ *     (GitHub names it "{repo}-{version}") back to "rankout-connector" so the plugin
  *     path stays consistent.
  *  4. Exposes a "Check for Updates" link on the Plugins page that busts the
  *     cache and forces a fresh API call.
  */
 class GitHub_Updater {
 
-    const TRANSIENT_KEY    = 'easy_mcp_ai_github_release';
+    const TRANSIENT_KEY    = 'rankout_connector_github_release';
     const TRANSIENT_EXPIRY = 12 * HOUR_IN_SECONDS;
-    const GITHUB_REPO      = 'throughout-org/easy-mcp-ai';
-    const PLUGIN_SLUG      = 'easy-mcp-ai';
+    const GITHUB_REPO      = 'throughout-org/rankout-connector';
+    const PLUGIN_SLUG      = 'rankout-connector';
     const CHECK_PARAM      = 'easy_mcp_check_update';
     const CHECK_NONCE      = 'easy_mcp_check_update_nonce';
 
@@ -135,7 +135,7 @@ class GitHub_Updater {
         $body    = ! empty( $release['body'] ) ? nl2br( esc_html( $release['body'] ) ) : 'See the <a href="https://github.com/' . self::GITHUB_REPO . '/releases" target="_blank">GitHub releases page</a> for changelog.';
 
         $info                        = new \stdClass();
-        $info->name                  = 'Easy MCP AI';
+        $info->name                  = 'RankOut Connector';
         $info->slug                  = self::PLUGIN_SLUG;
         $info->version               = $latest;
         $info->author                = '<a href="https://easymcpai.com" target="_blank">EasyMCPAI</a>';
@@ -154,7 +154,7 @@ class GitHub_Updater {
     }
 
     /**
-     * GitHub archives extract as "{repo}-{version}/" — rename to "easy-mcp-ai/".
+     * GitHub archives extract as "{repo}-{version}/" — rename to "rankout-connector/".
      */
     public function fix_source_dir( $source, $remote_source, $upgrader, $hook_extra = array() ) {
         if ( ! isset( $hook_extra['plugin'] ) || $this->plugin_basename !== $hook_extra['plugin'] ) {
@@ -175,7 +175,7 @@ class GitHub_Updater {
 
         if ( ! $wp_filesystem->move( $source_dir, $new_source ) ) {
             return new \WP_Error(
-                'easy_mcp_ai_rename_failed',
+                'rankout_connector_rename_failed',
                 sprintf( 'Could not rename update folder from %s to %s.', basename( $source_dir ), self::PLUGIN_SLUG )
             );
         }
@@ -199,7 +199,7 @@ class GitHub_Updater {
             add_query_arg( self::CHECK_PARAM, '1', admin_url( 'plugins.php' ) ),
             self::CHECK_NONCE
         );
-        $links[] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Check for Updates', 'easy-mcp-ai' ) . '</a>';
+        $links[] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Check for Updates', 'rankout-connector' ) . '</a>';
 
         return $links;
     }

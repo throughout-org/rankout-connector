@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Easy MCP AI are documented here.  
+All notable changes to RankOut Connector are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).  
 Versions follow [Semantic Versioning](https://semver.org/).
 
@@ -95,7 +95,7 @@ Parameters: `topics` (array, required), `post_type`, `threshold` (0–100, defau
 ## [1.9.2] — 2026-05-xx
 
 ### Added
-- GitHub auto-updater (`class-github-updater.php`) — plugin checks `throughout-org/easy-mcp-ai` releases every 12 h via transient cache; "Check for Updates" link on Plugins page busts the cache and forces a fresh check
+- GitHub auto-updater (`class-github-updater.php`) — plugin checks `throughout-org/rankout-connector` releases every 12 h via transient cache; "Check for Updates" link on Plugins page busts the cache and forces a fresh check
 - `wp_list_wp_content` — list directories and files anywhere under `wp-content/`
 - `wp_get_wp_content_file` — read any file under `wp-content/` (requires `manage_options`)
 

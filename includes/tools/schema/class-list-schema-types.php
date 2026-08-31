@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\Tools\Schema;
+namespace RankOut_Connector\Tools\Schema;
 
-use Easy_MCP_AI\Tools\Base_Tool;
+use RankOut_Connector\Tools\Base_Tool;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -250,8 +250,8 @@ class List_Schema_Types extends Base_Tool {
 				'example'             => array(
 					'@context'     => 'https://schema.org',
 					'@type'        => 'VideoObject',
-					'name'         => 'How to use Easy MCP AI',
-					'description'  => 'A walkthrough of the Easy MCP AI plugin.',
+					'name'         => 'How to use RankOut Connector',
+					'description'  => 'A walkthrough of the RankOut Connector plugin.',
 					'thumbnailUrl' => 'https://example.com/thumb.jpg',
 					'uploadDate'   => '2025-01-01',
 					'contentUrl'   => 'https://example.com/video.mp4',

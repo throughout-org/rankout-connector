@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\OAuth;
+namespace RankOut_Connector\OAuth;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -62,7 +62,7 @@ class Client_Registry {
         }
 
         
-        $dcr_enabled = get_option( 'easy_mcp_ai_oauth_dcr_enabled', true );
+        $dcr_enabled = get_option( 'rankout_connector_oauth_dcr_enabled', true );
         if ( ! $dcr_enabled ) {
             return new \WP_REST_Response( null, 404 );
         }
@@ -77,13 +77,13 @@ class Client_Registry {
         $content_type = $request->get_content_type();
         $ct_value     = is_array( $content_type ) && isset( $content_type['value'] ) ? strtolower( $content_type['value'] ) : '';
         if ( 'application/json' !== $ct_value ) {
-            return self::dcr_error( 'invalid_client_metadata', __( 'Request Content-Type must be application/json.', 'easy-mcp-ai' ), 400 );
+            return self::dcr_error( 'invalid_client_metadata', __( 'Request Content-Type must be application/json.', 'rankout-connector' ), 400 );
         }
 
         
         $body = $request->get_json_params();
         if ( empty( $body ) || ! is_array( $body ) ) {
-            return self::dcr_error( 'invalid_client_metadata', __( 'Request body must be a JSON object.', 'easy-mcp-ai' ), 400 );
+            return self::dcr_error( 'invalid_client_metadata', __( 'Request body must be a JSON object.', 'rankout-connector' ), 400 );
         }
 
         
@@ -114,18 +114,18 @@ class Client_Registry {
     private function validate_request_body( array $body ) {
         
         if ( ! isset( $body['redirect_uris'] ) || ! is_array( $body['redirect_uris'] ) || empty( $body['redirect_uris'] ) ) {
-            return self::dcr_error( 'invalid_redirect_uri', __( 'redirect_uris is required and must be a non-empty array of strings.', 'easy-mcp-ai' ), 400 );
+            return self::dcr_error( 'invalid_redirect_uri', __( 'redirect_uris is required and must be a non-empty array of strings.', 'rankout-connector' ), 400 );
         }
 
         
         if ( count( $body['redirect_uris'] ) > 10 ) {
-            return self::dcr_error( 'invalid_redirect_uri', __( 'Too many redirect_uris (maximum 10).', 'easy-mcp-ai' ), 400 );
+            return self::dcr_error( 'invalid_redirect_uri', __( 'Too many redirect_uris (maximum 10).', 'rankout-connector' ), 400 );
         }
 
         $redirect_uris = array();
         foreach ( $body['redirect_uris'] as $uri ) {
             if ( ! is_string( $uri ) ) {
-                return self::dcr_error( 'invalid_redirect_uri', __( 'Each redirect_uri must be a string.', 'easy-mcp-ai' ), 400 );
+                return self::dcr_error( 'invalid_redirect_uri', __( 'Each redirect_uri must be a string.', 'rankout-connector' ), 400 );
             }
 
             $validation_error = $this->validate_redirect_uri( $uri );
@@ -160,7 +160,7 @@ class Client_Registry {
                     return self::dcr_error(
                         'invalid_client_metadata',
                         /* translators: %s: unsupported grant type */
-                        sprintf( __( 'Unsupported grant_type: %s', 'easy-mcp-ai' ), esc_html( $gt ) ),
+                        sprintf( __( 'Unsupported grant_type: %s', 'rankout-connector' ), esc_html( $gt ) ),
                         400
                     );
                 }
@@ -175,7 +175,7 @@ class Client_Registry {
                     return self::dcr_error(
                         'invalid_client_metadata',
                         /* translators: %s: unsupported response type */
-                        sprintf( __( 'Unsupported response_type: %s', 'easy-mcp-ai' ), esc_html( $rt ) ),
+                        sprintf( __( 'Unsupported response_type: %s', 'rankout-connector' ), esc_html( $rt ) ),
                         400
                     );
                 }
@@ -185,7 +185,7 @@ class Client_Registry {
 
         
         if ( isset( $body['token_endpoint_auth_method'] ) && 'none' !== $body['token_endpoint_auth_method'] ) {
-            return self::dcr_error( 'invalid_client_metadata', __( 'Only token_endpoint_auth_method=none is supported.', 'easy-mcp-ai' ), 400 );
+            return self::dcr_error( 'invalid_client_metadata', __( 'Only token_endpoint_auth_method=none is supported.', 'rankout-connector' ), 400 );
         }
 
         $software_id      = isset( $body['software_id'] ) && is_string( $body['software_id'] )
@@ -220,7 +220,7 @@ class Client_Registry {
         $software_version = $fields['software_version'];
 
         global $wpdb;
-        $table = $wpdb->prefix . 'easy_mcp_ai_oauth_clients';
+        $table = $wpdb->prefix . 'rankout_connector_oauth_clients';
 
         
         $this->cleanup_stale_duplicates( $client_name, wp_json_encode( $redirect_uris ) );
@@ -252,7 +252,7 @@ class Client_Registry {
         );
 
         if ( false === $inserted ) {
-            return self::dcr_error( 'server_error', __( 'Client registration failed. Please try again.', 'easy-mcp-ai' ), 500 );
+            return self::dcr_error( 'server_error', __( 'Client registration failed. Please try again.', 'rankout-connector' ), 500 );
         }
 
         $response_data = array(
@@ -289,7 +289,7 @@ class Client_Registry {
         
         
         if ( strlen( $uri ) > 2048 ) {
-            return self::dcr_error( 'invalid_redirect_uri', __( 'Redirect URI is too long (maximum 2048 bytes).', 'easy-mcp-ai' ), 400 );
+            return self::dcr_error( 'invalid_redirect_uri', __( 'Redirect URI is too long (maximum 2048 bytes).', 'rankout-connector' ), 400 );
         }
 
         
@@ -297,7 +297,7 @@ class Client_Registry {
             return self::dcr_error(
                 'invalid_redirect_uri',
                 /* translators: %s: the offending URI */
-                sprintf( __( 'Invalid redirect URI: %s', 'easy-mcp-ai' ), esc_url( $uri ) ),
+                sprintf( __( 'Invalid redirect URI: %s', 'rankout-connector' ), esc_url( $uri ) ),
                 400
             );
         }
@@ -311,24 +311,24 @@ class Client_Registry {
             return self::dcr_error(
                 'invalid_redirect_uri',
                 /* translators: %s: the offending scheme */
-                sprintf( __( 'Forbidden scheme in redirect URI: %s', 'easy-mcp-ai' ), esc_html( $scheme ) ),
+                sprintf( __( 'Forbidden scheme in redirect URI: %s', 'rankout-connector' ), esc_html( $scheme ) ),
                 400
             );
         }
 
         
         if ( isset( $parsed['fragment'] ) ) {
-            return self::dcr_error( 'invalid_redirect_uri', __( 'Redirect URIs must not contain a fragment (#).', 'easy-mcp-ai' ), 400 );
+            return self::dcr_error( 'invalid_redirect_uri', __( 'Redirect URIs must not contain a fragment (#).', 'rankout-connector' ), 400 );
         }
 
         
         if ( isset( $parsed['user'] ) || isset( $parsed['pass'] ) ) {
-            return self::dcr_error( 'invalid_redirect_uri', __( 'Redirect URIs must not contain userinfo.', 'easy-mcp-ai' ), 400 );
+            return self::dcr_error( 'invalid_redirect_uri', __( 'Redirect URIs must not contain userinfo.', 'rankout-connector' ), 400 );
         }
 
         
         if ( false !== strpos( $uri, '*' ) ) {
-            return self::dcr_error( 'invalid_redirect_uri', __( 'Redirect URIs must not contain wildcards.', 'easy-mcp-ai' ), 400 );
+            return self::dcr_error( 'invalid_redirect_uri', __( 'Redirect URIs must not contain wildcards.', 'rankout-connector' ), 400 );
         }
 
         
@@ -336,7 +336,7 @@ class Client_Registry {
             $host       = isset( $parsed['host'] ) ? strtolower( $parsed['host'] ) : '';
             $local_hosts = array( 'localhost', '127.0.0.1', '[::1]' );
             if ( ! in_array( $host, $local_hosts, true ) ) {
-                return self::dcr_error( 'invalid_redirect_uri', __( 'Redirect URIs must use HTTPS except for localhost.', 'easy-mcp-ai' ), 400 );
+                return self::dcr_error( 'invalid_redirect_uri', __( 'Redirect URIs must use HTTPS except for localhost.', 'rankout-connector' ), 400 );
             }
         }
 
@@ -386,16 +386,16 @@ class Client_Registry {
         
         $ip = trim( $ip, '[]' );
 
-        $per_ip_key  = 'easy_mcp_ai_dcr_rl_' . md5( $ip );
-        $global_key  = 'easy_mcp_ai_dcr_rl_global';
+        $per_ip_key  = 'rankout_connector_dcr_rl_' . md5( $ip );
+        $global_key  = 'rankout_connector_dcr_rl_global';
         $global_cap  = self::GLOBAL_RATE_LIMIT_PER_HOUR;
 
         if ( \wp_using_ext_object_cache() ) {
-            \wp_cache_add( $per_ip_key, 0, 'easy_mcp_ai', HOUR_IN_SECONDS );
-            $new_count = \wp_cache_incr( $per_ip_key, 1, 'easy_mcp_ai' );
+            \wp_cache_add( $per_ip_key, 0, 'rankout_connector', HOUR_IN_SECONDS );
+            $new_count = \wp_cache_incr( $per_ip_key, 1, 'rankout_connector' );
 
-            \wp_cache_add( $global_key, 0, 'easy_mcp_ai', HOUR_IN_SECONDS );
-            $new_global = \wp_cache_incr( $global_key, 1, 'easy_mcp_ai' );
+            \wp_cache_add( $global_key, 0, 'rankout_connector', HOUR_IN_SECONDS );
+            $new_global = \wp_cache_incr( $global_key, 1, 'rankout_connector' );
         } else {
             
             $new_count  = Token_Endpoint::rl_transient_increment( $per_ip_key );
@@ -417,8 +417,8 @@ class Client_Registry {
     private function check_client_cap() {
         global $wpdb;
 
-        $table     = $wpdb->prefix . 'easy_mcp_ai_oauth_clients';
-        $max       = (int) get_option( 'easy_mcp_ai_oauth_max_clients', self::DEFAULT_MAX_CLIENTS );
+        $table     = $wpdb->prefix . 'rankout_connector_oauth_clients';
+        $max       = (int) get_option( 'rankout_connector_oauth_max_clients', self::DEFAULT_MAX_CLIENTS );
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table prefixed by $wpdb->prefix; live count must be fresh for cap check.
         $count     = (int) $wpdb->get_var(
             $wpdb->prepare(
@@ -429,7 +429,7 @@ class Client_Registry {
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         if ( $count >= $max ) {
-            return self::dcr_error( 'server_error', __( 'Maximum number of registered clients has been reached.', 'easy-mcp-ai' ), 503 );
+            return self::dcr_error( 'server_error', __( 'Maximum number of registered clients has been reached.', 'rankout-connector' ), 503 );
         }
 
         return null;
@@ -449,10 +449,10 @@ class Client_Registry {
     private function cleanup_stale_duplicates( $client_name, $redirect_uris_json ) {
         global $wpdb;
 
-        $clients_table  = $wpdb->prefix . 'easy_mcp_ai_oauth_clients';
-        $tokens_table   = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
-        $codes_table    = $wpdb->prefix . 'easy_mcp_ai_oauth_codes';
-        $consents_table = $wpdb->prefix . 'easy_mcp_ai_oauth_consents';
+        $clients_table  = $wpdb->prefix . 'rankout_connector_oauth_clients';
+        $tokens_table   = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
+        $codes_table    = $wpdb->prefix . 'rankout_connector_oauth_codes';
+        $consents_table = $wpdb->prefix . 'rankout_connector_oauth_consents';
 
         $now    = current_time( 'mysql', true );
         $cutoff = gmdate( 'Y-m-d H:i:s', time() - 60 );
@@ -503,7 +503,7 @@ class Client_Registry {
     public function get_client( $client_id ) {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'easy_mcp_ai_oauth_clients';
+        $table = $wpdb->prefix . 'rankout_connector_oauth_clients';
 
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table prefixed by $wpdb->prefix; client lookup must be fresh.
         return $wpdb->get_row(

@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\Tools\Database;
+namespace RankOut_Connector\Tools\Database;
 
-use Easy_MCP_AI\Tools\Base_Tool;
+use RankOut_Connector\Tools\Base_Tool;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

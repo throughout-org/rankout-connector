@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\OAuth;
+namespace RankOut_Connector\OAuth;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -20,7 +20,7 @@ class Authorization_Endpoint {
 
 
 
-    const NAMESPACE_V1 = 'easy-mcp-ai/v1';
+    const NAMESPACE_V1 = 'rankout-connector/v1';
 
     
 
@@ -78,12 +78,12 @@ class Authorization_Endpoint {
         
         
         
-        $min_cap = apply_filters( 'easy_mcp_ai_oauth_min_capability', 'publish_posts' );
+        $min_cap = apply_filters( 'rankout_connector_oauth_min_capability', 'publish_posts' );
         if ( ! current_user_can( $min_cap ) ) {
             return $this->redirect_with_error(
                 $params,
                 'access_denied',
-                __( 'Your account does not have sufficient permissions to authorize MCP access.', 'easy-mcp-ai' )
+                __( 'Your account does not have sufficient permissions to authorize MCP access.', 'rankout-connector' )
             );
         }
 
@@ -99,7 +99,7 @@ class Authorization_Endpoint {
         foreach ( $scope_list as $s ) {
             if ( 'mcp' !== $s && ! in_array( $s, $valid_scopes, true ) ) {
                 return $this->error_response(
-                    new \WP_Error( 'invalid_scope', __( 'Unknown scope requested.', 'easy-mcp-ai' ) ),
+                    new \WP_Error( 'invalid_scope', __( 'Unknown scope requested.', 'rankout-connector' ) ),
                     $params
                 );
             }
@@ -120,7 +120,7 @@ class Authorization_Endpoint {
                 $grant_scope = implode( ' ', $scope_list );
                 $code        = $this->mint_authorization_code( $params, $user->ID, $grant_scope );
                 if ( null === $code ) {
-                    return $this->redirect_with_error( $params, 'server_error', __( 'Failed to issue authorization code.', 'easy-mcp-ai' ) );
+                    return $this->redirect_with_error( $params, 'server_error', __( 'Failed to issue authorization code.', 'rankout-connector' ) );
                 }
                 return $this->redirect_with_code( $params['redirect_uri'], $code, $params['state'] );
             }
@@ -136,7 +136,7 @@ class Authorization_Endpoint {
         
         
         $params['scope_sig'] = self::sign_scope( $params['client_id'], $params['scope'] );
-        $script_nonce        = wp_create_nonce( 'easy_mcp_ai_consent_script' );
+        $script_nonce        = wp_create_nonce( 'rankout_connector_consent_script' );
         $html = Consent_Screen::render( $client, $user, $requested_scope, $params, $script_nonce );
 
         $response = new \WP_REST_Response( $html, 200 );
@@ -167,17 +167,17 @@ class Authorization_Endpoint {
         if ( ! is_user_logged_in() ) {
             return new \WP_Error(
                 'access_denied',
-                __( 'You must be logged in to authorize this request.', 'easy-mcp-ai' ),
+                __( 'You must be logged in to authorize this request.', 'rankout-connector' ),
                 array( 'status' => 401 )
             );
         }
 
         
-        $min_cap = apply_filters( 'easy_mcp_ai_oauth_min_capability', 'publish_posts' );
+        $min_cap = apply_filters( 'rankout_connector_oauth_min_capability', 'publish_posts' );
         if ( ! current_user_can( $min_cap ) ) {
             return new \WP_Error(
                 'access_denied',
-                __( 'Your account does not have sufficient permissions to authorize MCP access.', 'easy-mcp-ai' ),
+                __( 'Your account does not have sufficient permissions to authorize MCP access.', 'rankout-connector' ),
                 array( 'status' => 403 )
             );
         }
@@ -186,10 +186,10 @@ class Authorization_Endpoint {
 
         
         $nonce = sanitize_text_field( $request->get_param( '_wpnonce' ) );
-        if ( ! wp_verify_nonce( $nonce, 'easy_mcp_ai_oauth_consent_' . $params['client_id'] ) ) {
+        if ( ! wp_verify_nonce( $nonce, 'rankout_connector_oauth_consent_' . $params['client_id'] ) ) {
             return new \WP_Error(
                 'invalid_request',
-                __( 'Security check failed. Please try again.', 'easy-mcp-ai' ),
+                __( 'Security check failed. Please try again.', 'rankout-connector' ),
                 array( 'status' => 403 )
             );
         }
@@ -206,7 +206,7 @@ class Authorization_Endpoint {
         if ( '' === $scope_sig || ! hash_equals( $expected, $scope_sig ) ) {
             return new \WP_Error(
                 'invalid_request',
-                __( 'Scope integrity check failed. Please restart authorization.', 'easy-mcp-ai' ),
+                __( 'Scope integrity check failed. Please restart authorization.', 'rankout-connector' ),
                 array( 'status' => 403 )
             );
         }
@@ -268,7 +268,7 @@ class Authorization_Endpoint {
         return $this->redirect_with_error(
             $params,
             'access_denied',
-            __( 'The user denied the authorization request.', 'easy-mcp-ai' )
+            __( 'The user denied the authorization request.', 'rankout-connector' )
         );
     }
 
@@ -309,7 +309,7 @@ class Authorization_Endpoint {
             $this->store_consent( $user->ID, $params['client_id'], 'mcp' );
             $code = $this->mint_authorization_code( $params, $user->ID, 'mcp' );
             if ( null === $code ) {
-                return $this->redirect_with_error( $params, 'server_error', __( 'Failed to issue authorization code.', 'easy-mcp-ai' ) );
+                return $this->redirect_with_error( $params, 'server_error', __( 'Failed to issue authorization code.', 'rankout-connector' ) );
             }
             return $this->redirect_with_code( $params['redirect_uri'], $code, $params['state'] );
         }
@@ -343,7 +343,7 @@ class Authorization_Endpoint {
         $this->store_consent( $user->ID, $params['client_id'], $scope_string );
         $code = $this->mint_authorization_code( $params, $user->ID, $scope_string );
         if ( null === $code ) {
-            return $this->redirect_with_error( $params, 'server_error', __( 'Failed to issue authorization code.', 'easy-mcp-ai' ) );
+            return $this->redirect_with_error( $params, 'server_error', __( 'Failed to issue authorization code.', 'rankout-connector' ) );
         }
 
         return $this->redirect_with_code( $params['redirect_uri'], $code, $params['state'] );
@@ -417,14 +417,14 @@ class Authorization_Endpoint {
         if ( empty( $params['client_id'] ) ) {
             return new \WP_Error(
                 'invalid_request',
-                __( 'Missing required parameter: client_id', 'easy-mcp-ai' ),
+                __( 'Missing required parameter: client_id', 'rankout-connector' ),
                 array( 'status' => 400, 'no_redirect' => true )
             );
         }
         if ( empty( $params['redirect_uri'] ) ) {
             return new \WP_Error(
                 'invalid_request',
-                __( 'Missing required parameter: redirect_uri', 'easy-mcp-ai' ),
+                __( 'Missing required parameter: redirect_uri', 'rankout-connector' ),
                 array( 'status' => 400, 'no_redirect' => true )
             );
         }
@@ -434,7 +434,7 @@ class Authorization_Endpoint {
         if ( ! $client ) {
             return new \WP_Error(
                 'invalid_client',
-                __( 'Unknown or inactive client.', 'easy-mcp-ai' ),
+                __( 'Unknown or inactive client.', 'rankout-connector' ),
                 array( 'status' => 400, 'no_redirect' => true )
             );
         }
@@ -445,7 +445,7 @@ class Authorization_Endpoint {
             
             return new \WP_Error(
                 'invalid_redirect_uri',
-                __( 'The redirect_uri does not match any registered URI for this client.', 'easy-mcp-ai' ),
+                __( 'The redirect_uri does not match any registered URI for this client.', 'rankout-connector' ),
                 array( 'status' => 400, 'no_redirect' => true )
             );
         }
@@ -457,7 +457,7 @@ class Authorization_Endpoint {
         if ( 'code' !== $params['response_type'] ) {
             return new \WP_Error(
                 'unsupported_response_type',
-                __( 'Only response_type=code is supported.', 'easy-mcp-ai' )
+                __( 'Only response_type=code is supported.', 'rankout-connector' )
             );
         }
 
@@ -471,7 +471,7 @@ class Authorization_Endpoint {
                 return new \WP_Error(
                     'invalid_request',
                     /* translators: %s: parameter name */
-                    sprintf( __( 'Missing required parameter: %s', 'easy-mcp-ai' ), $field )
+                    sprintf( __( 'Missing required parameter: %s', 'rankout-connector' ), $field )
                 );
             }
         }
@@ -480,7 +480,7 @@ class Authorization_Endpoint {
         if ( 'S256' !== $params['code_challenge_method'] ) {
             return new \WP_Error(
                 'invalid_request',
-                __( 'Only code_challenge_method=S256 is supported.', 'easy-mcp-ai' )
+                __( 'Only code_challenge_method=S256 is supported.', 'rankout-connector' )
             );
         }
 
@@ -489,7 +489,7 @@ class Authorization_Endpoint {
         if ( ! preg_match( '/^[A-Za-z0-9\-._~]{43,128}$/', $params['code_challenge'] ) ) {
             return new \WP_Error(
                 'invalid_request',
-                __( 'Invalid code_challenge format.', 'easy-mcp-ai' )
+                __( 'Invalid code_challenge format.', 'rankout-connector' )
             );
         }
 
@@ -502,7 +502,7 @@ class Authorization_Endpoint {
         if ( ! Token_Endpoint::resource_matches( $params['resource'], $expected_resource ) ) {
             return new \WP_Error(
                 'invalid_target',
-                __( 'Resource parameter does not match this server.', 'easy-mcp-ai' )
+                __( 'Resource parameter does not match this server.', 'rankout-connector' )
             );
         }
 
@@ -561,7 +561,7 @@ class Authorization_Endpoint {
     private function render_error_page( \WP_Error $error ) {
         $code    = esc_html( $error->get_error_code() );
         $message = esc_html( $error->get_error_message() );
-        $title   = esc_html__( 'Authorization Error', 'easy-mcp-ai' );
+        $title   = esc_html__( 'Authorization Error', 'rankout-connector' );
 
         $html  = '<!DOCTYPE html>' . "\n";
         $html .= '<html lang="en">' . "\n";
@@ -597,7 +597,7 @@ class Authorization_Endpoint {
 
     private function get_existing_consent( $user_id, $client_id ) {
         global $wpdb;
-        $table = $wpdb->prefix . 'easy_mcp_ai_oauth_consents';
+        $table = $wpdb->prefix . 'rankout_connector_oauth_consents';
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Custom plugin table; name is prefixed by $wpdb->prefix (trusted); admin-side single-row lookup does not warrant object cache.
         return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE wp_user_id = %d AND client_id = %s LIMIT 1", $user_id, $client_id ) );
@@ -613,7 +613,7 @@ class Authorization_Endpoint {
 
     private function store_consent( $user_id, $client_id, $scope ) {
         global $wpdb;
-        $table = $wpdb->prefix . 'easy_mcp_ai_oauth_consents';
+        $table = $wpdb->prefix . 'rankout_connector_oauth_consents';
         $now   = current_time( 'mysql', true );
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Custom plugin table; name is prefixed by $wpdb->prefix (trusted); upsert cannot use $wpdb->insert().
@@ -633,7 +633,7 @@ class Authorization_Endpoint {
 
         $raw_code  = bin2hex( random_bytes( 32 ) );
         $code_hash = hash( 'sha256', $raw_code );
-        $table     = $wpdb->prefix . 'easy_mcp_ai_oauth_codes';
+        $table     = $wpdb->prefix . 'rankout_connector_oauth_codes';
         $expires   = gmdate( 'Y-m-d H:i:s', time() + self::CODE_LIFETIME );
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- $wpdb->insert() on plugin-owned table; writes don't need caching.

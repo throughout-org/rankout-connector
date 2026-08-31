@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI;
+namespace RankOut_Connector;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -7,9 +7,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Activator {
 
+    // RankOut's own fixed, non-secret public-client id — the one thing
+    // this plugin and RankOut's backend must both agree on ahead of time
+    // (matches backend/.env's WORDPRESS_CONNECTOR_CLIENT_ID). Seeding it
+    // here, at activation, is what makes the connect flow genuinely
+    // plug-and-play: RankOut never has to register itself against each
+    // client's site individually the way an arbitrary third-party MCP
+    // client would via Dynamic Client Registration (Client_Registry
+    // above) — it's already a known, pre-authorized client the moment
+    // this plugin is active. PKCE (required on every /oauth/token call
+    // this client makes) is what protects the code exchange in place of
+    // a client_secret, so nothing secret needs to ship in this file.
+    const RANKOUT_STATIC_CLIENT_ID = 'rankout-dashboard';
+
     public static function activate( $network_wide = false ) {
         if ( \is_multisite() && $network_wide ) {
-            
+
             $sites = \get_sites( array( 'number' => 0, 'fields' => 'ids' ) );
             foreach ( $sites as $blog_id ) {
                 \switch_to_blog( $blog_id );
@@ -18,6 +31,7 @@ class Activator {
                     self::create_oauth_tables();
                     self::create_change_log_tables();
                     self::set_default_options();
+                    self::seed_rankout_static_client();
                 } finally {
                     \restore_current_blog();
                 }
@@ -27,18 +41,19 @@ class Activator {
             self::create_oauth_tables();
             self::create_change_log_tables();
             self::set_default_options();
+            self::seed_rankout_static_client();
         }
-        if ( ! \wp_next_scheduled( 'easy_mcp_ai_cleanup_audit_log' ) ) {
-            \wp_schedule_event( time(), 'daily', 'easy_mcp_ai_cleanup_audit_log' );
+        if ( ! \wp_next_scheduled( 'rankout_connector_cleanup_audit_log' ) ) {
+            \wp_schedule_event( time(), 'daily', 'rankout_connector_cleanup_audit_log' );
         }
-        if ( ! \wp_next_scheduled( 'easy_mcp_ai_cleanup_oauth' ) ) {
-            \wp_schedule_event( time(), 'daily', 'easy_mcp_ai_cleanup_oauth' );
+        if ( ! \wp_next_scheduled( 'rankout_connector_cleanup_oauth' ) ) {
+            \wp_schedule_event( time(), 'daily', 'rankout_connector_cleanup_oauth' );
         }
-        if ( ! \wp_next_scheduled( 'easy_mcp_ai_cleanup_new_token_meta' ) ) {
-            \wp_schedule_event( time(), 'daily', 'easy_mcp_ai_cleanup_new_token_meta' );
+        if ( ! \wp_next_scheduled( 'rankout_connector_cleanup_new_token_meta' ) ) {
+            \wp_schedule_event( time(), 'daily', 'rankout_connector_cleanup_new_token_meta' );
         }
-        if ( ! \wp_next_scheduled( 'easy_mcp_ai_cleanup_change_log' ) ) {
-            \wp_schedule_event( time(), 'daily', 'easy_mcp_ai_cleanup_change_log' );
+        if ( ! \wp_next_scheduled( 'rankout_connector_cleanup_change_log' ) ) {
+            \wp_schedule_event( time(), 'daily', 'rankout_connector_cleanup_change_log' );
         }
         \flush_rewrite_rules();
     }
@@ -48,32 +63,95 @@ class Activator {
 
 
     public static function maybe_upgrade() {
-        if ( \get_option( 'easy_mcp_ai_db_version' ) !== EASY_MCP_AI_VERSION ) {
+        if ( \get_option( 'rankout_connector_db_version' ) !== RANKOUT_CONNECTOR_VERSION ) {
             self::create_tables();
         }
-        
-        
+
+
         self::maybe_upgrade_oauth_tables();
         self::maybe_upgrade_change_log_tables();
-        if ( ! \wp_next_scheduled( 'easy_mcp_ai_cleanup_audit_log' ) ) {
-            \wp_schedule_event( time(), 'daily', 'easy_mcp_ai_cleanup_audit_log' );
+        // Idempotent — re-running on every upgrade (not just first
+        // activation) self-heals the row if it's ever missing (a restored
+        // backup predating this plugin version, a manually cleared
+        // clients table, etc.) without requiring a full deactivate/
+        // reactivate cycle.
+        self::seed_rankout_static_client();
+        if ( ! \wp_next_scheduled( 'rankout_connector_cleanup_audit_log' ) ) {
+            \wp_schedule_event( time(), 'daily', 'rankout_connector_cleanup_audit_log' );
         }
-        if ( ! \wp_next_scheduled( 'easy_mcp_ai_cleanup_oauth' ) ) {
-            \wp_schedule_event( time(), 'daily', 'easy_mcp_ai_cleanup_oauth' );
+        if ( ! \wp_next_scheduled( 'rankout_connector_cleanup_oauth' ) ) {
+            \wp_schedule_event( time(), 'daily', 'rankout_connector_cleanup_oauth' );
         }
-        if ( ! \wp_next_scheduled( 'easy_mcp_ai_cleanup_new_token_meta' ) ) {
-            \wp_schedule_event( time(), 'daily', 'easy_mcp_ai_cleanup_new_token_meta' );
+        if ( ! \wp_next_scheduled( 'rankout_connector_cleanup_new_token_meta' ) ) {
+            \wp_schedule_event( time(), 'daily', 'rankout_connector_cleanup_new_token_meta' );
         }
-        if ( ! \wp_next_scheduled( 'easy_mcp_ai_cleanup_change_log' ) ) {
-            \wp_schedule_event( time(), 'daily', 'easy_mcp_ai_cleanup_change_log' );
+        if ( ! \wp_next_scheduled( 'rankout_connector_cleanup_change_log' ) ) {
+            \wp_schedule_event( time(), 'daily', 'rankout_connector_cleanup_change_log' );
         }
+    }
+
+    // Upserts RankOut's fixed static OAuth client into this install's own
+    // client registry — see RANKOUT_STATIC_CLIENT_ID's doc comment above
+    // for why this is what makes the connect flow plug-and-play rather
+    // than requiring a per-site Dynamic Client Registration round trip.
+    // Deliberately writes straight into the oauth_clients table rather
+    // than going through Client_Registry::persist_client() — that method
+    // always mints a fresh random client_id and enforces the DCR rate
+    // limit/cap, neither of which applies to seeding one fixed, trusted,
+    // first-party row at activation time.
+    private static function seed_rankout_static_client() {
+        $schema_file = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
+        if ( ! file_exists( $schema_file ) ) {
+            return;
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'rankout_connector_oauth_clients';
+
+        // The redirect_uri(s) RankOut's backend's WORDPRESS_CONNECTOR_CALLBACK_URL
+        // may point at. A filter, not a hardcoded single URL, because the
+        // real production callback domain is an operational detail this
+        // plugin's source shouldn't need editing to match — set it once
+        // via a small mu-plugin, or leave the default for local dev.
+        $redirect_uris = \apply_filters(
+            'rankout_connector_static_client_redirect_uris',
+            array( 'http://localhost:4000/api/wordpress-connector/callback' )
+        );
+        if ( ! is_array( $redirect_uris ) || empty( $redirect_uris ) ) {
+            return;
+        }
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Plugin-owned table write, one fixed row.
+        $wpdb->query(
+            $wpdb->prepare(
+                "INSERT INTO {$table}
+                    (client_id, client_name, redirect_uris, grant_types, response_types, scope, software_id, software_version, created_at, created_by_ip, is_active)
+                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 1)
+                 ON DUPLICATE KEY UPDATE
+                    client_name = VALUES(client_name),
+                    redirect_uris = VALUES(redirect_uris),
+                    grant_types = VALUES(grant_types),
+                    response_types = VALUES(response_types),
+                    is_active = 1",
+                self::RANKOUT_STATIC_CLIENT_ID,
+                'RankOut',
+                \wp_json_encode( array_values( $redirect_uris ) ),
+                \wp_json_encode( array( 'authorization_code', 'refresh_token' ) ),
+                \wp_json_encode( array( 'code' ) ),
+                '',
+                null,
+                null,
+                \current_time( 'mysql', true ),
+                ''
+            )
+        );
     }
 
     private static function create_tables() {
         global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();
-        $tokens_table = $wpdb->prefix . 'easy_mcp_ai_tokens';
-        $audit_table  = $wpdb->prefix . 'easy_mcp_ai_audit_log';
+        $tokens_table = $wpdb->prefix . 'rankout_connector_tokens';
+        $audit_table  = $wpdb->prefix . 'rankout_connector_audit_log';
 
         $sql = "CREATE TABLE {$tokens_table} (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -109,7 +187,7 @@ class Activator {
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         \dbDelta( $sql );
-        \update_option( 'easy_mcp_ai_db_version', EASY_MCP_AI_VERSION );
+        \update_option( 'rankout_connector_db_version', RANKOUT_CONNECTOR_VERSION );
     }
 
     
@@ -117,10 +195,10 @@ class Activator {
 
 
     private static function create_oauth_tables() {
-        $schema_file = EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
+        $schema_file = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
         if ( file_exists( $schema_file ) ) {
             require_once $schema_file;
-            \Easy_MCP_AI\OAuth\OAuth_Schema::create_tables();
+            \RankOut_Connector\OAuth\OAuth_Schema::create_tables();
         }
     }
 
@@ -129,10 +207,10 @@ class Activator {
 
 
     private static function maybe_upgrade_oauth_tables() {
-        $schema_file = EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
+        $schema_file = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-schema.php';
         if ( file_exists( $schema_file ) ) {
             require_once $schema_file;
-            \Easy_MCP_AI\OAuth\OAuth_Schema::maybe_upgrade();
+            \RankOut_Connector\OAuth\OAuth_Schema::maybe_upgrade();
         }
     }
 
@@ -141,17 +219,17 @@ class Activator {
 
 
     private static function create_change_log_tables() {
-        $schema_file = EASY_MCP_AI_PLUGIN_DIR . 'includes/history/class-change-log-schema.php';
+        $schema_file = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/history/class-change-log-schema.php';
         if ( ! file_exists( $schema_file ) ) {
             return;
         }
         require_once $schema_file;
-        \Easy_MCP_AI\History\Change_Log_Schema::create_tables();
+        \RankOut_Connector\History\Change_Log_Schema::create_tables();
 
         
         
-        \add_option( 'easy_mcp_ai_change_log_retention', 30 );
-        \add_option( 'easy_mcp_ai_change_log_enabled', true );
+        \add_option( 'rankout_connector_change_log_retention', 30 );
+        \add_option( 'rankout_connector_change_log_enabled', true );
 
         self::ensure_view_all_history_cap();
     }
@@ -168,8 +246,8 @@ class Activator {
 
     private static function ensure_view_all_history_cap() {
         $admin_role = \get_role( 'administrator' );
-        if ( $admin_role && ! $admin_role->has_cap( 'easy_mcp_ai_view_all_history' ) ) {
-            $admin_role->add_cap( 'easy_mcp_ai_view_all_history' );
+        if ( $admin_role && ! $admin_role->has_cap( 'rankout_connector_view_all_history' ) ) {
+            $admin_role->add_cap( 'rankout_connector_view_all_history' );
         }
     }
 
@@ -179,12 +257,12 @@ class Activator {
 
 
     private static function maybe_upgrade_change_log_tables() {
-        $schema_file = EASY_MCP_AI_PLUGIN_DIR . 'includes/history/class-change-log-schema.php';
+        $schema_file = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/history/class-change-log-schema.php';
         if ( ! file_exists( $schema_file ) ) {
             return;
         }
         require_once $schema_file;
-        \Easy_MCP_AI\History\Change_Log_Schema::maybe_upgrade();
+        \RankOut_Connector\History\Change_Log_Schema::maybe_upgrade();
         self::ensure_view_all_history_cap();
     }
 
@@ -200,8 +278,8 @@ class Activator {
             'enabled_hooks'          => array(),
         );
         foreach ( $defaults as $key => $value ) {
-            if ( false === \get_option( 'easy_mcp_ai_' . $key ) ) {
-                \update_option( 'easy_mcp_ai_' . $key, $value );
+            if ( false === \get_option( 'rankout_connector_' . $key ) ) {
+                \update_option( 'rankout_connector_' . $key, $value );
             }
         }
     }

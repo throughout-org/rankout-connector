@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\Tools\Users;
+namespace RankOut_Connector\Tools\Users;
 
-use Easy_MCP_AI\Tools\Base_Tool;
+use RankOut_Connector\Tools\Base_Tool;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -90,7 +90,7 @@ class Get_User_Meta extends Base_Tool {
             }
         }
         if ( ! current_user_can( 'manage_options' ) ) {
-            $readable_protected = apply_filters( 'easy_mcp_ai_user_meta_readable_protected_keys', array( 'wp_user-settings', 'wp_user-settings-time' ) );
+            $readable_protected = apply_filters( 'rankout_connector_user_meta_readable_protected_keys', array( 'wp_user-settings', 'wp_user-settings-time' ) );
             foreach ( $all as $k => $_ ) {
                 if ( '_' === ( $k[0] ?? '' ) && ! in_array( $k, $readable_protected, true ) ) {
                     unset( $all[ $k ] );

@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\Semrush;
+namespace RankOut_Connector\Semrush;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\Tools\Posts;
+namespace RankOut_Connector\Tools\Posts;
 
-use Easy_MCP_AI\Tools\Base_Tool;
+use RankOut_Connector\Tools\Base_Tool;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -27,7 +27,7 @@ class Get_Post_Full extends Base_Tool {
     }
 
     public function get_description() {
-        return 'Returns the complete view of a post in ONE call: post fields + all meta + all taxonomy terms grouped by taxonomy + featured image data + author data. Replaces 4–20 separate calls. Required: `id`. Optional: `post_type` (REST base, default `posts`), `include` (subset of [meta, terms, thumbnail, author] — omit for all), `exclude` (e.g. ["content"] to drop large post_content), `context` (view|edit, default view; edit exposes protected fields/meta and requires edit_post cap). Caps: 100 terms per taxonomy (filter: easy_mcp_ai_post_full_max_terms_per_taxonomy), 200 meta keys (filter: easy_mcp_ai_post_full_max_meta_keys). Response includes terms_truncated / meta_truncated flags when caps hit.';
+        return 'Returns the complete view of a post in ONE call: post fields + all meta + all taxonomy terms grouped by taxonomy + featured image data + author data. Replaces 4–20 separate calls. Required: `id`. Optional: `post_type` (REST base, default `posts`), `include` (subset of [meta, terms, thumbnail, author] — omit for all), `exclude` (e.g. ["content"] to drop large post_content), `context` (view|edit, default view; edit exposes protected fields/meta and requires edit_post cap). Caps: 100 terms per taxonomy (filter: rankout_connector_post_full_max_terms_per_taxonomy), 200 meta keys (filter: rankout_connector_post_full_max_meta_keys). Response includes terms_truncated / meta_truncated flags when caps hit.';
     }
 
     public function get_category() {
@@ -138,7 +138,7 @@ class Get_Post_Full extends Base_Tool {
 
         
         if ( in_array( 'meta', $include, true ) ) {
-            $meta_cap = (int) apply_filters( 'easy_mcp_ai_post_full_max_meta_keys', self::DEFAULT_MAX_META_KEYS );
+            $meta_cap = (int) apply_filters( 'rankout_connector_post_full_max_meta_keys', self::DEFAULT_MAX_META_KEYS );
             $all_meta = get_post_meta( $post_id );
             if ( ! is_array( $all_meta ) ) {
                 $all_meta = array();
@@ -175,8 +175,8 @@ class Get_Post_Full extends Base_Tool {
 
         
         if ( in_array( 'terms', $include, true ) ) {
-            $terms_cap   = (int) apply_filters( 'easy_mcp_ai_post_full_max_terms_per_taxonomy', self::DEFAULT_MAX_TERMS_PER_TAXONOMY );
-            $tax_cap     = (int) apply_filters( 'easy_mcp_ai_post_full_max_taxonomies', self::DEFAULT_MAX_TAXONOMIES );
+            $terms_cap   = (int) apply_filters( 'rankout_connector_post_full_max_terms_per_taxonomy', self::DEFAULT_MAX_TERMS_PER_TAXONOMY );
+            $tax_cap     = (int) apply_filters( 'rankout_connector_post_full_max_taxonomies', self::DEFAULT_MAX_TAXONOMIES );
             $taxonomies  = get_object_taxonomies( $post_object->post_type, 'names' );
             $terms_by_tax = array();
             $truncated    = array();

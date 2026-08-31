@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\Tools\Taxonomy;
+namespace RankOut_Connector\Tools\Taxonomy;
 
-use Easy_MCP_AI\Tools\Base_Tool;
+use RankOut_Connector\Tools\Base_Tool;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -82,7 +82,7 @@ class Update_Term_Meta extends Base_Tool {
         }
 
         
-        $blocked_patterns = apply_filters( 'easy_mcp_ai_term_meta_blocked_key_patterns', array() );
+        $blocked_patterns = apply_filters( 'rankout_connector_term_meta_blocked_key_patterns', array() );
         foreach ( $blocked_patterns as $pattern ) {
             if ( fnmatch( $pattern, $key ) ) {
                 throw new \RuntimeException( 'This meta key cannot be modified via MCP.' ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped

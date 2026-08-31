@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\Admin;
+namespace RankOut_Connector\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -17,7 +17,7 @@ class OAuth_Admin {
 
 
     public function __construct() {
-        \add_action( 'easy_mcp_ai_render_oauth_page', array( $this, 'render_page' ) );
+        \add_action( 'rankout_connector_render_oauth_page', array( $this, 'render_page' ) );
         \add_action( 'admin_init', array( $this, 'handle_actions' ) );
         \add_action( 'admin_init', array( $this, 'register_settings' ) );
     }
@@ -26,17 +26,17 @@ class OAuth_Admin {
 
 
     public function register_settings() {
-        \register_setting( 'easy_mcp_ai_oauth', 'easy_mcp_ai_oauth_access_token_ttl', array(
+        \register_setting( 'rankout_connector_oauth', 'rankout_connector_oauth_access_token_ttl', array(
             'type'              => 'integer',
             'sanitize_callback' => 'absint',
             'default'           => 3600,
         ) );
-        \register_setting( 'easy_mcp_ai_oauth', 'easy_mcp_ai_oauth_refresh_token_ttl', array(
+        \register_setting( 'rankout_connector_oauth', 'rankout_connector_oauth_refresh_token_ttl', array(
             'type'              => 'integer',
             'sanitize_callback' => 'absint',
             'default'           => 2592000,
         ) );
-        \register_setting( 'easy_mcp_ai_oauth', 'easy_mcp_ai_oauth_dcr_enabled', array(
+        \register_setting( 'rankout_connector_oauth', 'rankout_connector_oauth_dcr_enabled', array(
             'type'              => 'boolean',
             'sanitize_callback' => 'rest_sanitize_boolean',
             'default'           => true,
@@ -51,30 +51,30 @@ class OAuth_Admin {
 
     public function render_page() {
         if ( ! \current_user_can( 'manage_options' ) ) {
-            \wp_die( \esc_html__( 'You do not have sufficient permissions to access this page.', 'easy-mcp-ai' ) );
+            \wp_die( \esc_html__( 'You do not have sufficient permissions to access this page.', 'rankout-connector' ) );
         }
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only view/tab selector; mutating actions enforce their own nonces.
         $action = isset( $_GET['action'] ) ? \sanitize_text_field( \wp_unslash( $_GET['action'] ) ) : '';
 
         echo '<div class="wrap">';
-        echo '<h1>' . \esc_html__( 'API Token & OAuth', 'easy-mcp-ai' ) . '</h1>';
-        include EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/views/partials/page-nav.php';
-        $tokens_url = \admin_url( 'admin.php?page=easy-mcp-ai-tokens' );
-        $oauth_url  = \admin_url( 'admin.php?page=easy-mcp-ai-oauth' );
-        $endpoint_url           = \rest_url( 'easy-mcp-ai/v1/mcp' );
+        echo '<h1>' . \esc_html__( 'API Token & OAuth', 'rankout-connector' ) . '</h1>';
+        include RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/views/partials/page-nav.php';
+        $tokens_url = \admin_url( 'admin.php?page=rankout-connector-tokens' );
+        $oauth_url  = \admin_url( 'admin.php?page=rankout-connector-oauth' );
+        $endpoint_url           = \rest_url( 'rankout-connector/v1/mcp' );
         $client_guides          = Admin_Page::get_client_guides();
-        $tokens_link            = '<a href="' . \esc_url( $tokens_url ) . '">' . \esc_html__( 'API Tokens', 'easy-mcp-ai' ) . '</a>';
+        $tokens_link            = '<a href="' . \esc_url( $tokens_url ) . '">' . \esc_html__( 'API Tokens', 'rankout-connector' ) . '</a>';
         $quickstart_collapsible = true;
-        include EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/views/partials/quickstart-card.php';
+        include RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/views/partials/quickstart-card.php';
         echo '<h2 class="nav-tab-wrapper">';
-        echo '<a href="' . \esc_url( $oauth_url ) . '" class="nav-tab nav-tab-active">' . \esc_html__( 'OAuth', 'easy-mcp-ai' ) . '</a>';
-        echo '<a href="' . \esc_url( $tokens_url ) . '" class="nav-tab">' . \esc_html__( 'API Token', 'easy-mcp-ai' ) . '</a>';
+        echo '<a href="' . \esc_url( $oauth_url ) . '" class="nav-tab nav-tab-active">' . \esc_html__( 'OAuth', 'rankout-connector' ) . '</a>';
+        echo '<a href="' . \esc_url( $tokens_url ) . '" class="nav-tab">' . \esc_html__( 'API Token', 'rankout-connector' ) . '</a>';
         echo '</h2>';
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display flag set by our own redirect.
         if ( isset( $_GET['updated'] ) ) {
-            echo '<div class="notice notice-success is-dismissible"><p>' . \esc_html__( 'Settings saved.', 'easy-mcp-ai' ) . '</p></div>';
+            echo '<div class="notice notice-success is-dismissible"><p>' . \esc_html__( 'Settings saved.', 'rankout-connector' ) . '</p></div>';
         }
 
         if ( 'edit_scope' === $action ) {
@@ -96,48 +96,48 @@ class OAuth_Admin {
 
 
     private function render_settings_section() {
-        $access_ttl  = (int) \get_option( 'easy_mcp_ai_oauth_access_token_ttl', 3600 );
-        $refresh_ttl = (int) \get_option( 'easy_mcp_ai_oauth_refresh_token_ttl', 2592000 );
-        $dcr_enabled = (bool) \get_option( 'easy_mcp_ai_oauth_dcr_enabled', true );
+        $access_ttl  = (int) \get_option( 'rankout_connector_oauth_access_token_ttl', 3600 );
+        $refresh_ttl = (int) \get_option( 'rankout_connector_oauth_refresh_token_ttl', 2592000 );
+        $dcr_enabled = (bool) \get_option( 'rankout_connector_oauth_dcr_enabled', true );
         ?>
-        <details class="easy-mcp-ai-oauth-settings" style="margin:1em 0;">
-            <summary style="cursor:pointer;font-size:1.3em;font-weight:600;padding:.25em 0;"><?php \esc_html_e( 'Settings', 'easy-mcp-ai' ); ?></summary>
-        <form method="post" action="<?php echo \esc_url( \admin_url( 'admin.php?page=easy-mcp-ai-oauth' ) ); ?>">
-            <?php \wp_nonce_field( 'easy_mcp_ai_oauth_save_settings' ); ?>
-            <input type="hidden" name="easy_mcp_ai_oauth_action" value="save_settings" />
+        <details class="rankout-connector-oauth-settings" style="margin:1em 0;">
+            <summary style="cursor:pointer;font-size:1.3em;font-weight:600;padding:.25em 0;"><?php \esc_html_e( 'Settings', 'rankout-connector' ); ?></summary>
+        <form method="post" action="<?php echo \esc_url( \admin_url( 'admin.php?page=rankout-connector-oauth' ) ); ?>">
+            <?php \wp_nonce_field( 'rankout_connector_oauth_save_settings' ); ?>
+            <input type="hidden" name="rankout_connector_oauth_action" value="save_settings" />
             <table class="form-table" role="presentation">
                 <tr>
                     <th scope="row">
-                        <label for="access_token_ttl"><?php \esc_html_e( 'Access Token TTL (seconds)', 'easy-mcp-ai' ); ?></label>
+                        <label for="access_token_ttl"><?php \esc_html_e( 'Access Token TTL (seconds)', 'rankout-connector' ); ?></label>
                     </th>
                     <td>
                         <input type="number" id="access_token_ttl" name="access_token_ttl"
                                value="<?php echo \esc_attr( $access_ttl ); ?>" min="60" step="1" class="regular-text" />
-                        <p class="description"><?php \esc_html_e( 'Default: 3600 (1 hour).', 'easy-mcp-ai' ); ?></p>
+                        <p class="description"><?php \esc_html_e( 'Default: 3600 (1 hour).', 'rankout-connector' ); ?></p>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="refresh_token_ttl"><?php \esc_html_e( 'Refresh Token TTL (seconds)', 'easy-mcp-ai' ); ?></label>
+                        <label for="refresh_token_ttl"><?php \esc_html_e( 'Refresh Token TTL (seconds)', 'rankout-connector' ); ?></label>
                     </th>
                     <td>
                         <input type="number" id="refresh_token_ttl" name="refresh_token_ttl"
                                value="<?php echo \esc_attr( $refresh_ttl ); ?>" min="60" step="1" class="regular-text" />
-                        <p class="description"><?php \esc_html_e( 'Default: 2592000 (30 days).', 'easy-mcp-ai' ); ?></p>
+                        <p class="description"><?php \esc_html_e( 'Default: 2592000 (30 days).', 'rankout-connector' ); ?></p>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><?php \esc_html_e( 'Dynamic Client Registration', 'easy-mcp-ai' ); ?></th>
+                    <th scope="row"><?php \esc_html_e( 'Dynamic Client Registration', 'rankout-connector' ); ?></th>
                     <td>
                         <label for="dcr_enabled">
                             <input type="checkbox" id="dcr_enabled" name="dcr_enabled" value="1"
                                 <?php \checked( $dcr_enabled ); ?> />
-                            <?php \esc_html_e( 'Enable DCR endpoint', 'easy-mcp-ai' ); ?>
+                            <?php \esc_html_e( 'Enable DCR endpoint', 'rankout-connector' ); ?>
                         </label>
                     </td>
                 </tr>
             </table>
-            <?php \submit_button( __( 'Save Settings', 'easy-mcp-ai' ) ); ?>
+            <?php \submit_button( __( 'Save Settings', 'rankout-connector' ) ); ?>
         </form>
         </details>
         <hr />
@@ -154,8 +154,8 @@ class OAuth_Admin {
     private function render_clients_table() {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'easy_mcp_ai_oauth_clients';
-        $tokens_table = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $table = $wpdb->prefix . 'rankout_connector_oauth_clients';
+        $tokens_table = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only pagination parameter.
         $page   = isset( $_GET['paged'] ) ? max( 1, (int) $_GET['paged'] ) : 1;
@@ -185,26 +185,26 @@ class OAuth_Admin {
             $clients = array_slice( (array) $clients, 0, 50 );
         }
         ?>
-        <h2><?php \esc_html_e( 'Registered Clients', 'easy-mcp-ai' ); ?></h2>
+        <h2><?php \esc_html_e( 'Registered Clients', 'rankout-connector' ); ?></h2>
         <table class="widefat striped">
             <thead>
                 <tr>
-                    <th><?php \esc_html_e( 'Client Name', 'easy-mcp-ai' ); ?></th>
-                    <th><?php \esc_html_e( 'Client ID', 'easy-mcp-ai' ); ?></th>
-                    <th><?php \esc_html_e( 'Redirect URIs', 'easy-mcp-ai' ); ?></th>
-                    <th><?php \esc_html_e( 'Created', 'easy-mcp-ai' ); ?></th>
-                    <th><?php \esc_html_e( 'Active Tokens', 'easy-mcp-ai' ); ?></th>
-                    <th><?php \esc_html_e( 'Status', 'easy-mcp-ai' ); ?></th>
-                    <th><?php \esc_html_e( 'Actions', 'easy-mcp-ai' ); ?></th>
+                    <th><?php \esc_html_e( 'Client Name', 'rankout-connector' ); ?></th>
+                    <th><?php \esc_html_e( 'Client ID', 'rankout-connector' ); ?></th>
+                    <th><?php \esc_html_e( 'Redirect URIs', 'rankout-connector' ); ?></th>
+                    <th><?php \esc_html_e( 'Created', 'rankout-connector' ); ?></th>
+                    <th><?php \esc_html_e( 'Active Tokens', 'rankout-connector' ); ?></th>
+                    <th><?php \esc_html_e( 'Status', 'rankout-connector' ); ?></th>
+                    <th><?php \esc_html_e( 'Actions', 'rankout-connector' ); ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php if ( empty( $clients ) ) : ?>
                     <tr>
                         <td colspan="7">
-                            <?php \esc_html_e( 'No registered clients.', 'easy-mcp-ai' ); ?>
-                            <a href="<?php echo \esc_url( \admin_url( 'admin.php?page=easy-mcp-ai' ) ); ?>">
-                                <?php \esc_html_e( 'Connect to AI Client', 'easy-mcp-ai' ); ?>
+                            <?php \esc_html_e( 'No registered clients.', 'rankout-connector' ); ?>
+                            <a href="<?php echo \esc_url( \admin_url( 'admin.php?page=rankout-connector' ) ); ?>">
+                                <?php \esc_html_e( 'Connect to AI Client', 'rankout-connector' ); ?>
                             </a>
                         </td>
                     </tr>
@@ -229,19 +229,19 @@ class OAuth_Admin {
                             <td><?php echo \esc_html( $client->active_tokens ); ?></td>
                             <td>
                                 <span class="dashicons dashicons-yes-alt" style="color:#46b450;"></span>
-                                <?php \esc_html_e( 'Active', 'easy-mcp-ai' ); ?>
+                                <?php \esc_html_e( 'Active', 'rankout-connector' ); ?>
                             </td>
                             <td>
                                 <?php
                                 $revoke_url = \wp_nonce_url(
-                                    \admin_url( 'admin.php?page=easy-mcp-ai-oauth&easy_mcp_ai_oauth_action=revoke_client&client_id=' . \urlencode( $client->client_id ) ),
-                                    'easy_mcp_ai_oauth_revoke_client_' . $client->client_id
+                                    \admin_url( 'admin.php?page=rankout-connector-oauth&rankout_connector_oauth_action=revoke_client&client_id=' . \urlencode( $client->client_id ) ),
+                                    'rankout_connector_oauth_revoke_client_' . $client->client_id
                                 );
                                 ?>
                                 <a href="<?php echo \esc_url( $revoke_url ); ?>"
                                    class="button button-secondary"
-                                   onclick="return confirm('<?php \esc_attr_e( 'Revoke this client and all its tokens?', 'easy-mcp-ai' ); ?>');">
-                                    <?php \esc_html_e( 'Revoke', 'easy-mcp-ai' ); ?>
+                                   onclick="return confirm('<?php \esc_attr_e( 'Revoke this client and all its tokens?', 'rankout-connector' ); ?>');">
+                                    <?php \esc_html_e( 'Revoke', 'rankout-connector' ); ?>
                                 </a>
                             </td>
                         </tr>
@@ -251,7 +251,7 @@ class OAuth_Admin {
         </table>
         <?php if ( $has_next_page ) : ?>
             <a href="<?php echo \esc_url( \add_query_arg( 'paged', $page + 1 ) ); ?>" class="button">
-                <?php \esc_html_e( 'Next page', 'easy-mcp-ai' ); ?>
+                <?php \esc_html_e( 'Next page', 'rankout-connector' ); ?>
             </a>
         <?php endif; ?>
         <br />
@@ -268,9 +268,9 @@ class OAuth_Admin {
     private function render_grants_table() {
         global $wpdb;
 
-        $consents_table = $wpdb->prefix . 'easy_mcp_ai_oauth_consents';
-        $clients_table  = $wpdb->prefix . 'easy_mcp_ai_oauth_clients';
-        $tokens_table   = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $consents_table = $wpdb->prefix . 'rankout_connector_oauth_consents';
+        $clients_table  = $wpdb->prefix . 'rankout_connector_oauth_clients';
+        $tokens_table   = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only pagination parameter.
         $grants_page   = isset( $_GET['grants_paged'] ) ? max( 1, (int) $_GET['grants_paged'] ) : 1;
@@ -329,25 +329,25 @@ class OAuth_Admin {
             $grants[]     = $g;
         }
         ?>
-        <h2><?php \esc_html_e( 'Active Grants', 'easy-mcp-ai' ); ?></h2>
+        <h2><?php \esc_html_e( 'Active Grants', 'rankout-connector' ); ?></h2>
         <table class="widefat striped">
             <thead>
                 <tr>
-                    <th><?php \esc_html_e( 'User', 'easy-mcp-ai' ); ?></th>
-                    <th><?php \esc_html_e( 'Client', 'easy-mcp-ai' ); ?></th>
-                    <th><?php \esc_html_e( 'Scope', 'easy-mcp-ai' ); ?></th>
-                    <th><?php \esc_html_e( 'Granted At', 'easy-mcp-ai' ); ?></th>
-                    <th><?php \esc_html_e( 'Last Used', 'easy-mcp-ai' ); ?></th>
-                    <th><?php \esc_html_e( 'Actions', 'easy-mcp-ai' ); ?></th>
+                    <th><?php \esc_html_e( 'User', 'rankout-connector' ); ?></th>
+                    <th><?php \esc_html_e( 'Client', 'rankout-connector' ); ?></th>
+                    <th><?php \esc_html_e( 'Scope', 'rankout-connector' ); ?></th>
+                    <th><?php \esc_html_e( 'Granted At', 'rankout-connector' ); ?></th>
+                    <th><?php \esc_html_e( 'Last Used', 'rankout-connector' ); ?></th>
+                    <th><?php \esc_html_e( 'Actions', 'rankout-connector' ); ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php if ( empty( $grants ) ) : ?>
                     <tr>
                         <td colspan="6">
-                            <?php \esc_html_e( 'No active grants.', 'easy-mcp-ai' ); ?>
-                            <a href="<?php echo \esc_url( \admin_url( 'admin.php?page=easy-mcp-ai' ) ); ?>">
-                                <?php \esc_html_e( 'Connect to AI Client', 'easy-mcp-ai' ); ?>
+                            <?php \esc_html_e( 'No active grants.', 'rankout-connector' ); ?>
+                            <a href="<?php echo \esc_url( \admin_url( 'admin.php?page=rankout-connector' ) ); ?>">
+                                <?php \esc_html_e( 'Connect to AI Client', 'rankout-connector' ); ?>
                             </a>
                         </td>
                     </tr>
@@ -370,29 +370,29 @@ class OAuth_Admin {
                                 if ( $user ) {
                                     echo \esc_html( $user->display_name ) . ' <small>(' . \esc_html( $user->user_login ) . ')</small>';
                                 } else {
-                                    echo \esc_html__( 'Unknown user', 'easy-mcp-ai' ) . ' #' . \esc_html( $grant->wp_user_id );
+                                    echo \esc_html__( 'Unknown user', 'rankout-connector' ) . ' #' . \esc_html( $grant->wp_user_id );
                                 }
                                 ?>
                             </td>
                             <td><?php echo \esc_html( $grant->client_name ); ?></td>
                             <td><?php echo \esc_html( $this->summarize_scope( $grant->scope ) ); ?></td>
                             <td><?php echo \esc_html( $grant->granted_at ); ?></td>
-                            <td><?php echo $grant->last_used ? \esc_html( $grant->last_used ) : '<em>' . \esc_html__( 'Never', 'easy-mcp-ai' ) . '</em>'; ?></td>
+                            <td><?php echo $grant->last_used ? \esc_html( $grant->last_used ) : '<em>' . \esc_html__( 'Never', 'rankout-connector' ) . '</em>'; ?></td>
                             <td>
                                 <?php
                                 $revoke_grant_url = \wp_nonce_url(
-                                    \admin_url( 'admin.php?page=easy-mcp-ai-oauth&easy_mcp_ai_oauth_action=revoke_grant&consent_id=' . \absint( $grant->consent_id ) ),
-                                    'easy_mcp_ai_oauth_revoke_grant_' . $grant->consent_id
+                                    \admin_url( 'admin.php?page=rankout-connector-oauth&rankout_connector_oauth_action=revoke_grant&consent_id=' . \absint( $grant->consent_id ) ),
+                                    'rankout_connector_oauth_revoke_grant_' . $grant->consent_id
                                 );
-                                $edit_scope_url = \admin_url( 'admin.php?page=easy-mcp-ai-oauth&action=edit_scope&consent_id=' . \absint( $grant->consent_id ) );
+                                $edit_scope_url = \admin_url( 'admin.php?page=rankout-connector-oauth&action=edit_scope&consent_id=' . \absint( $grant->consent_id ) );
                                 ?>
                                 <a href="<?php echo \esc_url( $revoke_grant_url ); ?>"
                                    class="button button-secondary"
-                                   onclick="return confirm('<?php \esc_attr_e( 'Revoke this grant and all associated tokens?', 'easy-mcp-ai' ); ?>');">
-                                    <?php \esc_html_e( 'Revoke', 'easy-mcp-ai' ); ?>
+                                   onclick="return confirm('<?php \esc_attr_e( 'Revoke this grant and all associated tokens?', 'rankout-connector' ); ?>');">
+                                    <?php \esc_html_e( 'Revoke', 'rankout-connector' ); ?>
                                 </a>
                                 <a href="<?php echo \esc_url( $edit_scope_url ); ?>" class="button button-secondary">
-                                    <?php \esc_html_e( 'Edit Scope', 'easy-mcp-ai' ); ?>
+                                    <?php \esc_html_e( 'Edit Scope', 'rankout-connector' ); ?>
                                 </a>
                             </td>
                         </tr>
@@ -402,7 +402,7 @@ class OAuth_Admin {
         </table>
         <?php if ( $grants_has_next ) : ?>
             <a href="<?php echo \esc_url( \add_query_arg( 'grants_paged', $grants_page + 1 ) ); ?>" class="button">
-                <?php \esc_html_e( 'Next page', 'easy-mcp-ai' ); ?>
+                <?php \esc_html_e( 'Next page', 'rankout-connector' ); ?>
             </a>
         <?php endif; ?>
         <?php
@@ -421,12 +421,12 @@ class OAuth_Admin {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only view identifier; save action enforces its own nonce.
         $consent_id = isset( $_GET['consent_id'] ) ? \absint( $_GET['consent_id'] ) : 0;
         if ( ! $consent_id ) {
-            echo '<div class="notice notice-error"><p>' . \esc_html__( 'Invalid consent ID.', 'easy-mcp-ai' ) . '</p></div>';
+            echo '<div class="notice notice-error"><p>' . \esc_html__( 'Invalid consent ID.', 'rankout-connector' ) . '</p></div>';
             return;
         }
 
-        $consents_table = $wpdb->prefix . 'easy_mcp_ai_oauth_consents';
-        $clients_table  = $wpdb->prefix . 'easy_mcp_ai_oauth_clients';
+        $consents_table = $wpdb->prefix . 'rankout_connector_oauth_consents';
+        $clients_table  = $wpdb->prefix . 'rankout_connector_oauth_clients';
 
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Custom plugin tables; names prefixed by $wpdb->prefix.
         $consent = $wpdb->get_row(
@@ -438,18 +438,18 @@ class OAuth_Admin {
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         if ( ! $consent ) {
-            echo '<div class="notice notice-error"><p>' . \esc_html__( 'Consent not found.', 'easy-mcp-ai' ) . '</p></div>';
+            echo '<div class="notice notice-error"><p>' . \esc_html__( 'Consent not found.', 'rankout-connector' ) . '</p></div>';
             return;
         }
 
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
 
-        $categories    = \Easy_MCP_AI\OAuth\Scope_Map::get_categories();
+        $categories    = \RankOut_Connector\OAuth\Scope_Map::get_categories();
         $current_parts = array_filter( array_map( 'trim', explode( ' ', $consent->scope ) ) );
         $is_full_access = in_array( 'mcp', $current_parts, true );
 
         
-        $tokens_table      = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $tokens_table      = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Custom plugin table; names prefixed by $wpdb->prefix.
         $active_token_count = (int) $wpdb->get_var(
             $wpdb->prepare(
@@ -461,16 +461,16 @@ class OAuth_Admin {
         );
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
-        $back_url = \admin_url( 'admin.php?page=easy-mcp-ai-oauth' );
+        $back_url = \admin_url( 'admin.php?page=rankout-connector-oauth' );
         ?>
         <p>
-            <a href="<?php echo \esc_url( $back_url ); ?>">&larr; <?php \esc_html_e( 'Back to OAuth Clients', 'easy-mcp-ai' ); ?></a>
+            <a href="<?php echo \esc_url( $back_url ); ?>">&larr; <?php \esc_html_e( 'Back to OAuth Clients', 'rankout-connector' ); ?></a>
         </p>
         <h2>
             <?php
             printf(
                 /* translators: %s: client name */
-                \esc_html__( 'Edit Scope for %s', 'easy-mcp-ai' ),
+                \esc_html__( 'Edit Scope for %s', 'rankout-connector' ),
                 \esc_html( $consent->client_name )
             );
             ?>
@@ -481,7 +481,7 @@ class OAuth_Admin {
             if ( $user ) {
                 printf(
                     /* translators: %s: user display name */
-                    \esc_html__( 'User: %s', 'easy-mcp-ai' ),
+                    \esc_html__( 'User: %s', 'rankout-connector' ),
                     \esc_html( $user->display_name )
                 );
             }
@@ -490,12 +490,12 @@ class OAuth_Admin {
 
         <?php if ( $active_token_count > 0 ) : ?>
             <div class="notice notice-warning is-dismissible" style="padding:12px;margin:1em 0;">
-                <p><strong><?php \esc_html_e( 'Active Tokens Warning', 'easy-mcp-ai' ); ?></strong></p>
+                <p><strong><?php \esc_html_e( 'Active Tokens Warning', 'rankout-connector' ); ?></strong></p>
                 <p>
                     <?php
                     printf(
                         /* translators: %d: number of active tokens */
-                        \esc_html__( 'This user has %d active token(s) for this client. Saving will immediately apply the new scope to all active tokens — no re-authentication required.', 'easy-mcp-ai' ),
+                        \esc_html__( 'This user has %d active token(s) for this client. Saving will immediately apply the new scope to all active tokens — no re-authentication required.', 'rankout-connector' ),
                         (int) $active_token_count
                     );
                     ?>
@@ -503,14 +503,14 @@ class OAuth_Admin {
             </div>
         <?php endif; ?>
 
-        <form method="post" action="<?php echo \esc_url( \admin_url( 'admin.php?page=easy-mcp-ai-oauth' ) ); ?>">
-            <?php \wp_nonce_field( 'easy_mcp_ai_oauth_save_scope_' . $consent_id ); ?>
-            <input type="hidden" name="easy_mcp_ai_oauth_action" value="save_scope" />
+        <form method="post" action="<?php echo \esc_url( \admin_url( 'admin.php?page=rankout-connector-oauth' ) ); ?>">
+            <?php \wp_nonce_field( 'rankout_connector_oauth_save_scope_' . $consent_id ); ?>
+            <input type="hidden" name="rankout_connector_oauth_action" value="save_scope" />
             <input type="hidden" name="consent_id" value="<?php echo \esc_attr( $consent_id ); ?>" />
 
             <?php if ( $is_full_access ) : ?>
                 <div class="notice notice-info inline" style="padding:10px 14px;margin:0 0 16px;border-left-color:#007cba;background:#f0f6fc;">
-                    <p><?php \esc_html_e( 'This grant has Full Access — all tools are allowed, including any added in the future (plugin integrations, external data, and WordPress Abilities).', 'easy-mcp-ai' ); ?></p>
+                    <p><?php \esc_html_e( 'This grant has Full Access — all tools are allowed, including any added in the future (plugin integrations, external data, and WordPress Abilities).', 'rankout-connector' ); ?></p>
                 </div>
             <?php endif; ?>
 
@@ -519,19 +519,19 @@ class OAuth_Admin {
                     <input type="checkbox"
                            name="scopes[]"
                            value="mcp"
-                           id="easy-mcp-ai-full-access-toggle"
+                           id="rankout-connector-full-access-toggle"
                         <?php \checked( $is_full_access ); ?> />
-                    <strong><?php \esc_html_e( 'Full Access', 'easy-mcp-ai' ); ?></strong>
-                    &mdash; <?php \esc_html_e( 'grant all tools, current and future', 'easy-mcp-ai' ); ?>
+                    <strong><?php \esc_html_e( 'Full Access', 'rankout-connector' ); ?></strong>
+                    &mdash; <?php \esc_html_e( 'grant all tools, current and future', 'rankout-connector' ); ?>
                 </label>
             </p>
 
-            <table class="widefat striped" id="easy-mcp-ai-scope-table" style="max-width:700px;">
+            <table class="widefat striped" id="rankout-connector-scope-table" style="max-width:700px;">
                 <thead>
                     <tr>
-                        <th><?php \esc_html_e( 'Category', 'easy-mcp-ai' ); ?></th>
-                        <th style="text-align:center;"><?php \esc_html_e( 'Read', 'easy-mcp-ai' ); ?></th>
-                        <th style="text-align:center;"><?php \esc_html_e( 'Write', 'easy-mcp-ai' ); ?></th>
+                        <th><?php \esc_html_e( 'Category', 'rankout-connector' ); ?></th>
+                        <th style="text-align:center;"><?php \esc_html_e( 'Read', 'rankout-connector' ); ?></th>
+                        <th style="text-align:center;"><?php \esc_html_e( 'Write', 'rankout-connector' ); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -562,8 +562,8 @@ class OAuth_Admin {
 
             <script>
             (function() {
-                var toggle = document.getElementById('easy-mcp-ai-full-access-toggle');
-                var table  = document.getElementById('easy-mcp-ai-scope-table');
+                var toggle = document.getElementById('rankout-connector-full-access-toggle');
+                var table  = document.getElementById('rankout-connector-scope-table');
                 if ( ! toggle || ! table ) { return; }
 
                 var savedStates = {};
@@ -594,7 +594,7 @@ class OAuth_Admin {
             })();
             </script>
 
-            <?php \submit_button( __( 'Save Scope', 'easy-mcp-ai' ) ); ?>
+            <?php \submit_button( __( 'Save Scope', 'rankout-connector' ) ); ?>
         </form>
         <?php
     }
@@ -616,13 +616,13 @@ class OAuth_Admin {
         
         $action = '';
         // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- Dispatch only; each action_*() handler calls check_admin_referer() before mutating state.
-        if ( isset( $_POST['easy_mcp_ai_oauth_action'] ) ) {
+        if ( isset( $_POST['rankout_connector_oauth_action'] ) ) {
             // phpcs:ignore WordPress.Security.NonceVerification.Missing -- See above; handlers enforce nonces.
-            $action = \sanitize_text_field( \wp_unslash( $_POST['easy_mcp_ai_oauth_action'] ) );
+            $action = \sanitize_text_field( \wp_unslash( $_POST['rankout_connector_oauth_action'] ) );
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- See above; handlers enforce nonces.
-        } elseif ( isset( $_GET['easy_mcp_ai_oauth_action'] ) ) {
+        } elseif ( isset( $_GET['rankout_connector_oauth_action'] ) ) {
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- See above; handlers enforce nonces.
-            $action = \sanitize_text_field( \wp_unslash( $_GET['easy_mcp_ai_oauth_action'] ) );
+            $action = \sanitize_text_field( \wp_unslash( $_GET['rankout_connector_oauth_action'] ) );
         }
 
         if ( '' === $action ) {
@@ -653,7 +653,7 @@ class OAuth_Admin {
 
 
     private function action_save_settings() {
-        \check_admin_referer( 'easy_mcp_ai_oauth_save_settings' );
+        \check_admin_referer( 'rankout_connector_oauth_save_settings' );
 
         $access_ttl  = isset( $_POST['access_token_ttl'] ) ? \absint( $_POST['access_token_ttl'] ) : 3600;
         $refresh_ttl = isset( $_POST['refresh_token_ttl'] ) ? \absint( $_POST['refresh_token_ttl'] ) : 2592000;
@@ -663,11 +663,11 @@ class OAuth_Admin {
         $access_ttl  = max( 60, $access_ttl );
         $refresh_ttl = max( 60, $refresh_ttl );
 
-        \update_option( 'easy_mcp_ai_oauth_access_token_ttl', $access_ttl );
-        \update_option( 'easy_mcp_ai_oauth_refresh_token_ttl', $refresh_ttl );
-        \update_option( 'easy_mcp_ai_oauth_dcr_enabled', $dcr_enabled );
+        \update_option( 'rankout_connector_oauth_access_token_ttl', $access_ttl );
+        \update_option( 'rankout_connector_oauth_refresh_token_ttl', $refresh_ttl );
+        \update_option( 'rankout_connector_oauth_dcr_enabled', $dcr_enabled );
 
-        \wp_safe_redirect( \admin_url( 'admin.php?page=easy-mcp-ai-oauth&updated=1' ) );
+        \wp_safe_redirect( \admin_url( 'admin.php?page=rankout-connector-oauth&updated=1' ) );
         exit;
     }
 
@@ -680,14 +680,14 @@ class OAuth_Admin {
             return;
         }
 
-        \check_admin_referer( 'easy_mcp_ai_oauth_revoke_client_' . $client_id );
+        \check_admin_referer( 'rankout_connector_oauth_revoke_client_' . $client_id );
 
         global $wpdb;
 
-        $clients_table  = $wpdb->prefix . 'easy_mcp_ai_oauth_clients';
-        $tokens_table   = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
-        $codes_table    = $wpdb->prefix . 'easy_mcp_ai_oauth_codes';
-        $consents_table = $wpdb->prefix . 'easy_mcp_ai_oauth_consents';
+        $clients_table  = $wpdb->prefix . 'rankout_connector_oauth_clients';
+        $tokens_table   = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
+        $codes_table    = $wpdb->prefix . 'rankout_connector_oauth_codes';
+        $consents_table = $wpdb->prefix . 'rankout_connector_oauth_consents';
 
         
         
@@ -700,7 +700,7 @@ class OAuth_Admin {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->delete( $clients_table, array( 'client_id' => $client_id ), array( '%s' ) );
 
-        \wp_safe_redirect( \admin_url( 'admin.php?page=easy-mcp-ai-oauth&updated=1' ) );
+        \wp_safe_redirect( \admin_url( 'admin.php?page=rankout-connector-oauth&updated=1' ) );
         exit;
     }
 
@@ -713,12 +713,12 @@ class OAuth_Admin {
             return;
         }
 
-        \check_admin_referer( 'easy_mcp_ai_oauth_revoke_grant_' . $consent_id );
+        \check_admin_referer( 'rankout_connector_oauth_revoke_grant_' . $consent_id );
 
         global $wpdb;
 
-        $consents_table = $wpdb->prefix . 'easy_mcp_ai_oauth_consents';
-        $tokens_table   = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $consents_table = $wpdb->prefix . 'rankout_connector_oauth_consents';
+        $tokens_table   = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
 
         
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Custom plugin table; name prefixed by $wpdb->prefix.
@@ -753,7 +753,7 @@ class OAuth_Admin {
             );
         }
 
-        \wp_safe_redirect( \admin_url( 'admin.php?page=easy-mcp-ai-oauth&updated=1' ) );
+        \wp_safe_redirect( \admin_url( 'admin.php?page=rankout-connector-oauth&updated=1' ) );
         exit;
     }
 
@@ -766,11 +766,11 @@ class OAuth_Admin {
             return;
         }
 
-        \check_admin_referer( 'easy_mcp_ai_oauth_save_scope_' . $consent_id );
+        \check_admin_referer( 'rankout_connector_oauth_save_scope_' . $consent_id );
 
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
 
-        $valid_scopes = \Easy_MCP_AI\OAuth\Scope_Map::get_all_scopes();
+        $valid_scopes = \RankOut_Connector\OAuth\Scope_Map::get_all_scopes();
         $submitted    = isset( $_POST['scopes'] ) && is_array( $_POST['scopes'] )
             ? array_map( 'sanitize_text_field', \wp_unslash( $_POST['scopes'] ) )
             : array();
@@ -781,8 +781,8 @@ class OAuth_Admin {
 
         global $wpdb;
 
-        $consents_table = $wpdb->prefix . 'easy_mcp_ai_oauth_consents';
-        $tokens_table   = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+        $consents_table = $wpdb->prefix . 'rankout_connector_oauth_consents';
+        $tokens_table   = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
 
         
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Custom plugin table; name prefixed by $wpdb->prefix.
@@ -795,7 +795,7 @@ class OAuth_Admin {
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         if ( ! $consent ) {
-            \wp_safe_redirect( \admin_url( 'admin.php?page=easy-mcp-ai-oauth' ) );
+            \wp_safe_redirect( \admin_url( 'admin.php?page=rankout-connector-oauth' ) );
             exit;
         }
 
@@ -832,10 +832,10 @@ class OAuth_Admin {
             
             
             
-            error_log( 'Easy MCP AI: token scope update failed after consent update — ' . $wpdb->last_error ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+            error_log( 'RankOut Connector: token scope update failed after consent update — ' . $wpdb->last_error ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
         }
 
-        \wp_safe_redirect( \admin_url( 'admin.php?page=easy-mcp-ai-oauth&updated=1' ) );
+        \wp_safe_redirect( \admin_url( 'admin.php?page=rankout-connector-oauth&updated=1' ) );
         exit;
     }
 
@@ -853,11 +853,11 @@ class OAuth_Admin {
         $parts = array_filter( array_map( 'trim', explode( ' ', $scope ) ) );
 
         if ( empty( $parts ) ) {
-            return __( 'None', 'easy-mcp-ai' );
+            return __( 'None', 'rankout-connector' );
         }
 
         if ( in_array( 'mcp', $parts, true ) ) {
-            return __( 'Full access', 'easy-mcp-ai' );
+            return __( 'Full access', 'rankout-connector' );
         }
 
         $read_count  = 0;
@@ -874,11 +874,11 @@ class OAuth_Admin {
         $summary = array();
         if ( $read_count > 0 ) {
             /* translators: %d: number of read scope categories */
-            $summary[] = sprintf( _n( '%d read', '%d read', $read_count, 'easy-mcp-ai' ), $read_count );
+            $summary[] = sprintf( _n( '%d read', '%d read', $read_count, 'rankout-connector' ), $read_count );
         }
         if ( $write_count > 0 ) {
             /* translators: %d: number of write scope categories */
-            $summary[] = sprintf( _n( '%d write', '%d write', $write_count, 'easy-mcp-ai' ), $write_count );
+            $summary[] = sprintf( _n( '%d write', '%d write', $write_count, 'rankout-connector' ), $write_count );
         }
 
         return implode( ', ', $summary );

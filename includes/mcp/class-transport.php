@@ -1,17 +1,17 @@
 <?php
-namespace Easy_MCP_AI\MCP;
+namespace RankOut_Connector\MCP;
 
-use Easy_MCP_AI\Auth\Token_Manager;
-use Easy_MCP_AI\Auth\Token_Auth;
-use Easy_MCP_AI\OAuth\OAuth_Token_Validator;
-use Easy_MCP_AI\OAuth\OAuth_Token_Manager;
+use RankOut_Connector\Auth\Token_Manager;
+use RankOut_Connector\Auth\Token_Auth;
+use RankOut_Connector\OAuth\OAuth_Token_Validator;
+use RankOut_Connector\OAuth\OAuth_Token_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 class Transport {
-    const NAMESPACE_V1     = 'easy-mcp-ai/v1';
+    const NAMESPACE_V1     = 'rankout-connector/v1';
     const ROUTE            = '/mcp';
     const ROUTE_WITH_KEY   = '/mcp/(?P<api_key>wpmcp_[a-f0-9]{64})';
     const MAX_BATCH_SIZE   = 20;
@@ -108,15 +108,15 @@ class Transport {
 
         if ( \is_wp_error( $result ) && $request->get_header( 'authorization' ) ) {
             $ip        = trim( explode( ',', isset( $_SERVER['REMOTE_ADDR'] ) ? \sanitize_text_field( \wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '' )[0] );
-            $cache_key = 'easy_mcp_ai_auth_fail_' . md5( $ip );
+            $cache_key = 'rankout_connector_auth_fail_' . md5( $ip );
 
             
             
             
             
             if ( \wp_using_ext_object_cache() ) {
-                \wp_cache_add( $cache_key, 0, 'easy_mcp_ai', 60 );
-                $new_fails = \wp_cache_incr( $cache_key, 1, 'easy_mcp_ai' );
+                \wp_cache_add( $cache_key, 0, 'rankout_connector', 60 );
+                $new_fails = \wp_cache_incr( $cache_key, 1, 'rankout_connector' );
             } else {
                 
                 $new_fails = (int) \get_transient( $cache_key ) + 1;
@@ -565,7 +565,7 @@ class Transport {
             }
 
             
-            $throttle_key = 'easy_mcp_ai_oat_srv_' . $token_id;
+            $throttle_key = 'rankout_connector_oat_srv_' . $token_id;
             $cached = \get_transient( $throttle_key );
             if ( is_array( $cached ) ) {
                 $this->server->get_session_manager()->touch( $session_id );
@@ -573,7 +573,7 @@ class Transport {
             }
 
             global $wpdb;
-            $table = $wpdb->prefix . 'easy_mcp_ai_oauth_access_tokens';
+            $table = $wpdb->prefix . 'rankout_connector_oauth_access_tokens';
             // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table prefixed by $wpdb->prefix; token revalidation must be fresh.
             $row = $wpdb->get_row(
                 $wpdb->prepare( "SELECT id, wp_user_id, is_active, expires_at FROM {$table} WHERE id = %d LIMIT 1", $token_id ),
@@ -648,17 +648,17 @@ class Transport {
 
 
     private function is_oauth_available() {
-        if ( ! \apply_filters( 'easy_mcp_ai_oauth_enabled', true ) ) {
+        if ( ! \apply_filters( 'rankout_connector_oauth_enabled', true ) ) {
             return false;
         }
-        $file = EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-token-validator.php';
+        $file = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-token-validator.php';
         if ( ! file_exists( $file ) ) {
             return false;
         }
         if ( ! class_exists( OAuth_Token_Validator::class ) ) {
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-token-manager.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-oauth-token-validator.php';
-            require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-token-manager.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-oauth-token-validator.php';
+            require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/oauth/class-scope-map.php';
         }
         return true;
     }

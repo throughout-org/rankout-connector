@@ -1,11 +1,11 @@
 <?php
-namespace Easy_MCP_AI\Admin;
+namespace RankOut_Connector\Admin;
 
-use Easy_MCP_AI\GSC\GSC_Client;
-use Easy_MCP_AI\GA\GA_Client;
-use Easy_MCP_AI\DFS\DataforSEO_Client;
-use Easy_MCP_AI\Semrush\Semrush_Client;
-use Easy_MCP_AI\Tools\Tool_Registry;
+use RankOut_Connector\GSC\GSC_Client;
+use RankOut_Connector\GA\GA_Client;
+use RankOut_Connector\DFS\DataforSEO_Client;
+use RankOut_Connector\Semrush\Semrush_Client;
+use RankOut_Connector\Tools\Tool_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class External_Data_Admin {
 
-    const OPTION_GSC_SITES_CACHE = 'easy_mcp_ai_gsc_sites_cache';
-    const OPTION_GA_PROPS_CACHE  = 'easy_mcp_ai_ga_properties_cache';
+    const OPTION_GSC_SITES_CACHE = 'rankout_connector_gsc_sites_cache';
+    const OPTION_GA_PROPS_CACHE  = 'rankout_connector_ga_properties_cache';
 
     
 
@@ -106,19 +106,19 @@ class External_Data_Admin {
     }
 
     public function __construct() {
-        \add_action( 'admin_post_easy_mcp_ai_save_external_data', array( $this, 'handle_save' ) );
-        \add_action( 'admin_post_easy_mcp_ai_remove_gsc_key', array( $this, 'handle_remove_key' ) );
-        \add_action( 'admin_post_easy_mcp_ai_remove_ga_key', array( $this, 'handle_remove_ga_key' ) );
-        \add_action( 'wp_ajax_easy_mcp_ai_gsc_test', array( $this, 'handle_test_connection' ) );
-        \add_action( 'wp_ajax_easy_mcp_ai_ga_test', array( $this, 'handle_test_ga_connection' ) );
-        \add_action( 'admin_post_easy_mcp_ai_remove_dfs_key',   array( $this, 'handle_remove_dfs_key' ) );
-        \add_action( 'wp_ajax_easy_mcp_ai_dfs_test',            array( $this, 'handle_test_dfs_connection' ) );
-        \add_action( 'wp_ajax_easy_mcp_ai_dfs_refresh_balance', array( $this, 'handle_refresh_dfs_balance' ) );
-        \add_action( 'admin_post_easy_mcp_ai_clear_ga_cache',   array( $this, 'handle_clear_ga_cache' ) );
-        \add_action( 'admin_post_easy_mcp_ai_clear_gsc_cache',  array( $this, 'handle_clear_gsc_cache' ) );
-        \add_action( 'admin_post_easy_mcp_ai_remove_semrush_key',     array( $this, 'handle_remove_semrush_key' ) );
-        \add_action( 'wp_ajax_easy_mcp_ai_semrush_test',              array( $this, 'handle_test_semrush_connection' ) );
-        \add_action( 'wp_ajax_easy_mcp_ai_semrush_refresh_balance',   array( $this, 'handle_refresh_semrush_balance' ) );
+        \add_action( 'admin_post_rankout_connector_save_external_data', array( $this, 'handle_save' ) );
+        \add_action( 'admin_post_rankout_connector_remove_gsc_key', array( $this, 'handle_remove_key' ) );
+        \add_action( 'admin_post_rankout_connector_remove_ga_key', array( $this, 'handle_remove_ga_key' ) );
+        \add_action( 'wp_ajax_rankout_connector_gsc_test', array( $this, 'handle_test_connection' ) );
+        \add_action( 'wp_ajax_rankout_connector_ga_test', array( $this, 'handle_test_ga_connection' ) );
+        \add_action( 'admin_post_rankout_connector_remove_dfs_key',   array( $this, 'handle_remove_dfs_key' ) );
+        \add_action( 'wp_ajax_rankout_connector_dfs_test',            array( $this, 'handle_test_dfs_connection' ) );
+        \add_action( 'wp_ajax_rankout_connector_dfs_refresh_balance', array( $this, 'handle_refresh_dfs_balance' ) );
+        \add_action( 'admin_post_rankout_connector_clear_ga_cache',   array( $this, 'handle_clear_ga_cache' ) );
+        \add_action( 'admin_post_rankout_connector_clear_gsc_cache',  array( $this, 'handle_clear_gsc_cache' ) );
+        \add_action( 'admin_post_rankout_connector_remove_semrush_key',     array( $this, 'handle_remove_semrush_key' ) );
+        \add_action( 'wp_ajax_rankout_connector_semrush_test',              array( $this, 'handle_test_semrush_connection' ) );
+        \add_action( 'wp_ajax_rankout_connector_semrush_refresh_balance',   array( $this, 'handle_refresh_semrush_balance' ) );
     }
 
     
@@ -137,16 +137,16 @@ class External_Data_Admin {
         if ( ! \current_user_can( 'manage_options' ) ) {
             \wp_die( 'Unauthorized' );
         }
-        \check_admin_referer( 'easy_mcp_ai_clear_ga_cache' );
+        \check_admin_referer( 'rankout_connector_clear_ga_cache' );
 
-        self::purge_transients_by_prefix( 'easy_mcp_ai_ga_' );
+        self::purge_transients_by_prefix( 'rankout_connector_ga_' );
 
         
         if ( \get_option( GA_Client::OPTION_JSON, '' ) !== '' ) {
             self::refresh_ga_properties_cache();
         }
 
-        \wp_safe_redirect( \add_query_arg( 'message', 'ga_cache_cleared', \admin_url( 'admin.php?page=easy-mcp-ai-external-data' ) ) );
+        \wp_safe_redirect( \add_query_arg( 'message', 'ga_cache_cleared', \admin_url( 'admin.php?page=rankout-connector-external-data' ) ) );
         exit;
     }
 
@@ -161,15 +161,15 @@ class External_Data_Admin {
         if ( ! \current_user_can( 'manage_options' ) ) {
             \wp_die( 'Unauthorized' );
         }
-        \check_admin_referer( 'easy_mcp_ai_clear_gsc_cache' );
+        \check_admin_referer( 'rankout_connector_clear_gsc_cache' );
 
-        self::purge_transients_by_prefix( 'easy_mcp_ai_gsc_' );
+        self::purge_transients_by_prefix( 'rankout_connector_gsc_' );
 
         if ( \get_option( GSC_Client::OPTION_JSON, '' ) !== '' ) {
             self::refresh_gsc_sites_cache();
         }
 
-        \wp_safe_redirect( \add_query_arg( 'message', 'gsc_cache_cleared', \admin_url( 'admin.php?page=easy-mcp-ai-external-data' ) ) );
+        \wp_safe_redirect( \add_query_arg( 'message', 'gsc_cache_cleared', \admin_url( 'admin.php?page=rankout-connector-external-data' ) ) );
         exit;
     }
 
@@ -177,20 +177,20 @@ class External_Data_Admin {
         if ( ! \current_user_can( 'manage_options' ) ) {
             \wp_die( 'Unauthorized' );
         }
-        \check_admin_referer( 'easy_mcp_ai_remove_gsc_key' );
+        \check_admin_referer( 'rankout_connector_remove_gsc_key' );
 
         \delete_option( GSC_Client::OPTION_JSON );
         \delete_option( GSC_Client::OPTION_SITE_URL );
         \delete_option( self::OPTION_GSC_SITES_CACHE );
-        \delete_option( 'easy_mcp_ai_disabled_gsc_tools' );
-        self::purge_transients_by_prefix( 'easy_mcp_ai_gsc_' );
+        \delete_option( 'rankout_connector_disabled_gsc_tools' );
+        self::purge_transients_by_prefix( 'rankout_connector_gsc_' );
 
         
         $all_gsc_names   = array_keys( self::get_gsc_tools() );
-        $global_disabled = (array) \get_option( 'easy_mcp_ai_disabled_tools', array() );
-        \update_option( 'easy_mcp_ai_disabled_tools', array_values( array_diff( $global_disabled, $all_gsc_names ) ) );
+        $global_disabled = (array) \get_option( 'rankout_connector_disabled_tools', array() );
+        \update_option( 'rankout_connector_disabled_tools', array_values( array_diff( $global_disabled, $all_gsc_names ) ) );
 
-        \wp_safe_redirect( \add_query_arg( 'message', 'removed', \admin_url( 'admin.php?page=easy-mcp-ai-external-data' ) ) );
+        \wp_safe_redirect( \add_query_arg( 'message', 'removed', \admin_url( 'admin.php?page=rankout-connector-external-data' ) ) );
         exit;
     }
 
@@ -198,23 +198,23 @@ class External_Data_Admin {
         if ( ! \current_user_can( 'manage_options' ) ) {
             \wp_die( 'Unauthorized' );
         }
-        \check_admin_referer( 'easy_mcp_ai_remove_ga_key' );
+        \check_admin_referer( 'rankout_connector_remove_ga_key' );
 
         \delete_option( GA_Client::OPTION_JSON );
         \delete_option( GA_Client::OPTION_PROPERTY_ID );
         \delete_option( self::OPTION_GA_PROPS_CACHE );
-        \delete_option( 'easy_mcp_ai_disabled_ga_tools' );
+        \delete_option( 'rankout_connector_disabled_ga_tools' );
         
         
         
-        self::purge_transients_by_prefix( 'easy_mcp_ai_ga_' );
+        self::purge_transients_by_prefix( 'rankout_connector_ga_' );
 
         
         $all_ga_names    = array_keys( self::get_ga_tools() );
-        $global_disabled = (array) \get_option( 'easy_mcp_ai_disabled_tools', array() );
-        \update_option( 'easy_mcp_ai_disabled_tools', array_values( array_diff( $global_disabled, $all_ga_names ) ) );
+        $global_disabled = (array) \get_option( 'rankout_connector_disabled_tools', array() );
+        \update_option( 'rankout_connector_disabled_tools', array_values( array_diff( $global_disabled, $all_ga_names ) ) );
 
-        \wp_safe_redirect( \add_query_arg( 'message', 'ga_removed', \admin_url( 'admin.php?page=easy-mcp-ai-external-data' ) ) );
+        \wp_safe_redirect( \add_query_arg( 'message', 'ga_removed', \admin_url( 'admin.php?page=rankout-connector-external-data' ) ) );
         exit;
     }
 
@@ -222,19 +222,19 @@ class External_Data_Admin {
         if ( ! \current_user_can( 'manage_options' ) ) {
             \wp_die( 'Unauthorized' );
         }
-        \check_admin_referer( 'easy_mcp_ai_remove_dfs_key' );
+        \check_admin_referer( 'rankout_connector_remove_dfs_key' );
 
         \delete_option( DataforSEO_Client::OPTION_LOGIN );
         \delete_option( DataforSEO_Client::OPTION_API_PASSWORD );
         self::purge_transients_by_prefix( DataforSEO_Client::TRANSIENT_BALANCE_PREFIX );
-        \delete_option( 'easy_mcp_ai_disabled_dfs_tools' );
+        \delete_option( 'rankout_connector_disabled_dfs_tools' );
 
         
         $all_dfs_names   = array_keys( self::get_dfs_tools() );
-        $global_disabled = (array) \get_option( 'easy_mcp_ai_disabled_tools', array() );
-        \update_option( 'easy_mcp_ai_disabled_tools', array_values( array_diff( $global_disabled, $all_dfs_names ) ) );
+        $global_disabled = (array) \get_option( 'rankout_connector_disabled_tools', array() );
+        \update_option( 'rankout_connector_disabled_tools', array_values( array_diff( $global_disabled, $all_dfs_names ) ) );
 
-        \wp_safe_redirect( \add_query_arg( 'message', 'dfs_removed', \admin_url( 'admin.php?page=easy-mcp-ai-external-data' ) ) );
+        \wp_safe_redirect( \add_query_arg( 'message', 'dfs_removed', \admin_url( 'admin.php?page=rankout-connector-external-data' ) ) );
         exit;
     }
 
@@ -242,21 +242,21 @@ class External_Data_Admin {
         if ( ! \current_user_can( 'manage_options' ) ) {
             \wp_die( 'Unauthorized' );
         }
-        \check_admin_referer( 'easy_mcp_ai_remove_semrush_key' );
+        \check_admin_referer( 'rankout_connector_remove_semrush_key' );
 
         \delete_option( Semrush_Client::OPTION_API_KEY );
-        \delete_option( 'easy_mcp_ai_disabled_semrush_tools' );
+        \delete_option( 'rankout_connector_disabled_semrush_tools' );
 
         $all_semrush_names = array_keys( self::get_semrush_tools() );
-        $global_disabled   = (array) \get_option( 'easy_mcp_ai_disabled_tools', array() );
-        \update_option( 'easy_mcp_ai_disabled_tools', array_values( array_diff( $global_disabled, $all_semrush_names ) ) );
+        $global_disabled   = (array) \get_option( 'rankout_connector_disabled_tools', array() );
+        \update_option( 'rankout_connector_disabled_tools', array_values( array_diff( $global_disabled, $all_semrush_names ) ) );
 
-        \wp_safe_redirect( \add_query_arg( 'message', 'semrush_removed', \admin_url( 'admin.php?page=easy-mcp-ai-external-data' ) ) );
+        \wp_safe_redirect( \add_query_arg( 'message', 'semrush_removed', \admin_url( 'admin.php?page=rankout-connector-external-data' ) ) );
         exit;
     }
 
     public function handle_test_semrush_connection(): void {
-        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'easy_mcp_ai_semrush_test', 'nonce', false ) ) {
+        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'rankout_connector_semrush_test', 'nonce', false ) ) {
             \wp_send_json_error( array( 'message' => 'Unauthorized' ), 403 );
         }
         try {
@@ -268,7 +268,7 @@ class External_Data_Admin {
     }
 
     public function handle_refresh_semrush_balance(): void {
-        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'easy_mcp_ai_semrush_refresh_balance', 'nonce', false ) ) {
+        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'rankout_connector_semrush_refresh_balance', 'nonce', false ) ) {
             \wp_send_json_error( array( 'message' => 'Unauthorized' ), 403 );
         }
         try {
@@ -288,10 +288,10 @@ class External_Data_Admin {
             return $cached;
         }
 
-        $semrush_dir = EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/semrush/';
+        $semrush_dir = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/semrush/';
         if ( is_dir( $semrush_dir ) ) {
-            $client_file = EASY_MCP_AI_PLUGIN_DIR . 'includes/semrush/class-semrush-client.php';
-            $valid_file  = EASY_MCP_AI_PLUGIN_DIR . 'includes/semrush/class-semrush-validators.php';
+            $client_file = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/semrush/class-semrush-client.php';
+            $valid_file  = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/semrush/class-semrush-validators.php';
             if ( file_exists( $client_file ) ) { require_once $client_file; }
             if ( file_exists( $valid_file ) )  { require_once $valid_file; }
             foreach ( (array) glob( $semrush_dir . 'class-*.php' ) as $file ) {
@@ -299,7 +299,7 @@ class External_Data_Admin {
             }
         }
 
-        if ( ! class_exists( '\\Easy_MCP_AI\\Tools\\Tool_Registry' ) ) {
+        if ( ! class_exists( '\\RankOut_Connector\\Tools\\Tool_Registry' ) ) {
             $cached = array();
             return $cached;
         }
@@ -316,7 +316,7 @@ class External_Data_Admin {
     }
 
     public function handle_test_dfs_connection(): void {
-        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'easy_mcp_ai_dfs_test', 'nonce', false ) ) {
+        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'rankout_connector_dfs_test', 'nonce', false ) ) {
             \wp_send_json_error( array( 'message' => 'Unauthorized' ), 403 );
         }
         try {
@@ -329,7 +329,7 @@ class External_Data_Admin {
     }
 
     public function handle_refresh_dfs_balance(): void {
-        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'easy_mcp_ai_dfs_refresh_balance', 'nonce', false ) ) {
+        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'rankout_connector_dfs_refresh_balance', 'nonce', false ) ) {
             \wp_send_json_error( array( 'message' => 'Unauthorized' ), 403 );
         }
         try {
@@ -361,14 +361,14 @@ class External_Data_Admin {
             return $cached;
         }
 
-        $gsc_dir = EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/gsc/';
+        $gsc_dir = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/gsc/';
         if ( is_dir( $gsc_dir ) ) {
             foreach ( (array) glob( $gsc_dir . 'class-*.php' ) as $file ) {
                 require_once $file;
             }
         }
 
-        if ( ! class_exists( '\\Easy_MCP_AI\\Tools\\Tool_Registry' ) ) {
+        if ( ! class_exists( '\\RankOut_Connector\\Tools\\Tool_Registry' ) ) {
             $cached = array();
             return $cached;
         }
@@ -400,14 +400,14 @@ class External_Data_Admin {
             return $cached;
         }
 
-        $ga_dir = EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/ga/';
+        $ga_dir = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/ga/';
         if ( is_dir( $ga_dir ) ) {
             foreach ( (array) glob( $ga_dir . 'class-*.php' ) as $file ) {
                 require_once $file;
             }
         }
 
-        if ( ! class_exists( '\\Easy_MCP_AI\\Tools\\Tool_Registry' ) ) {
+        if ( ! class_exists( '\\RankOut_Connector\\Tools\\Tool_Registry' ) ) {
             $cached = array();
             return $cached;
         }
@@ -438,10 +438,10 @@ class External_Data_Admin {
             return $cached;
         }
 
-        $dfs_dir = EASY_MCP_AI_PLUGIN_DIR . 'includes/tools/dfs/';
+        $dfs_dir = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/tools/dfs/';
         if ( is_dir( $dfs_dir ) ) {
             
-            $client_file = EASY_MCP_AI_PLUGIN_DIR . 'includes/dfs/class-dataforseo-client.php';
+            $client_file = RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/dfs/class-dataforseo-client.php';
             if ( file_exists( $client_file ) ) {
                 require_once $client_file;
             }
@@ -450,7 +450,7 @@ class External_Data_Admin {
             }
         }
 
-        if ( ! class_exists( '\\Easy_MCP_AI\\Tools\\Tool_Registry' ) ) {
+        if ( ! class_exists( '\\RankOut_Connector\\Tools\\Tool_Registry' ) ) {
             $cached = array();
             return $cached;
         }
@@ -470,18 +470,18 @@ class External_Data_Admin {
         $message            = isset( $_GET['message'] ) ? \sanitize_text_field( \wp_unslash( $_GET['message'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $site_url           = \get_option( GSC_Client::OPTION_SITE_URL, '' );
         $has_json           = ! empty( \get_option( GSC_Client::OPTION_JSON, '' ) );
-        $gsc_disabled_tools = (array) \get_option( 'easy_mcp_ai_disabled_gsc_tools', array() );
+        $gsc_disabled_tools = (array) \get_option( 'rankout_connector_disabled_gsc_tools', array() );
         $gsc_tools          = self::get_gsc_tools();
         $gsc_sites          = (array) \get_option( self::OPTION_GSC_SITES_CACHE, array() );
         $ga_property_id     = \get_option( GA_Client::OPTION_PROPERTY_ID, '' );
         $has_ga_json        = ! empty( \get_option( GA_Client::OPTION_JSON, '' ) );
-        $ga_disabled_tools  = (array) \get_option( 'easy_mcp_ai_disabled_ga_tools', array() );
+        $ga_disabled_tools  = (array) \get_option( 'rankout_connector_disabled_ga_tools', array() );
         $ga_tools           = self::get_ga_tools();
         $ga_properties      = (array) \get_option( self::OPTION_GA_PROPS_CACHE, array() );
         $has_dfs_credentials = ! empty( \get_option( DataforSEO_Client::OPTION_LOGIN, '' ) )
                             && ! empty( \get_option( DataforSEO_Client::OPTION_API_PASSWORD, '' ) );
         $dfs_tools           = self::get_dfs_tools();
-        $dfs_disabled_tools  = (array) \get_option( 'easy_mcp_ai_disabled_dfs_tools', array() );
+        $dfs_disabled_tools  = (array) \get_option( 'rankout_connector_disabled_dfs_tools', array() );
         $dfs_balance         = null;
         if ( $has_dfs_credentials ) {
             try {
@@ -507,7 +507,7 @@ class External_Data_Admin {
         
         $has_semrush_credentials = ! empty( \get_option( Semrush_Client::OPTION_API_KEY, '' ) );
         $semrush_tools           = self::get_semrush_tools();
-        $semrush_disabled_tools  = (array) \get_option( 'easy_mcp_ai_disabled_semrush_tools', array() );
+        $semrush_disabled_tools  = (array) \get_option( 'rankout_connector_disabled_semrush_tools', array() );
         $semrush_balance         = null;
         if ( $has_semrush_credentials ) {
             try {
@@ -531,16 +531,16 @@ class External_Data_Admin {
             || ! defined( 'SECURE_AUTH_SALT' )
             || strlen( SECURE_AUTH_KEY . SECURE_AUTH_SALT ) < 64
             || false !== strpos( SECURE_AUTH_KEY . SECURE_AUTH_SALT, 'put your unique phrase here' );
-        require_once EASY_MCP_AI_PLUGIN_DIR . 'includes/admin/views/external-data.php';
+        require_once RANKOUT_CONNECTOR_PLUGIN_DIR . 'includes/admin/views/external-data.php';
     }
 
     public function handle_save(): void {
         if ( ! \current_user_can( 'manage_options' ) ) {
             \wp_die( 'Unauthorized' );
         }
-        \check_admin_referer( 'easy_mcp_ai_external_data' );
+        \check_admin_referer( 'rankout_connector_external_data' );
 
-        $redirect_base = \admin_url( 'admin.php?page=easy-mcp-ai-external-data' );
+        $redirect_base = \admin_url( 'admin.php?page=rankout-connector-external-data' );
 
         
 
@@ -588,7 +588,7 @@ class External_Data_Admin {
             
             
             
-            self::purge_transients_by_prefix( 'easy_mcp_ai_gsc_' );
+            self::purge_transients_by_prefix( 'rankout_connector_gsc_' );
             self::refresh_gsc_sites_cache();
         }
 
@@ -613,7 +613,7 @@ class External_Data_Admin {
                 $disabled_gsc[] = $tool_name;
             }
         }
-        \update_option( 'easy_mcp_ai_disabled_gsc_tools', $disabled_gsc );
+        \update_option( 'rankout_connector_disabled_gsc_tools', $disabled_gsc );
 
         
 
@@ -653,7 +653,7 @@ class External_Data_Admin {
                 }
             }
             \update_option( GA_Client::OPTION_JSON, GA_Client::encrypt( $ga_json_raw ), false );
-            self::purge_transients_by_prefix( 'easy_mcp_ai_ga_' );
+            self::purge_transients_by_prefix( 'rankout_connector_ga_' );
             self::refresh_ga_properties_cache();
         }
 
@@ -677,7 +677,7 @@ class External_Data_Admin {
                 $disabled_ga[] = $tool_name;
             }
         }
-        \update_option( 'easy_mcp_ai_disabled_ga_tools', $disabled_ga );
+        \update_option( 'rankout_connector_disabled_ga_tools', $disabled_ga );
 
         
 
@@ -724,7 +724,7 @@ class External_Data_Admin {
                 $disabled_dfs[] = $tool_name;
             }
         }
-        \update_option( 'easy_mcp_ai_disabled_dfs_tools', $disabled_dfs );
+        \update_option( 'rankout_connector_disabled_dfs_tools', $disabled_dfs );
 
         
 
@@ -763,14 +763,14 @@ class External_Data_Admin {
                 $disabled_semrush[] = $tool_name;
             }
         }
-        \update_option( 'easy_mcp_ai_disabled_semrush_tools', $disabled_semrush );
+        \update_option( 'rankout_connector_disabled_semrush_tools', $disabled_semrush );
 
         
 
-        $global_disabled = (array) \get_option( 'easy_mcp_ai_disabled_tools', array() );
+        $global_disabled = (array) \get_option( 'rankout_connector_disabled_tools', array() );
         $other_disabled  = array_values( array_diff( $global_disabled, $all_gsc_names, $all_ga_names, $all_dfs_names, $all_semrush_names ) );
         \update_option(
-            'easy_mcp_ai_disabled_tools',
+            'rankout_connector_disabled_tools',
             array_values( array_unique( array_merge( $other_disabled, $disabled_gsc, $disabled_ga, $disabled_dfs, $disabled_semrush ) ) )
         );
 
@@ -780,7 +780,7 @@ class External_Data_Admin {
     }
 
     public function handle_test_connection(): void {
-        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'easy_mcp_ai_gsc_test', 'nonce', false ) ) {
+        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'rankout_connector_gsc_test', 'nonce', false ) ) {
             \wp_send_json_error( array( 'message' => 'Unauthorized' ), 403 );
         }
         try {
@@ -794,7 +794,7 @@ class External_Data_Admin {
     }
 
     public function handle_test_ga_connection(): void {
-        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'easy_mcp_ai_ga_test', 'nonce', false ) ) {
+        if ( ! \current_user_can( 'manage_options' ) || ! \check_ajax_referer( 'rankout_connector_ga_test', 'nonce', false ) ) {
             \wp_send_json_error( array( 'message' => 'Unauthorized' ), 403 );
         }
         try {

@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\Tools\Filesystem;
+namespace RankOut_Connector\Tools\Filesystem;
 
-use Easy_MCP_AI\Tools\Base_Tool;
+use RankOut_Connector\Tools\Base_Tool;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +40,7 @@ class Get_Plugin_File extends Base_Tool {
 			'properties' => array(
 				'plugin' => array(
 					'type'        => 'string',
-					'description' => 'Plugin folder name (e.g. "woocommerce", "easy-mcp-ai"). Use wp_list_plugins to find the folder — it is the part before the "/" in the plugin identifier.',
+					'description' => 'Plugin folder name (e.g. "woocommerce", "rankout-connector"). Use wp_list_plugins to find the folder — it is the part before the "/" in the plugin identifier.',
 				),
 				'file'   => array(
 					'type'        => 'string',

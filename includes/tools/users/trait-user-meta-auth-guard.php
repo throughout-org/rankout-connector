@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\Tools\Users;
+namespace RankOut_Connector\Tools\Users;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -43,7 +43,7 @@ trait User_Meta_Auth_Guard {
     protected static function is_blocked_by_filter( string $key ): bool {
         static $blocked_patterns = null;
         if ( null === $blocked_patterns ) {
-            $blocked_patterns = apply_filters( 'easy_mcp_ai_user_meta_blocked_key_patterns', array() );
+            $blocked_patterns = apply_filters( 'rankout_connector_user_meta_blocked_key_patterns', array() );
         }
         foreach ( $blocked_patterns as $pattern ) {
             if ( fnmatch( $pattern, $key ) ) {

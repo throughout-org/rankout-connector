@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\Tools\Users;
+namespace RankOut_Connector\Tools\Users;
 
-use Easy_MCP_AI\Tools\Base_Tool;
+use RankOut_Connector\Tools\Base_Tool;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -16,7 +16,7 @@ class Update_User_Meta extends Base_Tool {
     }
 
     public function get_description() {
-        return 'Updates a user meta key/value. Required: `user_id`, `key`, `value`. Returns { updated: bool, user_id, key }. Users can update their own meta. Auth-sensitive keys are blocked for everyone. Writes to any `_`-prefixed key require manage_options (additional admin-only allowlist via `easy_mcp_ai_user_meta_writable_protected_keys` filter).';
+        return 'Updates a user meta key/value. Required: `user_id`, `key`, `value`. Returns { updated: bool, user_id, key }. Users can update their own meta. Auth-sensitive keys are blocked for everyone. Writes to any `_`-prefixed key require manage_options (additional admin-only allowlist via `rankout_connector_user_meta_writable_protected_keys` filter).';
     }
 
     public function get_category() {
@@ -87,7 +87,7 @@ class Update_User_Meta extends Base_Tool {
             if ( ! current_user_can( 'manage_options' ) ) {
                 throw new \RuntimeException( 'Protected meta keys require administrator privileges.' );
             }
-            $allowed = apply_filters( 'easy_mcp_ai_user_meta_writable_protected_keys', array() );
+            $allowed = apply_filters( 'rankout_connector_user_meta_writable_protected_keys', array() );
             if ( ! in_array( $key, (array) $allowed, true ) ) {
                 throw new \RuntimeException( sprintf( 'Protected meta key %s is not in the writable allowlist.', $key ) ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             }

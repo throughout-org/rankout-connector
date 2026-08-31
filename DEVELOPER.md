@@ -1,14 +1,14 @@
-# Easy MCP AI — Developer Documentation
+# RankOut Connector — Developer Documentation
 
 > **Version:** 2.0.0 | **PHP:** 7.4+ | **WordPress:** 6.0+  
-> **Repo:** [throughout-org/easy-mcp-ai](https://github.com/throughout-org/easy-mcp-ai)  
+> **Repo:** [throughout-org/rankout-connector](https://github.com/throughout-org/rankout-connector)  
 > **Website:** [easymcpai.com](https://easymcpai.com)
 
 ---
 
 ## Table of Contents
 
-1. [What is Easy MCP AI?](#1-what-is-easy-mcp-ai)
+1. [What is RankOut Connector?](#1-what-is-rankout-connector)
 2. [How It Works — Architecture Overview](#2-how-it-works--architecture-overview)
 3. [MCP Protocol Primer](#3-mcp-protocol-primer)
 4. [Plugin Structure](#4-plugin-structure)
@@ -25,14 +25,14 @@
 
 ---
 
-## 1. What is Easy MCP AI?
+## 1. What is RankOut Connector?
 
-Easy MCP AI turns your WordPress site into a **remote MCP (Model Context Protocol) server**. Once activated, any MCP-compatible AI assistant — Claude, ChatGPT, Cursor, Gemini, n8n — can read and write your WordPress content, manage media, pull SEO and analytics data, audit your site's structured data and E-E-A-T signals, and more, through **233 ready-made tools**.
+RankOut Connector turns your WordPress site into a **remote MCP (Model Context Protocol) server**. Once activated, any MCP-compatible AI assistant — Claude, ChatGPT, Cursor, Gemini, n8n — can read and write your WordPress content, manage media, pull SEO and analytics data, audit your site's structured data and E-E-A-T signals, and more, through **233 ready-made tools**.
 
 **Key points:**
 - **No Node.js, no proxy, no extra infrastructure.** The MCP server runs as a standard WordPress REST API endpoint.
 - **You bring your own AI.** The plugin does not call any AI provider. AI clients call *your* site.
-- **One endpoint, all tools.** `https://yourdomain.com/wp-json/easy-mcp-ai/v1/mcp`
+- **One endpoint, all tools.** `https://yourdomain.com/wp-json/rankout-connector/v1/mcp`
 - **Free and open source** (GPL-2.0+), with optional paid integrations using *your own* third-party API keys (Semrush, DataforSEO, Google APIs).
 
 ---
@@ -41,8 +41,8 @@ Easy MCP AI turns your WordPress site into a **remote MCP (Model Context Protoco
 
 ```
 ┌─────────────────────────────┐       MCP (JSON-RPC 2.0)       ┌────────────────────────────┐
-│  AI Client                  │ ◄─────────────────────────────► │  WordPress + Easy MCP AI   │
-│  (Claude, ChatGPT, Cursor…) │       Streamable HTTP           │  /wp-json/easy-mcp-ai/v1/  │
+│  AI Client                  │ ◄─────────────────────────────► │  WordPress + RankOut Connector   │
+│  (Claude, ChatGPT, Cursor…) │       Streamable HTTP           │  /wp-json/rankout-connector/v1/  │
 └─────────────────────────────┘                                 └────────────┬───────────────┘
                                                                              │
                               ┌──────────────────────────────────────────────▼─────────────────────────┐
@@ -55,7 +55,7 @@ Easy MCP AI turns your WordPress site into a **remote MCP (Model Context Protoco
 
 ### Request flow
 
-1. AI client sends a JSON-RPC 2.0 request to `POST /wp-json/easy-mcp-ai/v1/mcp`.
+1. AI client sends a JSON-RPC 2.0 request to `POST /wp-json/rankout-connector/v1/mcp`.
 2. `MCP\Transport` authenticates the request (Bearer token or OAuth 2.0 access token).
 3. `Auth\Permission_Guard` checks the token has permission for the requested tool.
 4. `MCP\Server` dispatches to `Tool_Registry::get_tool($name)->execute($arguments)`.
@@ -88,7 +88,7 @@ Easy MCP AI turns your WordPress site into a **remote MCP (Model Context Protoco
 |---|---|
 | **Tool** | A callable function with a name, description, and JSON Schema input schema. Analogous to a REST endpoint. |
 | **Resource** | A readable data source (like a file or database view). Read-only. |
-| **Transport** | How messages are sent. Easy MCP AI uses Streamable HTTP (POST + optional SSE stream). |
+| **Transport** | How messages are sent. RankOut Connector uses Streamable HTTP (POST + optional SSE stream). |
 | **JSON-RPC 2.0** | The wire format. Every request has `method`, `params`, `id`. Every response has `result` or `error`. |
 
 **How a tool call looks on the wire:**
@@ -107,8 +107,8 @@ Easy MCP AI turns your WordPress site into a **remote MCP (Model Context Protoco
 ## 4. Plugin Structure
 
 ```
-easy-mcp-ai/
-├── easy-mcp-ai.php                   # Main plugin file, defines constants
+rankout-connector/
+├── rankout-connector.php                   # Main plugin file, defines constants
 ├── includes/
 │   ├── class-plugin.php              # Singleton, hooks, init
 │   ├── class-github-updater.php      # GitHub-based auto-updater
@@ -174,15 +174,15 @@ easy-mcp-ai/
 
 ## 5. Tool System — Writing a Custom Tool
 
-Every tool is a PHP class that extends `Easy_MCP_AI\Tools\Base_Tool`.
+Every tool is a PHP class that extends `RankOut_Connector\Tools\Base_Tool`.
 
 ### Minimal example
 
 ```php
 <?php
-namespace Easy_MCP_AI\Tools\MyCategory;
+namespace RankOut_Connector\Tools\MyCategory;
 
-use Easy_MCP_AI\Tools\Base_Tool;
+use RankOut_Connector\Tools\Base_Tool;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -245,7 +245,7 @@ $tool_dirs = array(
 ```php
 $tool_classes = array(
     // ... existing ...
-    'Easy_MCP_AI\\Tools\\MyCategory\\Hello_World',
+    'RankOut_Connector\\Tools\\MyCategory\\Hello_World',
 );
 ```
 
@@ -335,10 +335,10 @@ $tool_classes = array(
 
 | Service | Tool count | Config location |
 |---|---|---|
-| Google Analytics 4 | 11 | Easy MCP AI → External Data |
-| Google Search Console | 6 | Easy MCP AI → External Data |
-| Semrush | 13 | Easy MCP AI → External Data |
-| DataforSEO | 8 | Easy MCP AI → External Data |
+| Google Analytics 4 | 11 | RankOut Connector → External Data |
+| Google Search Console | 6 | RankOut Connector → External Data |
+| Semrush | 13 | RankOut Connector → External Data |
+| DataforSEO | 8 | RankOut Connector → External Data |
 
 ---
 
@@ -346,7 +346,7 @@ $tool_classes = array(
 
 ### Bearer tokens
 
-1. Go to **Easy MCP AI → API Tokens → Create New Token**.
+1. Go to **RankOut Connector → API Tokens → Create New Token**.
 2. Set a name, choose the WordPress user the AI will act as, select tool permissions.
 3. Copy the token — it is shown **once only** (SHA-256 hashed before storage).
 4. Pass it in the `Authorization` header: `Authorization: Bearer <token>`.
@@ -362,8 +362,8 @@ The plugin implements a full OAuth 2.1 authorization server:
 
 **Flow:**
 1. AI client fetches `/.well-known/oauth-authorization-server` to discover endpoints.
-2. Client registers itself via `POST /wp-json/easy-mcp-ai/v1/oauth/register`.
-3. Client redirects user to `/?easy_mcp_ai_oauth=authorize`.
+2. Client registers itself via `POST /wp-json/rankout-connector/v1/oauth/register`.
+3. Client redirects user to `/?rankout_connector_oauth=authorize`.
 4. User logs in to WordPress, approves the consent screen (scope checkboxes).
 5. Client exchanges auth code for access + refresh tokens.
 6. Client sends `Authorization: Bearer <access_token>` on every MCP request.
@@ -505,11 +505,11 @@ ORDER BY post_date DESC LIMIT 10
 
 **How it works:**
 1. Hooks into `pre_set_site_transient_update_plugins` to inject update info
-2. Fetches `https://api.github.com/repos/throughout-org/easy-mcp-ai/releases/latest` (cached 12 h via transient `easy_mcp_ai_github_release`)
-3. Compares remote `tag_name` (strip leading `v`) against `EASY_MCP_AI_VERSION`
+2. Fetches `https://api.github.com/repos/throughout-org/rankout-connector/releases/latest` (cached 12 h via transient `rankout_connector_github_release`)
+3. Compares remote `tag_name` (strip leading `v`) against `RANKOUT_CONNECTOR_VERSION`
 4. If remote is newer, injects an update object into WordPress's update transient
 5. WordPress handles the rest: update notice, one-click update, progress bar
-6. After unzip, `fix_source_dir()` renames `easy-mcp-ai-{version}/` → `easy-mcp-ai/` so the plugin path stays consistent
+6. After unzip, `fix_source_dir()` renames `rankout-connector-{version}/` → `rankout-connector/` so the plugin path stays consistent
 
 **"Check for Updates" button:**  
 On the Plugins page, a "Check for Updates" link is added to the plugin row. Clicking it:
@@ -520,7 +520,7 @@ On the Plugins page, a "Check for Updates" link is added to the plugin row. Clic
 
 **Releasing a new version:**
 ```bash
-# 1. Bump version in easy-mcp-ai.php (both header comment and define)
+# 1. Bump version in rankout-connector.php (both header comment and define)
 # 2. Bump Stable tag in readme.txt
 # 3. Add changelog entry
 git add -p
@@ -565,15 +565,15 @@ git push origin main --tags
 
 | Hook | Type | Purpose |
 |---|---|---|
-| `easy_mcp_ai_oauth_enabled` | filter | Return `false` to disable the OAuth 2.0/2.1 server entirely |
-| `easy_mcp_ai_history_query_scope` | filter | Narrow the Change History query scope for non-admins |
-| `easy_mcp_ai_tool_categories` | filter | Add or rename tool categories in the admin UI |
+| `rankout_connector_oauth_enabled` | filter | Return `false` to disable the OAuth 2.0/2.1 server entirely |
+| `rankout_connector_history_query_scope` | filter | Narrow the Change History query scope for non-admins |
+| `rankout_connector_tool_categories` | filter | Add or rename tool categories in the admin UI |
 | `wp_head` | action | `output_post_schema()` — outputs `_easy_mcp_schema` JSON-LD |
 | `rest_api_init` | action | Registers all MCP REST routes |
 | `plugins_loaded` | action | `Activator::maybe_upgrade()` — runs DB migrations on plugin update |
-| `easy_mcp_ai_cleanup_audit_log` | action | Cron hook — purges old audit log rows |
-| `easy_mcp_ai_cleanup_change_log` | action | Cron hook — purges old change history rows |
-| `easy_mcp_ai_cleanup_oauth` | action | Cron hook — purges expired OAuth codes and tokens |
+| `rankout_connector_cleanup_audit_log` | action | Cron hook — purges old audit log rows |
+| `rankout_connector_cleanup_change_log` | action | Cron hook — purges old change history rows |
+| `rankout_connector_cleanup_oauth` | action | Cron hook — purges expired OAuth codes and tokens |
 
 ---
 
@@ -581,8 +581,8 @@ git push origin main --tags
 
 ### Claude Desktop (OAuth — recommended)
 
-1. Install and activate Easy MCP AI on your WordPress site.
-2. Go to **Easy MCP AI → Dashboard** and copy the MCP server URL.
+1. Install and activate RankOut Connector on your WordPress site.
+2. Go to **RankOut Connector → Dashboard** and copy the MCP server URL.
 3. Open Claude Desktop → Settings → Connectors → Add custom connector.
 4. Paste the URL. Claude opens your browser.
 5. Log in to WordPress if needed.
@@ -592,10 +592,10 @@ git push origin main --tags
 
 ### ChatGPT / Cursor / Windsurf (Bearer token)
 
-1. Go to **Easy MCP AI → API Tokens → Create New Token**.
+1. Go to **RankOut Connector → API Tokens → Create New Token**.
 2. Set a name, user, and permissions. Click **Create Token** and copy it.
 3. In your AI client, add an MCP server:
-   - **URL:** `https://yourdomain.com/wp-json/easy-mcp-ai/v1/mcp`
+   - **URL:** `https://yourdomain.com/wp-json/rankout-connector/v1/mcp`
    - **Auth:** Bearer token (paste the token you copied)
 4. Start a conversation.
 
@@ -614,7 +614,7 @@ Add to your `~/.claude/settings.json` or project `.claude/settings.json`:
   "mcpServers": {
     "my-wordpress": {
       "type": "http",
-      "url": "https://yourdomain.com/wp-json/easy-mcp-ai/v1/mcp",
+      "url": "https://yourdomain.com/wp-json/rankout-connector/v1/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_TOKEN_HERE"
       }
@@ -633,7 +633,7 @@ Go to **Settings → Permalinks** and click **Save Changes**. Pretty permalinks 
 
 ### 401 Unauthorized
 
-- Check the token in your client matches one in **Easy MCP AI → API Tokens** (tokens are shown once — if lost, delete and recreate).
+- Check the token in your client matches one in **RankOut Connector → API Tokens** (tokens are shown once — if lost, delete and recreate).
 - Ensure the `Authorization: Bearer <token>` header is reaching WordPress. Some reverse proxies strip the header — add `SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1` to `.htaccess` or the equivalent for nginx.
 
 ### Tools appear in the list but calls fail with "capability_check_failed"
@@ -652,7 +652,7 @@ define('FORCE_SSL_ADMIN', true);
 
 ### GitHub updater shows "up to date" even after a new release
 
-Click **Check for Updates** in the plugin row on the Plugins page to bust the 12-hour transient cache and force a fresh API call. Alternatively, delete the `easy_mcp_ai_github_release` transient directly from the Options table.
+Click **Check for Updates** in the plugin row on the Plugins page to bust the 12-hour transient cache and force a fresh API call. Alternatively, delete the `rankout_connector_github_release` transient directly from the Options table.
 
 ### FAQ block not showing FAQPage schema in `<head>`
 
@@ -662,4 +662,4 @@ Click **Check for Updates** in the plugin row on the Plugins page to bust the 12
 
 ---
 
-*For questions or contributions, open an issue at [github.com/throughout-org/easy-mcp-ai](https://github.com/throughout-org/easy-mcp-ai).*
+*For questions or contributions, open an issue at [github.com/throughout-org/rankout-connector](https://github.com/throughout-org/rankout-connector).*

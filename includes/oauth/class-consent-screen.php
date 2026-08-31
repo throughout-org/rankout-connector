@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\OAuth;
+namespace RankOut_Connector\OAuth;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -26,7 +26,7 @@ class Consent_Screen {
 
     public static function render( $client, $user, $scope, array $request_params, $script_nonce = '' ) {
 
-        $client_name       = isset( $client->client_name ) ? $client->client_name : __( 'Unknown Application', 'easy-mcp-ai' );
+        $client_name       = isset( $client->client_name ) ? $client->client_name : __( 'Unknown Application', 'rankout-connector' );
         $client_id         = isset( $client->client_id ) ? $client->client_id : '';
         $client_id_prefix  = substr( $client_id, 0, 8 );
         $redirect_host     = wp_parse_url( $request_params['redirect_uri'], PHP_URL_HOST );

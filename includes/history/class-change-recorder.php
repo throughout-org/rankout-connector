@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\History;
+namespace RankOut_Connector\History;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -60,7 +60,7 @@ class Change_Recorder {
         'default_category', 'default_comment_status', 'default_ping_status',
         'posts_per_page', 'date_format', 'time_format', 'start_of_week',
         'timezone_string', 'permalink_structure', 'show_on_front', 'page_on_front', 'page_for_posts',
-        'easy_mcp_ai_force_draft_on_create', 'easy_mcp_ai_disabled_tools', 'easy_mcp_ai_allowed_tool_patterns',
+        'rankout_connector_force_draft_on_create', 'rankout_connector_disabled_tools', 'rankout_connector_allowed_tool_patterns',
     );
 
     
@@ -69,7 +69,7 @@ class Change_Recorder {
 
 
     public static function option_allowlist() {
-        return (array) \apply_filters( 'easy_mcp_ai_change_log_option_allowlist', self::$option_allowlist );
+        return (array) \apply_filters( 'rankout_connector_change_log_option_allowlist', self::$option_allowlist );
     }
 
     public function __construct( Change_Log_Repository $repo ) {
@@ -795,7 +795,7 @@ class Change_Recorder {
             return;
         }
         $ids   = array_values( array_filter( array_map( 'intval', (array) $activity_ids ) ) );
-        $cap   = (int) apply_filters( 'easy_mcp_ai_bp_activity_delete_log_cap', 100 );
+        $cap   = (int) apply_filters( 'rankout_connector_bp_activity_delete_log_cap', 100 );
         $total = count( $ids );
         $write = $cap > 0 ? array_slice( $ids, 0, $cap ) : $ids;
         foreach ( $write as $id ) {

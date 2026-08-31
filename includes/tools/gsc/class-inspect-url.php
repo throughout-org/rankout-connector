@@ -1,8 +1,8 @@
 <?php
-namespace Easy_MCP_AI\Tools\GSC;
+namespace RankOut_Connector\Tools\GSC;
 
-use Easy_MCP_AI\Tools\Base_Tool;
-use Easy_MCP_AI\GSC\GSC_Client;
+use RankOut_Connector\Tools\Base_Tool;
+use RankOut_Connector\GSC\GSC_Client;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

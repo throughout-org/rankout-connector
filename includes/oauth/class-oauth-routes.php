@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\OAuth;
+namespace RankOut_Connector\OAuth;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -20,7 +20,7 @@ class OAuth_Routes {
 
 
 
-    const NAMESPACE_V1 = 'easy-mcp-ai/v1';
+    const NAMESPACE_V1 = 'rankout-connector/v1';
 
     
 
@@ -110,17 +110,17 @@ class OAuth_Routes {
             ? trim( sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ), '[]' )
             : 'unknown';
 
-        $per_ip_key    = 'easy_mcp_ai_revoke_rl_' . md5( $ip );
-        $global_key    = 'easy_mcp_ai_revoke_rl_global';
+        $per_ip_key    = 'rankout_connector_revoke_rl_' . md5( $ip );
+        $global_key    = 'rankout_connector_revoke_rl_global';
         $per_ip_limit  = 60;
         $global_limit  = 600;
 
         if ( \wp_using_ext_object_cache() ) {
-            \wp_cache_add( $per_ip_key, 0, 'easy_mcp_ai', HOUR_IN_SECONDS );
-            $ip_count = \wp_cache_incr( $per_ip_key, 1, 'easy_mcp_ai' );
+            \wp_cache_add( $per_ip_key, 0, 'rankout_connector', HOUR_IN_SECONDS );
+            $ip_count = \wp_cache_incr( $per_ip_key, 1, 'rankout_connector' );
 
-            \wp_cache_add( $global_key, 0, 'easy_mcp_ai', HOUR_IN_SECONDS );
-            $global_count = \wp_cache_incr( $global_key, 1, 'easy_mcp_ai' );
+            \wp_cache_add( $global_key, 0, 'rankout_connector', HOUR_IN_SECONDS );
+            $global_count = \wp_cache_incr( $global_key, 1, 'rankout_connector' );
         } else {
             
             $ip_count     = Token_Endpoint::rl_transient_increment( $per_ip_key );

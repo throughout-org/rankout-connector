@@ -1,7 +1,7 @@
 <?php
-namespace Easy_MCP_AI\GA;
+namespace RankOut_Connector\GA;
 
-use Easy_MCP_AI\Abstract_Google_Client;
+use RankOut_Connector\Abstract_Google_Client;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -9,11 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class GA_Client extends Abstract_Google_Client {
 
-    const OPTION_JSON        = 'easy_mcp_ai_ga_service_account_json';
-    const OPTION_PROPERTY_ID = 'easy_mcp_ai_ga_default_property_id';
-    const TRANSIENT_TOKEN    = 'easy_mcp_ai_ga_token';
+    const OPTION_JSON        = 'rankout_connector_ga_service_account_json';
+    const OPTION_PROPERTY_ID = 'rankout_connector_ga_default_property_id';
+    const TRANSIENT_TOKEN    = 'rankout_connector_ga_token';
     const SCOPE              = 'https://www.googleapis.com/auth/analytics.readonly';
-    const HKDF_INFO          = 'easy_mcp_ai_ga_creds_v1';
+    const HKDF_INFO          = 'rankout_connector_ga_creds_v1';
 
     protected static function product_name(): string {
         return 'Google Analytics';
@@ -76,7 +76,7 @@ class GA_Client extends Abstract_Google_Client {
                 );
             }
             throw new \RuntimeException(
-                'Access denied by Google Analytics. The configured service account does not have access to this property. A site administrator can grant access in Easy MCP AI → External Data → Test Connection.'
+                'Access denied by Google Analytics. The configured service account does not have access to this property. A site administrator can grant access in RankOut Connector → External Data → Test Connection.'
             );
         }
         if ( 404 === $code ) {
@@ -114,7 +114,7 @@ class GA_Client extends Abstract_Google_Client {
         $id = \get_option( self::OPTION_PROPERTY_ID, '' );
         if ( empty( $id ) ) {
             throw new \RuntimeException(
-                'No property_id provided and no default property configured. Set one in Easy MCP AI → External Data.'
+                'No property_id provided and no default property configured. Set one in RankOut Connector → External Data.'
             );
         }
         return self::normalize_property( (string) $id );

@@ -1,8 +1,8 @@
 <?php
-namespace Easy_MCP_AI\Tools\History;
+namespace RankOut_Connector\Tools\History;
 
-use Easy_MCP_AI\Tools\Base_Tool;
-use Easy_MCP_AI\History\Change_Log_Repository;
+use RankOut_Connector\Tools\Base_Tool;
+use RankOut_Connector\History\Change_Log_Repository;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -30,7 +30,7 @@ class History_Diff extends Base_Tool {
     public function execute( array $args ) {
         $this->validate_required( $args, array( 'id_a' ) );
         $repo         = new Change_Log_Repository();
-        $can_view_all = \current_user_can( 'easy_mcp_ai_view_all_history' );
+        $can_view_all = \current_user_can( 'rankout_connector_view_all_history' );
         $current_uid  = (int) \get_current_user_id();
 
         $row_a = $repo->find( (int) $args['id_a'] );
@@ -73,7 +73,7 @@ class History_Diff extends Base_Tool {
             
             
             if ( is_array( $b_after ) ) {
-                $redacted = \Easy_MCP_AI\History\Change_Redactor::redact( $b_after );
+                $redacted = \RankOut_Connector\History\Change_Redactor::redact( $b_after );
                 $b_after  = $redacted['value'];
             }
             $b_label = 'live';
@@ -157,7 +157,7 @@ class History_Diff extends Base_Tool {
                 
                 
                 
-                $allowlist = \Easy_MCP_AI\History\Change_Recorder::option_allowlist();
+                $allowlist = \RankOut_Connector\History\Change_Recorder::option_allowlist();
                 if ( ! in_array( (string) $id, $allowlist, true ) ) {
                     return array();
                 }

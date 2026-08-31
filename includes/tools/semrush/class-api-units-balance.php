@@ -1,8 +1,8 @@
 <?php
-namespace Easy_MCP_AI\Tools\Semrush;
+namespace RankOut_Connector\Tools\Semrush;
 
-use Easy_MCP_AI\Tools\Base_Tool;
-use Easy_MCP_AI\Semrush\Semrush_Client;
+use RankOut_Connector\Tools\Base_Tool;
+use RankOut_Connector\Semrush\Semrush_Client;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

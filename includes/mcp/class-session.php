@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\MCP;
+namespace RankOut_Connector\MCP;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -22,7 +22,7 @@ class Session {
             'protocol_version' => $protocol_version,
             'auth_source'      => 'oauth' === $auth_source ? 'oauth' : 'legacy',
         );
-        \set_transient( 'easy_mcp_ai_session_' . $session_id, $session_data, $this->ttl_seconds );
+        \set_transient( 'rankout_connector_session_' . $session_id, $session_data, $this->ttl_seconds );
         return $session_id;
     }
 
@@ -30,13 +30,13 @@ class Session {
         if ( ! self::is_valid_format( $session_id ) ) {
             return false;
         }
-        $session_data = \get_transient( 'easy_mcp_ai_session_' . $session_id );
+        $session_data = \get_transient( 'rankout_connector_session_' . $session_id );
         if ( false === $session_data || ! is_array( $session_data ) ) {
             return false;
         }
         
         if ( empty( $session_data['token_id'] ) || empty( $session_data['wp_user_id'] ) ) {
-            \delete_transient( 'easy_mcp_ai_session_' . $session_id );
+            \delete_transient( 'rankout_connector_session_' . $session_id );
             return false;
         }
         return $session_data;
@@ -46,7 +46,7 @@ class Session {
         if ( ! self::is_valid_format( $session_id ) ) {
             return;
         }
-        \delete_transient( 'easy_mcp_ai_session_' . $session_id );
+        \delete_transient( 'rankout_connector_session_' . $session_id );
     }
 
     public function touch( $session_id ) {
@@ -57,7 +57,7 @@ class Session {
         
         $session_data = $this->validate( $session_id );
         if ( false !== $session_data ) {
-            \set_transient( 'easy_mcp_ai_session_' . $session_id, $session_data, $this->ttl_seconds );
+            \set_transient( 'rankout_connector_session_' . $session_id, $session_data, $this->ttl_seconds );
         }
     }
 

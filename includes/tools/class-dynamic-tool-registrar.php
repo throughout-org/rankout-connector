@@ -1,5 +1,5 @@
 <?php
-namespace Easy_MCP_AI\Tools;
+namespace RankOut_Connector\Tools;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -33,7 +33,7 @@ class Dynamic_Tool_Registrar {
             return;
         }
 
-        $enabled_slugs = (array) \get_option( 'easy_mcp_ai_enabled_abilities', array() );
+        $enabled_slugs = (array) \get_option( 'rankout_connector_enabled_abilities', array() );
         if ( empty( $enabled_slugs ) ) {
             return;
         }

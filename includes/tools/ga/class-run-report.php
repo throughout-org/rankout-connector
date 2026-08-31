@@ -1,8 +1,8 @@
 <?php
-namespace Easy_MCP_AI\Tools\GA;
+namespace RankOut_Connector\Tools\GA;
 
-use Easy_MCP_AI\Tools\Base_Tool;
-use Easy_MCP_AI\GA\GA_Client;
+use RankOut_Connector\Tools\Base_Tool;
+use RankOut_Connector\GA\GA_Client;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

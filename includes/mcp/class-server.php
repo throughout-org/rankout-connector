@@ -1,10 +1,10 @@
 <?php
-namespace Easy_MCP_AI\MCP;
+namespace RankOut_Connector\MCP;
 
-use Easy_MCP_AI\Auth\Token_Manager;
-use Easy_MCP_AI\Auth\Permission_Guard;
-use Easy_MCP_AI\Tools\Tool_Registry;
-use Easy_MCP_AI\Resources\Resource_Registry;
+use RankOut_Connector\Auth\Token_Manager;
+use RankOut_Connector\Auth\Permission_Guard;
+use RankOut_Connector\Tools\Tool_Registry;
+use RankOut_Connector\Resources\Resource_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Server {
     const PROTOCOL_VERSION = '2025-11-25';
-    const SERVER_NAME      = 'easy-mcp-ai';
+    const SERVER_NAME      = 'rankout-connector';
 
     private $tool_registry;
     private $resource_registry;
@@ -37,9 +37,9 @@ class Server {
         $this->token_manager     = $token_manager;
         $this->session_manager   = new Session();
         $this->permission_guard  = new Permission_Guard( $token_manager );
-        $this->disabled_tools       = (array) get_option( 'easy_mcp_ai_disabled_tools', array() );
-        $this->audit_log_enabled    = (bool)  get_option( 'easy_mcp_ai_audit_log_enabled', true );
-        $this->allowed_tool_patterns = (array) get_option( 'easy_mcp_ai_allowed_tool_patterns', array() );
+        $this->disabled_tools       = (array) get_option( 'rankout_connector_disabled_tools', array() );
+        $this->audit_log_enabled    = (bool)  get_option( 'rankout_connector_audit_log_enabled', true );
+        $this->allowed_tool_patterns = (array) get_option( 'rankout_connector_allowed_tool_patterns', array() );
 
         
         
@@ -49,9 +49,9 @@ class Server {
             if ( ! in_array( $err['type'], array( E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR ), true ) ) {
                 return;
             }
-            if ( ! class_exists( '\\Easy_MCP_AI\\History\\Change_Context' ) ) { return; }
-            if ( ! \Easy_MCP_AI\History\Change_Context::is_active() ) { return; }
-            $audit_id = \Easy_MCP_AI\History\Change_Context::get( 'audit_id' );
+            if ( ! class_exists( '\\RankOut_Connector\\History\\Change_Context' ) ) { return; }
+            if ( ! \RankOut_Connector\History\Change_Context::is_active() ) { return; }
+            $audit_id = \RankOut_Connector\History\Change_Context::get( 'audit_id' );
             if ( $audit_id ) {
                 $this->update_audit_status( (int) $audit_id, 'error' );
             }
@@ -131,7 +131,7 @@ class Server {
                 'tools'     => new \stdClass(),
                 'resources' => new \stdClass(),
             ),
-            'serverInfo'      => array( 'name' => self::SERVER_NAME, 'version' => EASY_MCP_AI_VERSION ),
+            'serverInfo'      => array( 'name' => self::SERVER_NAME, 'version' => RANKOUT_CONNECTOR_VERSION ),
             'instructions'    => 'WordPress MCP Server. Use tools to manage posts, pages, media, comments, users, and site settings. Use resources to read site information.',
         ) );
     }
@@ -234,8 +234,8 @@ class Server {
         $audit_id     = $this->log_tool_call( $token_id, $tool_name, $arguments, 'pending' );
         $final_status = null;
 
-        if ( class_exists( '\\Easy_MCP_AI\\History\\Change_Context' ) ) {
-            \Easy_MCP_AI\History\Change_Context::set( array(
+        if ( class_exists( '\\RankOut_Connector\\History\\Change_Context' ) ) {
+            \RankOut_Connector\History\Change_Context::set( array(
                 'audit_id'        => $audit_id,
                 'tool_name'       => $tool_name,
                 'token_id'        => $token_id ? (int) $token_id : 0,
@@ -283,13 +283,13 @@ class Server {
             
             
             $this->update_audit_status( $audit_id, null === $final_status ? 'error' : $final_status );
-            if ( class_exists( '\\Easy_MCP_AI\\History\\Change_Context' ) ) {
-                \Easy_MCP_AI\History\Change_Context::clear();
+            if ( class_exists( '\\RankOut_Connector\\History\\Change_Context' ) ) {
+                \RankOut_Connector\History\Change_Context::clear();
             }
             
             
             
-            \Easy_MCP_AI\Tools\Base_Tool::flush_deferred_purges();
+            \RankOut_Connector\Tools\Base_Tool::flush_deferred_purges();
         }
     }
 
@@ -393,15 +393,15 @@ class Server {
         if ( null === $token_id ) {
             return true; 
         }
-        $limit     = (int) get_option( 'easy_mcp_ai_rate_limit_per_minute', 60 );
-        $cache_key = 'easy_mcp_ai_rate_' . (int) $token_id;
+        $limit     = (int) get_option( 'rankout_connector_rate_limit_per_minute', 60 );
+        $cache_key = 'rankout_connector_rate_' . (int) $token_id;
 
         
         
         
         if ( \wp_using_ext_object_cache() ) {
-            \wp_cache_add( $cache_key, 0, 'easy_mcp_ai', 60 );
-            $new_count = \wp_cache_incr( $cache_key, 1, 'easy_mcp_ai' );
+            \wp_cache_add( $cache_key, 0, 'rankout_connector', 60 );
+            $new_count = \wp_cache_incr( $cache_key, 1, 'rankout_connector' );
             return $new_count <= $limit;
         }
 
@@ -423,7 +423,7 @@ class Server {
         }
         global $wpdb;
         $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct insert required for audit logging.
-            $wpdb->prefix . 'easy_mcp_ai_audit_log',
+            $wpdb->prefix . 'rankout_connector_audit_log',
             array(
                 'token_id'      => 0,
                 'tool_name'     => '_auth_failure',
@@ -443,7 +443,7 @@ class Server {
         global $wpdb;
         $safe_args = self::redact_sensitive_args( $arguments );
         $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct insert required for audit logging.
-            $wpdb->prefix . 'easy_mcp_ai_audit_log',
+            $wpdb->prefix . 'rankout_connector_audit_log',
             array(
                 'token_id'      => $token_id ? (int) $token_id : 0,
                 'tool_name'     => $tool_name,
@@ -463,7 +463,7 @@ class Server {
         }
         global $wpdb;
         $wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct update required to finalize audit status.
-            $wpdb->prefix . 'easy_mcp_ai_audit_log',
+            $wpdb->prefix . 'rankout_connector_audit_log',
             array( 'result_status' => $status ),
             array( 'id' => (int) $audit_id ),
             array( '%s' ),
