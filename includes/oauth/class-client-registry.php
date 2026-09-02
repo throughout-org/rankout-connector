@@ -15,6 +15,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Client_Registry {
 
+    const RANKOUT_CLIENT_ID = 'rankout-dashboard';
+    const RANKOUT_CALLBACK  = 'https://api.rankout.app/api/wordpress-connector/callback';
+
+    public static function register_rankout_client() {
+        global $wpdb;
+        $table = $wpdb->prefix . 'easy_mcp_ai_oauth_clients';
+        $redirect_uris = (array) apply_filters( 'rankout_connector_oauth_redirect_uris', array( self::RANKOUT_CALLBACK ) );
+        $redirect_uris = array_values( array_filter( array_map( 'esc_url_raw', $redirect_uris ) ) );
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Plugin-owned OAuth registry.
+        $wpdb->replace(
+            $table,
+            array(
+                'client_id' => self::RANKOUT_CLIENT_ID,
+                'client_name' => 'RankOut Dashboard',
+                'redirect_uris' => wp_json_encode( $redirect_uris ),
+                'grant_types' => wp_json_encode( array( 'authorization_code', 'refresh_token' ) ),
+                'response_types' => wp_json_encode( array( 'code' ) ),
+                'scope' => '',
+                'software_id' => 'rankout-dashboard',
+                'software_version' => EASY_MCP_AI_VERSION,
+                'created_at' => current_time( 'mysql', true ),
+                'created_by_ip' => '',
+                'is_active' => 1,
+            ),
+            array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d' )
+        );
+    }
+
     
 
 
@@ -516,4 +545,3 @@ class Client_Registry {
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
     }
 }
-

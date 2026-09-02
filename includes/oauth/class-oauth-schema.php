@@ -136,6 +136,8 @@ class OAuth_Schema {
         }
 
         update_option( self::VERSION_OPTION, self::DB_VERSION );
+        require_once __DIR__ . '/class-client-registry.php';
+        Client_Registry::register_rankout_client();
     }
 
     
@@ -148,6 +150,9 @@ class OAuth_Schema {
 
         if ( version_compare( $installed_version, self::DB_VERSION, '<' ) ) {
             self::create_tables();
+        } else {
+            require_once __DIR__ . '/class-client-registry.php';
+            Client_Registry::register_rankout_client();
         }
     }
 }

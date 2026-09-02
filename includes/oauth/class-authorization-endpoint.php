@@ -78,7 +78,7 @@ class Authorization_Endpoint {
         
         
         
-        $min_cap = apply_filters( 'rankout_connector_oauth_min_capability', 'publish_posts' );
+        $min_cap = apply_filters( 'rankout_connector_oauth_min_capability', 'manage_options' );
         if ( ! current_user_can( $min_cap ) ) {
             return $this->redirect_with_error(
                 $params,
@@ -109,7 +109,8 @@ class Authorization_Endpoint {
         $user    = wp_get_current_user();
         $consent = $this->get_existing_consent( $user->ID, $params['client_id'] );
 
-        if ( $consent ) {
+        // Reconnections from the first-party dashboard must remain explicit.
+        if ( $consent && Client_Registry::RANKOUT_CLIENT_ID !== $params['client_id'] ) {
             $consented_scopes = array_filter( array_map( 'trim', explode( ' ', $consent->scope ) ) );
             $is_subset        = empty( array_diff( $scope_list, $consented_scopes ) )
                                 || in_array( 'mcp', $consented_scopes, true );
@@ -173,7 +174,7 @@ class Authorization_Endpoint {
         }
 
         
-        $min_cap = apply_filters( 'rankout_connector_oauth_min_capability', 'publish_posts' );
+        $min_cap = apply_filters( 'rankout_connector_oauth_min_capability', 'manage_options' );
         if ( ! current_user_can( $min_cap ) ) {
             return new \WP_Error(
                 'access_denied',
