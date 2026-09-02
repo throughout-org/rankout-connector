@@ -110,12 +110,11 @@ class Activator {
 
         // The redirect_uri(s) RankOut's backend's WORDPRESS_CONNECTOR_CALLBACK_URL
         // may point at. A filter, not a hardcoded single URL, because the
-        // real production callback domain is an operational detail this
-        // plugin's source shouldn't need editing to match — set it once
-        // via a small mu-plugin, or leave the default for local dev.
+        // Production uses RankOut's fixed first-party callback. Local and
+        // staging installations can override it with this filter.
         $redirect_uris = \apply_filters(
             'rankout_connector_static_client_redirect_uris',
-            array( 'http://localhost:4000/api/wordpress-connector/callback' )
+            array( 'https://api.rankout.app/api/wordpress-connector/callback' )
         );
         if ( ! is_array( $redirect_uris ) || empty( $redirect_uris ) ) {
             return;

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+- Register RankOut's production WordPress OAuth callback by default while retaining a filter for local and staging environments.
+
 ## 2.0.1
 
 - Fix activation after the RankOut namespace migration by using the current plugin version constant.
