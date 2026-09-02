@@ -17,11 +17,15 @@ class Client_Registry {
 
     const RANKOUT_CLIENT_ID = 'rankout-dashboard';
     const RANKOUT_CALLBACK  = 'https://api.rankout.app/api/wordpress-connector/callback';
+    const RANKOUT_LOCAL_CALLBACK = 'http://localhost:4000/api/wordpress-connector/callback';
 
     public static function register_rankout_client() {
         global $wpdb;
         $table = $wpdb->prefix . 'rankout_connector_oauth_clients';
-        $redirect_uris = (array) apply_filters( 'rankout_connector_oauth_redirect_uris', array( self::RANKOUT_CALLBACK ) );
+        $redirect_uris = (array) apply_filters(
+            'rankout_connector_oauth_redirect_uris',
+            array( self::RANKOUT_CALLBACK, self::RANKOUT_LOCAL_CALLBACK )
+        );
         $redirect_uris = array_values( array_filter( array_map( 'esc_url_raw', $redirect_uris ) ) );
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Plugin-owned OAuth registry.

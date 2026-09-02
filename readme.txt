@@ -4,7 +4,7 @@ Tags: mcp, ai, ai-seo, claude, mcp-server
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -431,6 +431,9 @@ Please report security bugs found in the source code of the RankOut Connector fo
 6. External Data — connect Google Search Console, Google Analytics 4, Semrush, and DataForSEO with encrypted credentials
 
 == Changelog ==
+
+= 2.0.5 =
+* Allow the RankOut Dashboard localhost callback for secure PKCE development connections.
 
 = 2.0.4 =
 * Include the authorizing WordPress user ID in OAuth token responses for RankOut Dashboard compatibility.
