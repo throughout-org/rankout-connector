@@ -1,0 +1,54 @@
+name: Release WordPress plugin
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate version and PHP syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag_version="${GITHUB_REF_NAME#v}"
+          header_version="$(sed -nE 's/^ \* Version:[[:space:]]+([^[:space:]]+).*/\1/p' rankout-connector.php)"
+          constant_version="$(sed -nE "s/.*RANKOUT_CONNECTOR_VERSION', '([^']+)'.*/\1/p" rankout-connector.php | head -1)"
+          stable_version="$(sed -nE 's/^Stable tag:[[:space:]]+([^[:space:]]+).*/\1/p' readme.txt)"
+          test "$tag_version" = "$header_version"
+          test "$tag_version" = "$constant_version"
+          test "$tag_version" = "$stable_version"
+          find . -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Build WordPress package
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist/stage/rankout-connector
+          cp -R assets includes rankout-connector.php readme.txt uninstall.php dist/stage/rankout-connector/
+          if [ -d languages ]; then cp -R languages dist/stage/rankout-connector/; fi
+          find dist/stage -name '.DS_Store' -delete
+          cd dist/stage
+          zip -X -r ../rankout-connector.zip rankout-connector
+          cd ..
+          sha256sum rankout-connector.zip > rankout-connector.zip.sha256
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            dist/rankout-connector.zip \
+            dist/rankout-connector.zip.sha256 \
+            --verify-tag \
+            --generate-notes \
+            --title "RankOut Connector $GITHUB_REF_NAME" \
+            --latest

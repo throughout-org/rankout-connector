@@ -3,7 +3,7 @@
  * Plugin Name: RankOut Connector
  * Plugin URI:  https://rankout.app
  * Description: Connects your WordPress site to your RankOut account — RankOut's dashboard and AI agent can read your site's content, SEO, WooCommerce, and technical health, and (with your explicit approval on each change) apply optimizations directly.
- * Version:     1.0.0
+ * Version:     2.0.1
  * Author:      RankOut
  * Author URI:  https://rankout.app
  * License:     GPL-2.0-or-later
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'RANKOUT_CONNECTOR_VERSION' ) ) {
-    define( 'RANKOUT_CONNECTOR_VERSION', '2.0.0' );
+    define( 'RANKOUT_CONNECTOR_VERSION', '2.0.1' );
 }
 if ( ! defined( 'RANKOUT_CONNECTOR_PLUGIN_FILE' ) ) {
     define( 'RANKOUT_CONNECTOR_PLUGIN_FILE', __FILE__ );

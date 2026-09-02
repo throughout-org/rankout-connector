@@ -253,9 +253,9 @@ class GitHub_Updater {
      */
     private function zip_url( string $tag ): string {
         return sprintf(
-            'https://github.com/%s/archive/refs/tags/%s.zip',
+            'https://github.com/%s/releases/download/%s/rankout-connector.zip',
             self::GITHUB_REPO,
-            $tag
+            rawurlencode( $tag )
         );
     }
 }

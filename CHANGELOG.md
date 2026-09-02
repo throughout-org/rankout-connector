@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1
+
+- Fix activation after the RankOut namespace migration by using the current plugin version constant.
+- Complete the RankOut Connector branding migration.
+- Restore packaged GitHub releases for WordPress one-click updates.
+
 All notable changes to RankOut Connector are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).  
 Versions follow [Semantic Versioning](https://semver.org/).
