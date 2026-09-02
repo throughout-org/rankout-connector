@@ -1,5 +1,5 @@
 === RankOut Connector – Claude, ChatGPT & SEO Data Connector ===
-Contributors: easymcpai
+Contributors: rankout
 Tags: mcp, ai, ai-seo, claude, mcp-server
 Requires at least: 6.0
 Tested up to: 7.0
@@ -12,7 +12,7 @@ Connect Claude, ChatGPT & any AI to WordPress. Manage your entire site by chat �
 
 == Description ==
 
-[**RankOut Connector**](https://easymcpai.com/) is the most complete **free WordPress MCP server** — a remote MCP server built so AI assistants and autonomous AI agents can run your entire site workflow, from content and publishing to SEO research, traffic monitoring, and daily admin, through the [Model Context Protocol](https://modelcontextprotocol.io). It works as an MCP adapter for any MCP-compatible AI client, making your site agent-ready out of the box. Ask your AI about Google Analytics, Google Search Console, and SEO data without leaving your chat. You bring the direction. Your AI handles the execution.
+[**RankOut Connector**](https://rankout.app/) is the most complete **free WordPress MCP server** — a remote MCP server built so AI assistants and autonomous AI agents can run your entire site workflow, from content and publishing to SEO research, traffic monitoring, and daily admin, through the [Model Context Protocol](https://modelcontextprotocol.io). It works as an MCP adapter for any MCP-compatible AI client, making your site agent-ready out of the box. Ask your AI about Google Analytics, Google Search Console, and SEO data without leaving your chat. You bring the direction. Your AI handles the execution.
 
 No Node.js. No external proxy. No complicated setup. Just install, generate a token, and start building.
 
@@ -30,7 +30,7 @@ No Node.js. No external proxy. No complicated setup. Just install, generate a to
 
 = Works With Every Major AI =
 
-Connect any of the following AI assistants or AI agents to your site through the **WordPress MCP** endpoint — [full integration guides here](https://easymcpai.com/integrations):
+Connect any of the following AI assistants or AI agents to your site through the **WordPress MCP** endpoint — [full integration guides here](https://rankout.app/integrations):
 
 * **Manus** — the autonomous AI agent that can run multi-step workflows start to finish
 * **Claude** (Claude.ai, Claude Desktop, Claude Code) — connect Claude to WordPress in one click via OAuth
@@ -102,7 +102,7 @@ Once connected, your **AI agent** can handle everything you'd normally do in the
 
 = Tools =
 
-[**214 Tools, Ready to Use**](https://easymcpai.com/tools)
+[**214 Tools, Ready to Use**](https://rankout.app/tools)
 
 **93 core tools** covering every major WordPress content type:
 
@@ -320,7 +320,7 @@ After activation, go to **RankOut Connector → Dashboard** and copy your MCP se
 * **Gemini AI** (Gemini CLI / Google Antigravity) — register the MCP endpoint in the client config.
 * **n8n** — use the MCP node and point it at the URL plus a Bearer token created under **RankOut Connector → API Tokens**.
 
-See the [integrations page](https://easymcpai.com/integrations) for step-by-step guides per client.
+See the [integrations page](https://rankout.app/integrations) for step-by-step guides per client.
 
 = Does it work with WooCommerce, Yoast, Rank Math, ACF, BuddyPress, and The Events Calendar? =
 
@@ -450,7 +450,7 @@ Please report security bugs found in the source code of the RankOut Connector fo
 * **Phase 2 — GEO (Generative Engine Optimisation):** 4 new tools — `wp_get_llms_txt`, `wp_update_llms_txt`, `wp_get_entity_context`, `wp_audit_geo_readiness`
 
 = 1.8.0 =
-* **Phase 1 — Schema / Structured Data:** 4 new tools — `wp_get_post_schema`, `wp_update_post_schema`, `wp_audit_schema_coverage`, `wp_list_schema_types`; JSON-LD auto-output in `<head>` via `_easy_mcp_schema` post meta
+* **Phase 1 — Schema / Structured Data:** 4 new tools — `wp_get_post_schema`, `wp_update_post_schema`, `wp_audit_schema_coverage`, `wp_list_schema_types`; JSON-LD auto-output in `<head>` via `_rankout_connector_schema` post meta
 
 = 1.7.2 =
 * Fixed: AI connections that dropped when an access token expired now reconnect on their own instead of silently failing — your AI client refreshes its login and keeps working.
@@ -582,4 +582,4 @@ Initial release. No upgrade steps required.
 
 == Author ==
 
-Developed by [EasyMCPAI](https://easymcpai.com).
+Developed by [RankOut](https://rankout.app).

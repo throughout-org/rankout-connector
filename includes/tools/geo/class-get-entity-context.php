@@ -294,7 +294,7 @@ class Get_Entity_Context extends Base_Tool {
 	}
 
 	private function extract_schema_entity( int $post_id ): ?array {
-		$json = get_post_meta( $post_id, '_easy_mcp_schema', true );
+		$json = get_post_meta( $post_id, '_rankout_connector_schema', true );
 		if ( empty( $json ) ) {
 			return null;
 		}

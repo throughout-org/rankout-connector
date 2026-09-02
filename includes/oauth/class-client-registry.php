@@ -20,7 +20,7 @@ class Client_Registry {
 
     public static function register_rankout_client() {
         global $wpdb;
-        $table = $wpdb->prefix . 'easy_mcp_ai_oauth_clients';
+        $table = $wpdb->prefix . 'rankout_connector_oauth_clients';
         $redirect_uris = (array) apply_filters( 'rankout_connector_oauth_redirect_uris', array( self::RANKOUT_CALLBACK ) );
         $redirect_uris = array_values( array_filter( array_map( 'esc_url_raw', $redirect_uris ) ) );
 
@@ -35,7 +35,7 @@ class Client_Registry {
                 'response_types' => wp_json_encode( array( 'code' ) ),
                 'scope' => '',
                 'software_id' => 'rankout-dashboard',
-                'software_version' => EASY_MCP_AI_VERSION,
+                'software_version' => RANKOUT_CONNECTOR_VERSION,
                 'created_at' => current_time( 'mysql', true ),
                 'created_by_ip' => '',
                 'is_active' => 1,

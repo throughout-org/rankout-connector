@@ -99,7 +99,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         <?php wp_nonce_field( 'rankout_connector_external_data' ); ?>
 
         <div style="margin-top:1.5em; border:1px solid #c3c4c7; border-radius:4px; padding:1em 1.5em; background:#fff;">
-            <h2 style="margin-top:0; font-size:1.1em; font-weight:600; padding-bottom:.5em; border-bottom:1px solid #f0f0f1; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="(function(el){var body=document.getElementById('dfs-section-body');var open=body.style.display!=='none';body.style.display=open?'none':'';el.querySelector('.easy-mcp-toggle-icon').textContent=open?'▶':'▼';})(this)">
+            <h2 style="margin-top:0; font-size:1.1em; font-weight:600; padding-bottom:.5em; border-bottom:1px solid #f0f0f1; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="(function(el){var body=document.getElementById('dfs-section-body');var open=body.style.display!=='none';body.style.display=open?'none':'';el.querySelector('.rankout-connector-toggle-icon').textContent=open?'▶':'▼';})(this)">
                 <span>
                     <?php esc_html_e( 'DataforSEO', 'rankout-connector' ); ?>
                     <?php if ( $has_dfs_credentials ) : ?>
@@ -118,7 +118,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                         <span style="color:#2271b1; font-size:.8em; font-weight:normal; margin-left:.75em; background:#f0f6fc; border:1px solid #c2d4e8; border-radius:3px; padding:1px 6px;"><?php esc_html_e( '$1 trial credit available', 'rankout-connector' ); ?></span>
                     <?php endif; ?>
                 </span>
-                <span class="easy-mcp-toggle-icon" style="font-size:.8em; color:#646970; user-select:none;">▶</span>
+                <span class="rankout-connector-toggle-icon" style="font-size:.8em; color:#646970; user-select:none;">▶</span>
             </h2>
 
             <div id="dfs-section-body" style="display:none;">
@@ -295,10 +295,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             <?php endif; ?>
 
             <div style="margin-top:1.5em; border-top:1px solid #f0f0f1; padding-top:1em;">
-                <button type="button" style="width:100%; text-align:left; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; padding:.6em .9em; cursor:pointer; display:flex; align-items:baseline; gap:.5em;" onmouseover="this.style.background='#edeeee'" onmouseout="this.style.background='#f6f7f7'" onclick="(function(el){var body=document.getElementById('dfs-tools-body');var open=body.style.display!=='none';body.style.display=open?'none':'block';el.querySelector('.easy-mcp-tools-toggle').textContent=open?'▶':'▼';el.querySelector('.easy-mcp-tools-hint').style.display=open?'inline':'none';})(this)">
-                    <span class="easy-mcp-tools-toggle" style="font-size:.75em; color:#646970; user-select:none; flex-shrink:0;">▶</span>
+                <button type="button" style="width:100%; text-align:left; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; padding:.6em .9em; cursor:pointer; display:flex; align-items:baseline; gap:.5em;" onmouseover="this.style.background='#edeeee'" onmouseout="this.style.background='#f6f7f7'" onclick="(function(el){var body=document.getElementById('dfs-tools-body');var open=body.style.display!=='none';body.style.display=open?'none':'block';el.querySelector('.rankout-connector-tools-toggle').textContent=open?'▶':'▼';el.querySelector('.rankout-connector-tools-hint').style.display=open?'inline':'none';})(this)">
+                    <span class="rankout-connector-tools-toggle" style="font-size:.75em; color:#646970; user-select:none; flex-shrink:0;">▶</span>
                     <span style="font-size:1em; font-weight:600; color:#1d2327;"><?php esc_html_e( 'Available Tools', 'rankout-connector' ); ?></span>
-                    <span class="easy-mcp-tools-hint" style="font-size:.85em; font-weight:normal; color:#646970;"><?php echo $has_dfs_credentials ? esc_html__( 'click to expand', 'rankout-connector' ) : esc_html__( 'Save credentials above to enable or disable individual tools. Tools are shown below for reference.', 'rankout-connector' ); ?></span>
+                    <span class="rankout-connector-tools-hint" style="font-size:.85em; font-weight:normal; color:#646970;"><?php echo $has_dfs_credentials ? esc_html__( 'click to expand', 'rankout-connector' ) : esc_html__( 'Save credentials above to enable or disable individual tools. Tools are shown below for reference.', 'rankout-connector' ); ?></span>
                 </button>
                 <div id="dfs-tools-body" style="display:none;">
                 <?php if ( $has_dfs_credentials ) : ?>
@@ -322,7 +322,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         </div>
 
         <div style="margin-top:1.5em; border:1px solid #c3c4c7; border-radius:4px; padding:1em 1.5em; background:#fff;">
-            <h2 style="margin-top:0; font-size:1.1em; font-weight:600; padding-bottom:.5em; border-bottom:1px solid #f0f0f1; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="(function(el){var body=document.getElementById('semrush-section-body');var open=body.style.display!=='none';body.style.display=open?'none':'';el.querySelector('.easy-mcp-toggle-icon').textContent=open?'▶':'▼';})(this)">
+            <h2 style="margin-top:0; font-size:1.1em; font-weight:600; padding-bottom:.5em; border-bottom:1px solid #f0f0f1; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="(function(el){var body=document.getElementById('semrush-section-body');var open=body.style.display!=='none';body.style.display=open?'none':'';el.querySelector('.rankout-connector-toggle-icon').textContent=open?'▶':'▼';})(this)">
                 <span>
                     <?php esc_html_e( 'Semrush', 'rankout-connector' ); ?>
                     <?php if ( $has_semrush_credentials ) : ?>
@@ -341,17 +341,17 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                         <span style="color:#2271b1; font-size:.8em; font-weight:normal; margin-left:.75em; background:#f0f6fc; border:1px solid #c2d4e8; border-radius:3px; padding:1px 6px;"><?php esc_html_e( '14-day free trial available', 'rankout-connector' ); ?></span>
                     <?php endif; ?>
                 </span>
-                <span class="easy-mcp-toggle-icon" style="font-size:.8em; color:#646970; user-select:none;">▶</span>
+                <span class="rankout-connector-toggle-icon" style="font-size:.8em; color:#646970; user-select:none;">▶</span>
             </h2>
 
             <div id="semrush-section-body" style="display:none;">
             <p style="color:#646970; font-size:.9em; margin-top:0;">
-                <?php esc_html_e( 'Sign up at', 'rankout-connector' ); ?> <a href="https://easymcpai.com/go/semrush" target="_blank" rel="noopener noreferrer">semrush.com</a><span aria-hidden="true">*</span> <?php esc_html_e( 'on a plan that includes API access — the Semrush One plan is recommended. Retrieve the key at Profile → Subscription info → API units.', 'rankout-connector' ); ?>
+                <?php esc_html_e( 'Sign up at', 'rankout-connector' ); ?> <a href="https://rankout.app/go/semrush" target="_blank" rel="noopener noreferrer">semrush.com</a><span aria-hidden="true">*</span> <?php esc_html_e( 'on a plan that includes API access — the Semrush One plan is recommended. Retrieve the key at Profile → Subscription info → API units.', 'rankout-connector' ); ?>
             </p>
 
             <?php if ( ! $has_semrush_credentials ) : ?>
             <p style="margin-top:0; margin-bottom:1em;">
-                <a href="https://easymcpai.com/go/semrush" target="_blank" rel="noopener noreferrer" class="button button-secondary"><?php esc_html_e( 'Start Your Free 14-Day Trial *', 'rankout-connector' ); ?></a>
+                <a href="https://rankout.app/go/semrush" target="_blank" rel="noopener noreferrer" class="button button-secondary"><?php esc_html_e( 'Start Your Free 14-Day Trial *', 'rankout-connector' ); ?></a>
                 <span style="display:block; margin-top:.4em; color:#646970; font-size:.85em;"><?php esc_html_e( 'No API key yet? Try Semrush free for 14 days — no commitment required.', 'rankout-connector' ); ?></span>
             </p>
             <?php endif; ?>
@@ -380,7 +380,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                                     sprintf(
                                         /* translators: %s: Semrush affiliate URL */
                                         __( 'Get your API key from <a href="%s" target="_blank" rel="noopener noreferrer">Semrush</a><span aria-hidden="true">*</span> — go to Profile → Subscription info → API units.', 'rankout-connector' ),
-                                        'https://easymcpai.com/go/semrush'
+                                        'https://rankout.app/go/semrush'
                                     ),
                                     array(
                                         'a'    => array( 'href' => array(), 'target' => array(), 'rel' => array() ),
@@ -453,10 +453,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             <?php endif; ?>
 
             <div style="margin-top:1.5em; border-top:1px solid #f0f0f1; padding-top:1em;">
-                <button type="button" style="width:100%; text-align:left; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; padding:.6em .9em; cursor:pointer; display:flex; align-items:baseline; gap:.5em;" onmouseover="this.style.background='#edeeee'" onmouseout="this.style.background='#f6f7f7'" onclick="(function(el){var body=document.getElementById('semrush-tools-body');var open=body.style.display!=='none';body.style.display=open?'none':'block';el.querySelector('.easy-mcp-tools-toggle').textContent=open?'▶':'▼';el.querySelector('.easy-mcp-tools-hint').style.display=open?'inline':'none';})(this)">
-                    <span class="easy-mcp-tools-toggle" style="font-size:.75em; color:#646970; user-select:none; flex-shrink:0;">▶</span>
+                <button type="button" style="width:100%; text-align:left; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; padding:.6em .9em; cursor:pointer; display:flex; align-items:baseline; gap:.5em;" onmouseover="this.style.background='#edeeee'" onmouseout="this.style.background='#f6f7f7'" onclick="(function(el){var body=document.getElementById('semrush-tools-body');var open=body.style.display!=='none';body.style.display=open?'none':'block';el.querySelector('.rankout-connector-tools-toggle').textContent=open?'▶':'▼';el.querySelector('.rankout-connector-tools-hint').style.display=open?'inline':'none';})(this)">
+                    <span class="rankout-connector-tools-toggle" style="font-size:.75em; color:#646970; user-select:none; flex-shrink:0;">▶</span>
                     <span style="font-size:1em; font-weight:600; color:#1d2327;"><?php esc_html_e( 'Available Tools', 'rankout-connector' ); ?></span>
-                    <span class="easy-mcp-tools-hint" style="font-size:.85em; font-weight:normal; color:#646970;"><?php echo $has_semrush_credentials ? esc_html__( 'click to expand', 'rankout-connector' ) : esc_html__( 'Save credentials above to enable or disable individual tools. Tools are shown below for reference.', 'rankout-connector' ); ?></span>
+                    <span class="rankout-connector-tools-hint" style="font-size:.85em; font-weight:normal; color:#646970;"><?php echo $has_semrush_credentials ? esc_html__( 'click to expand', 'rankout-connector' ) : esc_html__( 'Save credentials above to enable or disable individual tools. Tools are shown below for reference.', 'rankout-connector' ); ?></span>
                 </button>
                 <div id="semrush-tools-body" style="display:none;">
                 <?php if ( $has_semrush_credentials ) : ?>
@@ -485,7 +485,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         </div>
 
         <div style="margin-top:1.5em; border:1px solid #c3c4c7; border-radius:4px; padding:1em 1.5em; background:#fff;">
-            <h2 style="margin-top:0; font-size:1.1em; font-weight:600; padding-bottom:.5em; border-bottom:1px solid #f0f0f1; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="(function(el){var body=document.getElementById('gsc-section-body');var open=body.style.display!=='none';body.style.display=open?'none':'';el.querySelector('.easy-mcp-toggle-icon').textContent=open?'▶':'▼';})(this)">
+            <h2 style="margin-top:0; font-size:1.1em; font-weight:600; padding-bottom:.5em; border-bottom:1px solid #f0f0f1; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="(function(el){var body=document.getElementById('gsc-section-body');var open=body.style.display!=='none';body.style.display=open?'none':'';el.querySelector('.rankout-connector-toggle-icon').textContent=open?'▶':'▼';})(this)">
                 <span>
                     <?php esc_html_e( 'Google Search Console', 'rankout-connector' ); ?>
                     <?php if ( $has_json ) : ?>
@@ -494,14 +494,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                         <span style="color:#d63638; font-size:.85em; font-weight:normal; margin-left:.5em;"><?php esc_html_e( 'Not configured', 'rankout-connector' ); ?></span>
                     <?php endif; ?>
                 </span>
-                <span class="easy-mcp-toggle-icon" style="font-size:.8em; color:#646970; user-select:none;">▶</span>
+                <span class="rankout-connector-toggle-icon" style="font-size:.8em; color:#646970; user-select:none;">▶</span>
             </h2>
 
             <div id="gsc-section-body" style="display:none;">
             <div style="background:#f6f7f7; border-left:4px solid #72aee6; margin:.5em 0 1em; border-radius:0 4px 4px 0; overflow:hidden;">
-                <button type="button" onclick="(function(btn){var body=btn.nextElementSibling;var open=body.style.display!=='none';body.style.display=open?'none':'block';btn.querySelector('.easy-mcp-setup-icon').textContent=open?'▶':'▼';btn.querySelector('.easy-mcp-setup-label').textContent=open?'<?php echo esc_js( __( 'Click here to see how to set up Search Console', 'rankout-connector' ) ); ?>':'<?php echo esc_js( __( 'Hide setup instructions', 'rankout-connector' ) ); ?>';})(this)" style="width:100%; text-align:left; background:none; border:none; padding:.75em 1em; font-weight:600; color:#2271b1; cursor:pointer; display:flex; align-items:center; gap:.5em; text-decoration:underline; text-underline-offset:2px;">
-                    <span class="easy-mcp-setup-icon" style="font-size:.75em; color:#2271b1; text-decoration:none;">▶</span>
-                    <span class="easy-mcp-setup-label"><?php esc_html_e( 'Click here to see how to set up Search Console', 'rankout-connector' ); ?></span>
+                <button type="button" onclick="(function(btn){var body=btn.nextElementSibling;var open=body.style.display!=='none';body.style.display=open?'none':'block';btn.querySelector('.rankout-connector-setup-icon').textContent=open?'▶':'▼';btn.querySelector('.rankout-connector-setup-label').textContent=open?'<?php echo esc_js( __( 'Click here to see how to set up Search Console', 'rankout-connector' ) ); ?>':'<?php echo esc_js( __( 'Hide setup instructions', 'rankout-connector' ) ); ?>';})(this)" style="width:100%; text-align:left; background:none; border:none; padding:.75em 1em; font-weight:600; color:#2271b1; cursor:pointer; display:flex; align-items:center; gap:.5em; text-decoration:underline; text-underline-offset:2px;">
+                    <span class="rankout-connector-setup-icon" style="font-size:.75em; color:#2271b1; text-decoration:none;">▶</span>
+                    <span class="rankout-connector-setup-label"><?php esc_html_e( 'Click here to see how to set up Search Console', 'rankout-connector' ); ?></span>
                 </button>
                 <div style="display:none; padding:0 1em .75em;">
                 <ol style="margin:.25em 0 0 1.25em; padding:0; color:#3c434a; font-size:.9em; line-height:1.7;">
@@ -609,10 +609,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             <?php endif; ?>
 
             <div style="margin-top:1.5em; border-top:1px solid #f0f0f1; padding-top:1em;">
-                <button type="button" style="width:100%; text-align:left; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; padding:.6em .9em; cursor:pointer; display:flex; align-items:baseline; gap:.5em;" onmouseover="this.style.background='#edeeee'" onmouseout="this.style.background='#f6f7f7'" onclick="(function(el){var body=document.getElementById('gsc-tools-body');var open=body.style.display!=='none';body.style.display=open?'none':'block';el.querySelector('.easy-mcp-tools-toggle').textContent=open?'▶':'▼';el.querySelector('.easy-mcp-tools-hint').style.display=open?'inline':'none';})(this)">
-                    <span class="easy-mcp-tools-toggle" style="font-size:.75em; color:#646970; user-select:none; flex-shrink:0;">▶</span>
+                <button type="button" style="width:100%; text-align:left; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; padding:.6em .9em; cursor:pointer; display:flex; align-items:baseline; gap:.5em;" onmouseover="this.style.background='#edeeee'" onmouseout="this.style.background='#f6f7f7'" onclick="(function(el){var body=document.getElementById('gsc-tools-body');var open=body.style.display!=='none';body.style.display=open?'none':'block';el.querySelector('.rankout-connector-tools-toggle').textContent=open?'▶':'▼';el.querySelector('.rankout-connector-tools-hint').style.display=open?'inline':'none';})(this)">
+                    <span class="rankout-connector-tools-toggle" style="font-size:.75em; color:#646970; user-select:none; flex-shrink:0;">▶</span>
                     <span style="font-size:1em; font-weight:600; color:#1d2327;"><?php esc_html_e( 'Available Tools', 'rankout-connector' ); ?></span>
-                    <span class="easy-mcp-tools-hint" style="font-size:.85em; font-weight:normal; color:#646970;"><?php echo $has_json ? esc_html__( 'click to expand', 'rankout-connector' ) : esc_html__( 'Save credentials above to enable or disable individual tools. Tools are shown below for reference.', 'rankout-connector' ); ?></span>
+                    <span class="rankout-connector-tools-hint" style="font-size:.85em; font-weight:normal; color:#646970;"><?php echo $has_json ? esc_html__( 'click to expand', 'rankout-connector' ) : esc_html__( 'Save credentials above to enable or disable individual tools. Tools are shown below for reference.', 'rankout-connector' ); ?></span>
                 </button>
                 <div id="gsc-tools-body" style="display:none;">
                 <?php if ( $has_json ) : ?>
@@ -638,7 +638,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         </div>
 
         <div style="margin-top:1.5em; border:1px solid #c3c4c7; border-radius:4px; padding:1em 1.5em; background:#fff;">
-            <h2 style="margin-top:0; font-size:1.1em; font-weight:600; padding-bottom:.5em; border-bottom:1px solid #f0f0f1; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="(function(el){var body=document.getElementById('ga-section-body');var open=body.style.display!=='none';body.style.display=open?'none':'';el.querySelector('.easy-mcp-toggle-icon').textContent=open?'▶':'▼';})(this)">
+            <h2 style="margin-top:0; font-size:1.1em; font-weight:600; padding-bottom:.5em; border-bottom:1px solid #f0f0f1; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="(function(el){var body=document.getElementById('ga-section-body');var open=body.style.display!=='none';body.style.display=open?'none':'';el.querySelector('.rankout-connector-toggle-icon').textContent=open?'▶':'▼';})(this)">
                 <span>
                     <?php esc_html_e( 'Google Analytics 4', 'rankout-connector' ); ?>
                     <?php if ( $has_ga_json ) : ?>
@@ -647,14 +647,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                         <span style="color:#d63638; font-size:.85em; font-weight:normal; margin-left:.5em;"><?php esc_html_e( 'Not configured', 'rankout-connector' ); ?></span>
                     <?php endif; ?>
                 </span>
-                <span class="easy-mcp-toggle-icon" style="font-size:.8em; color:#646970; user-select:none;">▶</span>
+                <span class="rankout-connector-toggle-icon" style="font-size:.8em; color:#646970; user-select:none;">▶</span>
             </h2>
 
             <div id="ga-section-body" style="display:none;">
             <div style="background:#f6f7f7; border-left:4px solid #72aee6; margin:.5em 0 1em; border-radius:0 4px 4px 0; overflow:hidden;">
-                <button type="button" onclick="(function(btn){var body=btn.nextElementSibling;var open=body.style.display!=='none';body.style.display=open?'none':'block';btn.querySelector('.easy-mcp-setup-icon').textContent=open?'▶':'▼';btn.querySelector('.easy-mcp-setup-label').textContent=open?'<?php echo esc_js( __( 'Click here to see how to set up Google Analytics', 'rankout-connector' ) ); ?>':'<?php echo esc_js( __( 'Hide setup instructions', 'rankout-connector' ) ); ?>';})(this)" style="width:100%; text-align:left; background:none; border:none; padding:.75em 1em; font-weight:600; color:#2271b1; cursor:pointer; display:flex; align-items:center; gap:.5em; text-decoration:underline; text-underline-offset:2px;">
-                    <span class="easy-mcp-setup-icon" style="font-size:.75em; color:#2271b1; text-decoration:none;">▶</span>
-                    <span class="easy-mcp-setup-label"><?php esc_html_e( 'Click here to see how to set up Google Analytics', 'rankout-connector' ); ?></span>
+                <button type="button" onclick="(function(btn){var body=btn.nextElementSibling;var open=body.style.display!=='none';body.style.display=open?'none':'block';btn.querySelector('.rankout-connector-setup-icon').textContent=open?'▶':'▼';btn.querySelector('.rankout-connector-setup-label').textContent=open?'<?php echo esc_js( __( 'Click here to see how to set up Google Analytics', 'rankout-connector' ) ); ?>':'<?php echo esc_js( __( 'Hide setup instructions', 'rankout-connector' ) ); ?>';})(this)" style="width:100%; text-align:left; background:none; border:none; padding:.75em 1em; font-weight:600; color:#2271b1; cursor:pointer; display:flex; align-items:center; gap:.5em; text-decoration:underline; text-underline-offset:2px;">
+                    <span class="rankout-connector-setup-icon" style="font-size:.75em; color:#2271b1; text-decoration:none;">▶</span>
+                    <span class="rankout-connector-setup-label"><?php esc_html_e( 'Click here to see how to set up Google Analytics', 'rankout-connector' ); ?></span>
                 </button>
                 <div style="display:none; padding:0 1em .75em;">
                 <ol style="margin:.25em 0 0 1.25em; padding:0; color:#3c434a; font-size:.9em; line-height:1.7;">
@@ -767,10 +767,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             <?php endif; ?>
 
             <div style="margin-top:1.5em; border-top:1px solid #f0f0f1; padding-top:1em;">
-                <button type="button" style="width:100%; text-align:left; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; padding:.6em .9em; cursor:pointer; display:flex; align-items:baseline; gap:.5em;" onmouseover="this.style.background='#edeeee'" onmouseout="this.style.background='#f6f7f7'" onclick="(function(el){var body=document.getElementById('ga-tools-body');var open=body.style.display!=='none';body.style.display=open?'none':'block';el.querySelector('.easy-mcp-tools-toggle').textContent=open?'▶':'▼';el.querySelector('.easy-mcp-tools-hint').style.display=open?'inline':'none';})(this)">
-                    <span class="easy-mcp-tools-toggle" style="font-size:.75em; color:#646970; user-select:none; flex-shrink:0;">▶</span>
+                <button type="button" style="width:100%; text-align:left; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; padding:.6em .9em; cursor:pointer; display:flex; align-items:baseline; gap:.5em;" onmouseover="this.style.background='#edeeee'" onmouseout="this.style.background='#f6f7f7'" onclick="(function(el){var body=document.getElementById('ga-tools-body');var open=body.style.display!=='none';body.style.display=open?'none':'block';el.querySelector('.rankout-connector-tools-toggle').textContent=open?'▶':'▼';el.querySelector('.rankout-connector-tools-hint').style.display=open?'inline':'none';})(this)">
+                    <span class="rankout-connector-tools-toggle" style="font-size:.75em; color:#646970; user-select:none; flex-shrink:0;">▶</span>
                     <span style="font-size:1em; font-weight:600; color:#1d2327;"><?php esc_html_e( 'Available Tools', 'rankout-connector' ); ?></span>
-                    <span class="easy-mcp-tools-hint" style="font-size:.85em; font-weight:normal; color:#646970;"><?php echo $has_ga_json ? esc_html__( 'click to expand', 'rankout-connector' ) : esc_html__( 'Save credentials above to enable or disable individual tools. Tools are shown below for reference.', 'rankout-connector' ); ?></span>
+                    <span class="rankout-connector-tools-hint" style="font-size:.85em; font-weight:normal; color:#646970;"><?php echo $has_ga_json ? esc_html__( 'click to expand', 'rankout-connector' ) : esc_html__( 'Save credentials above to enable or disable individual tools. Tools are shown below for reference.', 'rankout-connector' ); ?></span>
                 </button>
                 <div id="ga-tools-body" style="display:none;">
                 <?php if ( $has_ga_json ) : ?>

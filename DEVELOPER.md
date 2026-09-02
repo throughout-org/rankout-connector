@@ -2,7 +2,7 @@
 
 > **Version:** 2.0.0 | **PHP:** 7.4+ | **WordPress:** 6.0+  
 > **Repo:** [throughout-org/rankout-connector](https://github.com/throughout-org/rankout-connector)  
-> **Website:** [easymcpai.com](https://easymcpai.com)
+> **Website:** [rankout.app](https://rankout.app)
 
 ---
 
@@ -382,7 +382,7 @@ Goal: ensure every post has machine-readable JSON-LD that AI engines can parse.
 ```
 wp_list_schema_types          → pick the right @type (Article, FAQPage, HowTo, etc.)
 wp_get_post_schema  (post_id) → see what's there now
-wp_update_post_schema         → write validated JSON-LD to _easy_mcp_schema meta
+wp_update_post_schema         → write validated JSON-LD to _rankout_connector_schema meta
 wp_audit_schema_coverage      → find all posts missing structured data
 ```
 
@@ -568,7 +568,7 @@ git push origin main --tags
 | `rankout_connector_oauth_enabled` | filter | Return `false` to disable the OAuth 2.0/2.1 server entirely |
 | `rankout_connector_history_query_scope` | filter | Narrow the Change History query scope for non-admins |
 | `rankout_connector_tool_categories` | filter | Add or rename tool categories in the admin UI |
-| `wp_head` | action | `output_post_schema()` — outputs `_easy_mcp_schema` JSON-LD |
+| `wp_head` | action | `output_post_schema()` — outputs `_rankout_connector_schema` JSON-LD |
 | `rest_api_init` | action | Registers all MCP REST routes |
 | `plugins_loaded` | action | `Activator::maybe_upgrade()` — runs DB migrations on plugin update |
 | `rankout_connector_cleanup_audit_log` | action | Cron hook — purges old audit log rows |
@@ -656,7 +656,7 @@ Click **Check for Updates** in the plugin row on the Plugins page to bust the 12
 
 ### FAQ block not showing FAQPage schema in `<head>`
 
-1. Confirm the post has `_easy_mcp_schema` set (use `wp_get_post_schema` to check).
+1. Confirm the post has `_rankout_connector_schema` set (use `wp_get_post_schema` to check).
 2. Ensure no other plugin (Yoast, Rank Math) is stripping or deduplicating `<script type="application/ld+json">` tags. Some SEO plugins have a "deduplicate schema" option that may remove ours.
 3. Check the `wp_head` hook fires — some page-caching setups serve static HTML that bypasses it.
 

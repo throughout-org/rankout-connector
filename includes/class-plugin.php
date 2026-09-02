@@ -712,7 +712,7 @@ class Plugin {
         if ( ! $post_id ) {
             return;
         }
-        $json = \get_post_meta( $post_id, '_easy_mcp_schema', true );
+        $json = \get_post_meta( $post_id, '_rankout_connector_schema', true );
         if ( empty( $json ) ) {
             return;
         }

@@ -51,8 +51,8 @@ function rankout_connector_view_settings( $settings, $all_tool_names, $message, 
                     <div class="wp-mcp-lang-select" data-placeholder="<?php esc_attr_e( 'Search language…', 'rankout-connector' ); ?>">
                         <input type="hidden" id="admin_language" name="admin_language" value="<?php echo esc_attr( $settings['admin_language'] ); ?>" />
                         <input type="text" id="admin_language_display" class="wp-mcp-lang-display" autocomplete="off" placeholder="<?php esc_attr_e( 'Search language…', 'rankout-connector' ); ?>" value="<?php
-                            $easy_mcp_current_lang = $settings['admin_language'];
-                            $easy_mcp_languages = array(
+                            $rankout_connector_current_lang = $settings['admin_language'];
+                            $rankout_connector_languages = array(
                                 ''      => __( 'Default (WordPress language)', 'rankout-connector' ),
                                 'en_US' => 'English',
                                 'ar'    => 'العربية',
@@ -106,11 +106,11 @@ function rankout_connector_view_settings( $settings, $all_tool_names, $message, 
                                 'zh_CN' => '中文 (简体)',
                                 'zh_TW' => '中文 (繁體)',
                             );
-                            echo esc_attr( isset( $easy_mcp_languages[ $easy_mcp_current_lang ] ) ? $easy_mcp_languages[ $easy_mcp_current_lang ] : '' );
+                            echo esc_attr( isset( $rankout_connector_languages[ $rankout_connector_current_lang ] ) ? $rankout_connector_languages[ $rankout_connector_current_lang ] : '' );
                         ?>" />
                         <ul class="wp-mcp-lang-options" role="listbox">
-                            <?php foreach ( $easy_mcp_languages as $code => $name ) : ?>
-                                <li role="option" data-value="<?php echo esc_attr( $code ); ?>" data-label="<?php echo esc_attr( $name ); ?>"<?php if ( $code === $easy_mcp_current_lang ) echo ' class="wp-mcp-lang-active"'; ?>><?php echo esc_html( $name ); ?> <span class="wp-mcp-lang-code"><?php echo esc_html( $code ); ?></span></li>
+                            <?php foreach ( $rankout_connector_languages as $code => $name ) : ?>
+                                <li role="option" data-value="<?php echo esc_attr( $code ); ?>" data-label="<?php echo esc_attr( $name ); ?>"<?php if ( $code === $rankout_connector_current_lang ) echo ' class="wp-mcp-lang-active"'; ?>><?php echo esc_html( $name ); ?> <span class="wp-mcp-lang-code"><?php echo esc_html( $code ); ?></span></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>

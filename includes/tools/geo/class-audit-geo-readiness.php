@@ -239,7 +239,7 @@ class Audit_Geo_Readiness extends Base_Tool {
 	}
 
 	private function has_schema( int $post_id, string $html, bool $yoast, bool $rankmath ): bool {
-		if ( get_post_meta( $post_id, '_easy_mcp_schema', true ) ) {
+		if ( get_post_meta( $post_id, '_rankout_connector_schema', true ) ) {
 			return true;
 		}
 		if ( preg_match( '/<script[^>]+type=["\']application\/ld\+json["\'][^>]*>/i', $html ) ) {

@@ -26,8 +26,8 @@ class GitHub_Updater {
     const TRANSIENT_EXPIRY = 12 * HOUR_IN_SECONDS;
     const GITHUB_REPO      = 'throughout-org/rankout-connector';
     const PLUGIN_SLUG      = 'rankout-connector';
-    const CHECK_PARAM      = 'easy_mcp_check_update';
-    const CHECK_NONCE      = 'easy_mcp_check_update_nonce';
+    const CHECK_PARAM      = 'rankout_connector_check_update';
+    const CHECK_NONCE      = 'rankout_connector_check_update_nonce';
 
     private $plugin_file;
     private $plugin_basename;
@@ -138,7 +138,7 @@ class GitHub_Updater {
         $info->name                  = 'RankOut Connector';
         $info->slug                  = self::PLUGIN_SLUG;
         $info->version               = $latest;
-        $info->author                = '<a href="https://easymcpai.com" target="_blank">EasyMCPAI</a>';
+        $info->author                = '<a href="https://rankout.app" target="_blank">RankOut</a>';
         $info->homepage              = 'https://github.com/' . self::GITHUB_REPO;
         $info->requires              = '6.0';
         $info->requires_php          = '7.4';

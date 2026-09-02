@@ -63,7 +63,7 @@ class Update_Post_Schema extends Base_Tool {
 
 		// Deletion.
 		if ( null === $schema ) {
-			delete_post_meta( $post_id, '_easy_mcp_schema' );
+			delete_post_meta( $post_id, '_rankout_connector_schema' );
 			return array(
 				'post_id' => $post_id,
 				'schema'  => null,
@@ -96,7 +96,7 @@ class Update_Post_Schema extends Base_Tool {
 
 		$json = wp_json_encode( $schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 
-		update_post_meta( $post_id, '_easy_mcp_schema', $json );
+		update_post_meta( $post_id, '_rankout_connector_schema', $json );
 
 		return array(
 			'post_id' => $post_id,

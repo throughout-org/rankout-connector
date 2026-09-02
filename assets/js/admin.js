@@ -472,54 +472,54 @@
     });
 
     // ── Audit-log change-detail expand/collapse + AJAX detail loader. ────────
-    // Activates only when wp_localize_script provided easyMcpAiAudit on the
+    // Activates only when wp_localize_script provided rankoutConnectorAudit on the
     // Audit Log admin page. AJAX endpoint returns server-rendered HTML
     // (escape responsibility lives in Admin_Page::ajax_get_changes_for_audit).
-    if (typeof window.easyMcpAiAudit !== 'undefined' && window.easyMcpAiAudit && window.easyMcpAiAudit.ajaxUrl) {
-        var emaiAudit = window.easyMcpAiAudit;
+    if (typeof window.rankoutConnectorAudit !== 'undefined' && window.rankoutConnectorAudit && window.rankoutConnectorAudit.ajaxUrl) {
+        var connectorAudit = window.rankoutConnectorAudit;
 
         function loadAuditDetail(auditId, detailRow) {
-            var $body = $(detailRow).find('.emai-changes-detail-body');
+            var $body = $(detailRow).find('.rankout-connector-changes-detail-body');
             if (!$body.length || detailRow.dataset.loaded === '1') { return; }
             var fd = new FormData();
-            fd.append('action',   'easy_mcp_ai_get_changes_for_audit');
+            fd.append('action',   'rankout_connector_get_changes_for_audit');
             fd.append('audit_id', auditId);
-            fd.append('nonce',    emaiAudit.nonce);
-            fetch(emaiAudit.ajaxUrl, { method: 'POST', body: fd, credentials: 'same-origin' })
+            fd.append('nonce',    connectorAudit.nonce);
+            fetch(connectorAudit.ajaxUrl, { method: 'POST', body: fd, credentials: 'same-origin' })
                 .then(function (r) { return r.json(); })
                 .then(function (json) {
                     if (json && json.success && json.data && json.data.html) {
                         $body.html(json.data.html);
                     } else {
-                        $body.html('<p class="description"></p>').find('p').text(emaiAudit.failedToLoadMsg);
+                        $body.html('<p class="description"></p>').find('p').text(connectorAudit.failedToLoadMsg);
                     }
                     detailRow.dataset.loaded = '1';
                 })
                 .catch(function () {
-                    $body.html('<p class="description"></p>').find('p').text(emaiAudit.failedToLoadMsg);
+                    $body.html('<p class="description"></p>').find('p').text(connectorAudit.failedToLoadMsg);
                 });
         }
 
         function toggleAuditRow(auditId) {
-            var toggle    = document.querySelector('.emai-changes-toggle[data-audit-id="' + auditId + '"]');
-            var detailRow = document.querySelector('.emai-changes-detail[data-audit-id="' + auditId + '"]');
+            var toggle    = document.querySelector('.rankout-connector-changes-toggle[data-audit-id="' + auditId + '"]');
+            var detailRow = document.querySelector('.rankout-connector-changes-detail[data-audit-id="' + auditId + '"]');
             if (!toggle || !detailRow) { return; }
             if (detailRow.hidden === false) {
                 detailRow.hidden = true;
                 toggle.setAttribute('aria-expanded', 'false');
-                var caret = toggle.querySelector('.emai-changes-caret');
+                var caret = toggle.querySelector('.rankout-connector-changes-caret');
                 if (caret) { caret.textContent = '▾'; }
             } else {
                 detailRow.hidden = false;
                 toggle.setAttribute('aria-expanded', 'true');
-                var c2 = toggle.querySelector('.emai-changes-caret');
+                var c2 = toggle.querySelector('.rankout-connector-changes-caret');
                 if (c2) { c2.textContent = '▴'; }
                 loadAuditDetail(auditId, detailRow);
             }
         }
 
         document.addEventListener('click', function (e) {
-            var t = e.target.closest && e.target.closest('.emai-changes-toggle');
+            var t = e.target.closest && e.target.closest('.rankout-connector-changes-toggle');
             if (!t) { return; }
             e.preventDefault();
             toggleAuditRow(t.dataset.auditId);

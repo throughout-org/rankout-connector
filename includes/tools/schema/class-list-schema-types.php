@@ -206,10 +206,10 @@ class List_Schema_Types extends Base_Tool {
 				'example'             => array(
 					'@context' => 'https://schema.org',
 					'@type'    => 'Organization',
-					'name'     => 'EasyMCP AI',
-					'url'      => 'https://easymcpai.com',
-					'logo'     => 'https://easymcpai.com/logo.png',
-					'sameAs'   => array( 'https://twitter.com/easymcpai', 'https://linkedin.com/company/easymcpai' ),
+					'name'     => 'RankOut Connector',
+					'url'      => 'https://rankout.app',
+					'logo'     => 'https://rankout.app/logo.png',
+					'sameAs'   => array( 'https://twitter.com/rankout', 'https://linkedin.com/company/rankout' ),
 				),
 			),
 			array(

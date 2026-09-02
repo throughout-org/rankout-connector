@@ -125,7 +125,7 @@ class Get_Eeat_Signals extends Base_Tool {
 		// --- Expertise ---
 
 		// 3. Author schema entity in content or post meta (15 pts).
-		$schema_raw   = get_post_meta( $post_id, '_easy_mcp_schema', true );
+		$schema_raw   = get_post_meta( $post_id, '_rankout_connector_schema', true );
 		$schema_data  = $schema_raw ? json_decode( $schema_raw, true ) : array();
 		$has_author_schema = false;
 		if ( is_array( $schema_data ) ) {

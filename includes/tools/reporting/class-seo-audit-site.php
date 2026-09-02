@@ -100,7 +100,7 @@ class Seo_Audit_Site extends Base_Tool {
 
 			// ---- Schema ----
 			$has_schema = false;
-			if ( get_post_meta( $pid, '_easy_mcp_schema', true ) ) {
+			if ( get_post_meta( $pid, '_rankout_connector_schema', true ) ) {
 				$has_schema = true;
 			} elseif ( preg_match( '/<script[^>]+type=["\']application\/ld\+json["\'][^>]*>/i', $html ) ) {
 				$has_schema = true;

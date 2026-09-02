@@ -89,8 +89,8 @@ class Audit_Schema_Coverage extends Base_Tool {
 			}
 
 			// Check our own meta.
-			if ( get_post_meta( $post_id, '_easy_mcp_schema', true ) ) {
-				$sources[] = 'easy_mcp_schema';
+			if ( get_post_meta( $post_id, '_rankout_connector_schema', true ) ) {
+				$sources[] = 'rankout_connector_schema';
 			}
 
 			// Check Yoast.

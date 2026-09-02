@@ -14,7 +14,7 @@ class Create_Faq_Block extends Base_Tool {
 	}
 
 	public function get_description() {
-		return 'Appends a FAQ block to a post and saves a FAQPage JSON-LD schema. Generates a Yoast-compatible wp:yoast/faq-block (works with or without Yoast active) and stores FAQPage structured data in _easy_mcp_schema post meta so it renders in <head>. Parameters: post_id (required), faqs (required, array of { question, answer } objects), append (bool, default true — set false to prepend). Returns { post_id, faq_count, updated }.';
+		return 'Appends a FAQ block to a post and saves a FAQPage JSON-LD schema. Generates a Yoast-compatible wp:yoast/faq-block (works with or without Yoast active) and stores FAQPage structured data in _rankout_connector_schema post meta so it renders in <head>. Parameters: post_id (required), faqs (required, array of { question, answer } objects), append (bool, default true — set false to prepend). Returns { post_id, faq_count, updated }.';
 	}
 
 	public function get_category() {
@@ -133,7 +133,7 @@ class Create_Faq_Block extends Base_Tool {
 			);
 		}, $faqs );
 
-		$existing_raw = get_post_meta( $post_id, '_easy_mcp_schema', true );
+		$existing_raw = get_post_meta( $post_id, '_rankout_connector_schema', true );
 		$existing     = $existing_raw ? json_decode( $existing_raw, true ) : null;
 
 		if ( is_array( $existing ) && ( $existing['@type'] ?? '' ) === 'FAQPage' ) {
@@ -149,13 +149,13 @@ class Create_Faq_Block extends Base_Tool {
 			);
 		}
 
-		update_post_meta( $post_id, '_easy_mcp_schema', wp_json_encode( $schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) );
+		update_post_meta( $post_id, '_rankout_connector_schema', wp_json_encode( $schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) );
 
 		return array(
 			'post_id'   => $post_id,
 			'faq_count' => count( $faqs ),
 			'position'  => $append ? 'appended' : 'prepended',
-			'schema'    => 'FAQPage JSON-LD saved to _easy_mcp_schema',
+			'schema'    => 'FAQPage JSON-LD saved to _rankout_connector_schema',
 			'updated'   => true,
 		);
 	}

@@ -6,15 +6,15 @@
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-8892bf)](https://php.net)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![Tools](https://img.shields.io/badge/tools-233-orange)](https://easymcpai.com/tools)
+[![Tools](https://img.shields.io/badge/tools-233-orange)](https://rankout.app/tools)
 
-**Links:** [Website](https://easymcpai.com) · [WordPress.org Plugin](https://wordpress.org/plugins/rankout-connector/) · [Integration Guides](https://easymcpai.com/integrations) · [Developer Docs](DEVELOPER.md) · [Changelog](CHANGELOG.md)
+**Links:** [Website](https://rankout.app) · [WordPress.org Plugin](https://wordpress.org/plugins/rankout-connector/) · [Integration Guides](https://rankout.app/integrations) · [Developer Docs](DEVELOPER.md) · [Changelog](CHANGELOG.md)
 
 ---
 
 ## What is RankOut Connector?
 
-[**RankOut Connector**](https://easymcpai.com/) is the most complete **free WordPress MCP server** — a remote MCP server built so AI assistants and autonomous AI agents can run your entire site workflow, from content and publishing to SEO research, traffic monitoring, and daily admin, through the [Model Context Protocol](https://modelcontextprotocol.io). It works as an MCP adapter for any MCP-compatible AI client, making your site agent-ready out of the box.
+[**RankOut Connector**](https://rankout.app/) is the most complete **free WordPress MCP server** — a remote MCP server built so AI assistants and autonomous AI agents can run your entire site workflow, from content and publishing to SEO research, traffic monitoring, and daily admin, through the [Model Context Protocol](https://modelcontextprotocol.io). It works as an MCP adapter for any MCP-compatible AI client, making your site agent-ready out of the box.
 
 No Node.js. No external proxy. No complicated setup. Just install, generate a token, and start building.
 
@@ -34,7 +34,7 @@ No Node.js. No external proxy. No complicated setup. Just install, generate a to
 
 ## Works With Every Major AI
 
-Connect any of the following AI assistants or AI agents to your site through the **WordPress MCP** endpoint — [full integration guides here](https://easymcpai.com/integrations):
+Connect any of the following AI assistants or AI agents to your site through the **WordPress MCP** endpoint — [full integration guides here](https://rankout.app/integrations):
 
 | AI Client | Connection Method |
 |---|---|
@@ -106,7 +106,7 @@ Once connected, your AI agent can handle everything you'd normally do in the Wor
 
 ## Tools
 
-### [233 Tools, Ready to Use](https://easymcpai.com/tools)
+### [233 Tools, Ready to Use](https://rankout.app/tools)
 
 #### Core WordPress (93 tools)
 
@@ -423,4 +423,4 @@ GPL-2.0-or-later — see [LICENSE](https://www.gnu.org/licenses/gpl-2.0.html)
 
 ---
 
-Developed by [EasyMCPAI](https://easymcpai.com) · [WordPress.org](https://wordpress.org/plugins/rankout-connector/) · [GitHub](https://github.com/throughout-org/rankout-connector)
+Developed by [RankOut](https://rankout.app) · [WordPress.org](https://wordpress.org/plugins/rankout-connector/) · [GitHub](https://github.com/throughout-org/rankout-connector)

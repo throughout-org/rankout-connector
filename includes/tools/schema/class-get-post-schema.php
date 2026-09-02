@@ -76,7 +76,7 @@ class Get_Post_Schema extends Base_Tool {
 		}
 
 		// 2. Schema stored via wp_update_post_schema (our own meta).
-		$meta_raw = get_post_meta( $post_id, '_easy_mcp_schema', true );
+		$meta_raw = get_post_meta( $post_id, '_rankout_connector_schema', true );
 		if ( ! empty( $meta_raw ) ) {
 			$decoded = json_decode( $meta_raw, true );
 			if ( $decoded ) {

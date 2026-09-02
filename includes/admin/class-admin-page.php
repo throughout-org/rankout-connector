@@ -58,7 +58,7 @@ class Admin_Page {
         if ( empty( $rows ) ) {
             echo '<p class="description">' . esc_html__( 'No change-log rows for this call.', 'rankout-connector' ) . '</p>';
         } else {
-            echo '<ul class="emai-changes-list" style="margin:0; padding-left: 18px;">';
+            echo '<ul class="rankout-connector-changes-list" style="margin:0; padding-left: 18px;">';
             foreach ( $rows as $r ) {
                 $changed = ! empty( $r['changed_fields'] ) ? json_decode( $r['changed_fields'], true ) : array();
                 $changed = is_array( $changed ) ? array_map( 'sanitize_text_field', $changed ) : array();
@@ -615,7 +615,7 @@ class Admin_Page {
                 foreach ( $active_paths as $plugin_path ) {
                     if ( ! isset( $all_plugins[ $plugin_path ] ) ) { continue; }
                     $plugin_name = $all_plugins[ $plugin_path ]['Name'];
-                    if ( false !== stripos( $plugin_name, 'Easy MCP' ) ) { continue; }
+                    if ( false !== stripos( $plugin_name, 'RankOut Connector' ) ) { continue; }
 
                     $folder = ( false !== strpos( $plugin_path, '/' ) )
                         ? explode( '/', $plugin_path )[0]
@@ -807,7 +807,7 @@ class Admin_Page {
                 'config' => "Server Name:    WordPress\nTransport Type: HTTP\nServer URL:     %s\n\nCustom headers:\n  Header name:  Authorization\n  Header value: Bearer YOUR_API_TOKEN",
                 'show_url_copy' => true,
                 'note'   => __( 'Manus uses a form (not JSON). Leave Icon and Note empty, or add your own description.', 'rankout-connector' ),
-                'signup_link'       => 'https://manus.im/invitation/BOMGVX7BSFBJLX?utm_source=invitation&utm_medium=plugin&utm_campaign=easymcpaicom',
+                'signup_link'       => 'https://manus.im/invitation/BOMGVX7BSFBJLX?utm_source=invitation&utm_medium=plugin&utm_campaign=rankoutcom',
                 'signup_label'      => __( 'Sign up for Manus', 'rankout-connector' ),
             ),
             array(
@@ -1060,7 +1060,7 @@ class Admin_Page {
         
         
         
-        \wp_localize_script( 'rankout-connector-admin', 'easyMcpAiAudit', array(
+        \wp_localize_script( 'rankout-connector-admin', 'rankoutConnectorAudit', array(
             'ajaxUrl'         => \admin_url( 'admin-ajax.php' ),
             'nonce'           => $changes_nonce,
             'failedToLoadMsg' => __( 'Failed to load changes.', 'rankout-connector' ),

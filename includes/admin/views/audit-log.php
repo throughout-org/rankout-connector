@@ -120,14 +120,14 @@ function rankout_connector_view_audit_log( $total, $entries, $page, $total_pages
                             $is_read_only_tool = isset( $entry['tool_name'] )
                                 && preg_match( '/^wp_(list|get|search|count|history)_|^wp_search$/', $entry['tool_name'] );
                             if ( $c > 0 && ! $is_read_only_tool ) : ?>
-                                <a href="#" class="emai-changes-toggle"
+                                <a href="#" class="rankout-connector-changes-toggle"
                                    data-audit-id="<?php echo absint( $entry['id'] ); ?>"
                                    aria-expanded="false">
                                     <?php
                                     /* translators: %d: change row count */
                                     echo esc_html( sprintf( _n( '%d change', '%d changes', $c, 'rankout-connector' ), $c ) );
                                     ?>
-                                    <span class="emai-changes-caret" aria-hidden="true">▾</span>
+                                    <span class="rankout-connector-changes-caret" aria-hidden="true">▾</span>
                                 </a>
                             <?php else : ?>
                                 <span class="description">—</span>
@@ -151,9 +151,9 @@ function rankout_connector_view_audit_log( $total, $entries, $page, $total_pages
                             <?php echo esc_html( $entry['ip_address'] ); ?>
                         </td>
                     </tr>
-                    <tr class="emai-changes-detail" data-audit-id="<?php echo absint( $entry['id'] ); ?>" hidden>
+                    <tr class="rankout-connector-changes-detail" data-audit-id="<?php echo absint( $entry['id'] ); ?>" hidden>
                         <td colspan="7" style="background:#f6f7f7;">
-                            <div class="emai-changes-detail-body">
+                            <div class="rankout-connector-changes-detail-body">
                                 <em><?php esc_html_e( 'Loading…', 'rankout-connector' ); ?></em>
                             </div>
                         </td>

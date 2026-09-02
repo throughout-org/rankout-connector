@@ -20,7 +20,7 @@ Extracts all FAQ and Q&A blocks from a post. Detects:
 Returns `{ faq_count, source_counts, faqs: [{ source, question, answer }] }`.
 
 **`wp_create_faq_block`** `write`  
-Appends (or prepends) a Yoast-compatible FAQ block to a post and simultaneously saves a `FAQPage` JSON-LD schema to `_easy_mcp_schema` post meta so it renders in `<head>`. Merges with existing FAQPage schemas instead of overwriting. Parameters: `post_id`, `faqs: [{ question, answer }]`, `append` (default `true`).
+Appends (or prepends) a Yoast-compatible FAQ block to a post and simultaneously saves a `FAQPage` JSON-LD schema to `_rankout_connector_schema` post meta so it renders in `<head>`. Merges with existing FAQPage schemas instead of overwriting. Parameters: `post_id`, `faqs: [{ question, answer }]`, `append` (default `true`).
 
 **`wp_audit_answer_readiness`** `readonly`  
 Scores published posts out of 100 for Answer Engine Optimisation (featured snippets, "People also ask"). Rubric:
@@ -115,7 +115,7 @@ Parameters: `topics` (array, required), `post_type`, `threshold` (0–100, defau
 
 ### Added
 - `wp_get_post_schema` — reads JSON-LD schema from post meta, Yoast, Rank Math, or inline content
-- `wp_update_post_schema` — stores validated JSON-LD in `_easy_mcp_schema` post meta; `null` deletes it
+- `wp_update_post_schema` — stores validated JSON-LD in `_rankout_connector_schema` post meta; `null` deletes it
 - `wp_audit_schema_coverage` — scans up to 200 posts and reports coverage percentage
 - `wp_list_schema_types` — returns 14 schema.org types with required fields and AI-ready examples
 - Auto-output: schemas stored via the plugin are output as `<script type="application/ld+json">` in `<head>` via `wp_head` hook
