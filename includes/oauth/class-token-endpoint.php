@@ -223,6 +223,7 @@ class Token_Endpoint {
                 'expires_in'    => $tokens['expires_in'],
                 'refresh_token' => $tokens['refresh_token'],
                 'scope'         => $tokens['scope'],
+                'wp_user_id'    => (int) $code_row->wp_user_id,
             ),
             200
         );
