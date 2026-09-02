@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.3
+
+- Self-heal stale first-party OAuth client registrations before redirect validation.
+
 ## 2.0.2
 
 - Register RankOut's production WordPress OAuth callback by default while retaining a filter for local and staging environments.

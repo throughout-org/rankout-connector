@@ -532,6 +532,14 @@ class Client_Registry {
     public function get_client( $client_id ) {
         global $wpdb;
 
+        // Self-heal installations that were activated by an earlier build
+        // which registered RankOut's public client with a development
+        // callback. This runs before redirect validation, so upgrading the
+        // plugin is sufficient; no deactivate/reactivate cycle is required.
+        if ( self::RANKOUT_CLIENT_ID === $client_id ) {
+            self::register_rankout_client();
+        }
+
         $table = $wpdb->prefix . 'rankout_connector_oauth_clients';
 
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Plugin-owned table prefixed by $wpdb->prefix; client lookup must be fresh.
